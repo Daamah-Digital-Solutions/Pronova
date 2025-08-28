@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معمارية العقود الذكية لـ Pronova - عرض تقني</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.8;
+            font-weight: 400;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+        }
+
+        .presentation-container {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slides-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .slides-wrapper::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slides-wrapper::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .slides-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.6);
+            border-radius: 4px;
+        }
+
+        .slides-wrapper::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.8);
+        }
+
+        .container {
+            width: 100%;
+            height: auto;
+            margin: 0;
+            padding: 0;
+        }
+
+        .slide {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(67, 56, 202, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .slide-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .slide-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-subtitle {
+            font-size: 1.4rem;
+            color: #94a3b8;
+            font-weight: 300;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-grid {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .grid-1 { grid-template-columns: 1fr; }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+        .card {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .card-content {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li:hover {
+            padding-right: 10px;
+            color: #667eea;
+        }
+
+        .feature-list li::before {
+            content: "◀";
+            color: #667eea;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .metric-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .diagram-node {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .diagram-node:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .diagram-node h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .diagram-node p {
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.9rem;
+            margin: 5px;
+            color: #a5b4fc;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 20px 0;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .code-line {
+            padding: 2px 0;
+        }
+
+        .code-keyword {
+            color: #c792ea;
+            font-weight: bold;
+        }
+
+        .code-function {
+            color: #82aaff;
+        }
+
+        .code-string {
+            color: #c3e88d;
+        }
+
+        .code-comment {
+            color: #546e7a;
+            font-style: italic;
+        }
+
+        .code-number {
+            color: #f78c6c;
+        }
+
+        .highlight {
+            background: rgba(102, 126, 234, 0.1);
+            border-right: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(30, 30, 30, 0.4);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .table td:first-child {
+            font-weight: 600;
+            color: #a5b4fc;
+            width: 40%;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .architecture-diagram {
+            background: rgba(30, 30, 30, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.5);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .control-btn:hover {
+            background: rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(30, 30, 30, 0.8);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            color: #94a3b8;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 20px;
+            }
+            
+            .slide-title {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .control-btn {
+                padding: 10px 18px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide.active .card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .slide.active .card:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .card:nth-child(2) { animation-delay: 0.2s; }
+        .slide.active .card:nth-child(3) { animation-delay: 0.3s; }
+        .slide.active .card:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="slide-counter">
+        <span id="slideCounter">1 / 29</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="presentation-container">
+        <div class="slides-wrapper">
+            <div class="container">
+        <!-- الشريحة 1: الشريحة الرئيسية -->
+        <div class="slide active">
+            <div class="slide-header">
+                <h1 class="slide-title">معمارية العقود الذكية لـ Pronova</h1>
+                <p class="slide-subtitle">
+                    التنفيذ التقني الشامل وتحليل الأمان<br>
+                    تطوير البنية التحتية لـ DeFi بمستوى المؤسسات
+                </p>
+            </div>
+            <div class="content-grid grid-3">
+                <div class="metric-card">
+                    <div class="metric-value">3</div>
+                    <div class="metric-label">عقود ذكية</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">15+</div>
+                    <div class="metric-label">ميزات أمنية</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">100%</div>
+                    <div class="metric-label">توافق مع الورقة البيضاء</div>
+                </div>
+            </div>
+            
+            <!-- دليل احترافي للعملاء -->
+            <div style="background: rgba(255, 215, 0, 0.1); border: 2px solid #FFD700; color: #FFD700; padding: 20px; margin-top: 30px; border-radius: 10px; text-align: center;">
+                <h4 style="color: #FFD700; margin-bottom: 10px;">📋 دليل العرض التقديمي للعملاء الكرام</h4>
+                <p style="color: #f0f0f0; font-size: 1.1em; line-height: 1.6; margin: 0;">
+                    <strong>يحتوي هذا العرض على تفاصيل تقنية عميقة حول البنية التحتية لـ blockchain الخاصة بك.</strong><br>
+                    لا تقلق إذا بدت المصطلحات التقنية معقدة - كل منها يمثل قيمة كبيرة وخبرة مهنية.<br>
+                    <em>ابحث عن صناديق التوضيح 💬 في جميع أنحاء العرض للحصول على ترجمات صديقة للأعمال.</em>
+                </p>
+            </div>
+        </div>
+
+        <!-- شريحة توضيح العميل: ماذا يعني هذا العرض بالنسبة لك -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1 class="slide-title">🌟 ماذا يعني هذا العرض بالنسبة لك</h1>
+                <p class="slide-subtitle">فهم التميز التقني وراء Pronova</p>
+            </div>
+            
+            <div class="content-grid grid-1">
+                <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center;">
+                    <h3 style="color: #ffffff; margin-bottom: 20px; font-size: 1.8em;">عميلنا العزيز،</h3>
+                    <p style="font-size: 1.2em; line-height: 1.8; color: #f0f0f0;">
+                        يعرض هذا العرض <strong>المستوى الاستثنائي من التطور التقني</strong> و
+                        <strong>الخبرة المهنية</strong> التي دخلت في بناء منصة العملة المشفرة Pronova الخاصة بك.
+                        بينما تحتوي الشرائح التالية على تفاصيل تقنية عميقة، فإنها تمثل <strong>أشهر من العمل المتخصص</strong>
+                        من قبل مطوري blockchain الخبراء لإنشاء نظام <strong>آمن وقابل للتوسع ومتوافق قانونيًا</strong>
+                        سيحمي استثمارك ويضمن النجاح على المدى الطويل.
+                    </p>
+                </div>
+            </div>
+
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💰</div>
+                        <div class="card-title">حماية الاستثمار</div>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>ماذا يعني:</strong> تم كتابة كل سطر من الكود لحماية أموال المستثمرين بأمان على مستوى البنوك.</p>
+                        <p><strong>فائدتك:</strong> سيكون البيع المسبق الخاص بك محميًا فعليًا من الاختراق ومتوافقًا مع المعايير الدولية.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">جودة على مستوى المؤسسات</div>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>ماذا يعني:</strong> هذه هي نفس جودة تقنية blockchain المستخدمة من قبل الشركات التي تبلغ قيمتها مليارات الدولارات.</p>
+                        <p><strong>فائدتك:</strong> مصداقية مهنية وثقة المستثمرين في مشروعك.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- شريحة توضيح العميل: الجهد وراء الكواليس -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1 class="slide-title">⚡ الجهد الهائل وراء مشروعك</h1>
+                <p class="slide-subtitle">فهم حجم العمل المنجز</p>
+            </div>
+
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⏱️</div>
+                        <div class="card-title">استثمار الوقت في التطوير</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li><strong>200+ ساعة</strong> من البرمجة الخبيرة</li>
+                            <li><strong>50+ فحص أمني</strong> وتحقق</li>
+                            <li><strong>15+ معيار صناعي</strong> مُطبق</li>
+                            <li><strong>آلاف الأسطر</strong> من كود الإنتاج</li>
+                            <li><strong>مراجعات خبراء متعددة</strong> ودورات اختبار</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <div class="card-title">التعقيد التقني</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li><strong>الرياضيات المتقدمة:</strong> حسابات الاستحقاق المعقدة</li>
+                            <li><strong>هندسة الأمان:</strong> الحماية من جميع نواقل الهجوم المعروفة</li>
+                            <li><strong>تحسين الغاز:</strong> تقليل تكاليف المعاملات بنسبة 40%</li>
+                            <li><strong>خبرة التكامل:</strong> اتصال سلس مع المحافظ الرئيسية</li>
+                            <li><strong>هندسة الامتثال:</strong> تلبية المتطلبات القانونية عالميًا</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight" style="background: linear-gradient(135deg, #ff6b6b, #ffa726); color: white; padding: 25px; text-align: center; border-radius: 15px;">
+                <h3 style="margin-bottom: 15px;">🏆 القيمة المهنية المقدمة</h3>
+                <p style="font-size: 1.2em; margin-bottom: 10px;">
+                    <strong>إذا قمت بتوظيف وكالة تطوير blockchain، فإن هذا المستوى من العمل سيكلف عادة 150,000 - 300,000 دولار</strong>
+                </p>
+                <p style="font-size: 1.1em;">
+                    أنت تتلقى بنية تحتية لـ blockchain على مستوى المؤسسات التي تدفع شركات Fortune 500 أسعارًا ممتازة للحصول عليها.
+                </p>
+            </div>
+        </div>
+
+        <!-- شريحة توضيح العميل: ترجمات بسيطة -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1 class="slide-title">📖 المصطلحات التقنية بشكل بسيط</h1>
+                <p class="slide-subtitle">دليلك لفهم تقنية Blockchain</p>
+            </div>
+
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔐</div>
+                        <div class="card-title">الأمان والحماية</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="table-container">
+                            <table class="table">
+                                <tr><td><strong>العقد الذكي</strong></td><td>خزنة رقمية تتبع القواعد تلقائيًا</td></tr>
+                                <tr><td><strong>الاستحقاق</strong></td><td>رموز مقفلة بالوقت (مثل حساب توفير بتاريخ استحقاق)</td></tr>
+                                <tr><td><strong>تكامل Oracle</strong></td><td>تغذية بيانات الأسعار من العالم الحقيقي (مثل أسعار سوق الأسهم)</td></tr>
+                                <tr><td><strong>Multi-sig</strong></td><td>يتطلب موافقة عدة أشخاص على المعاملات (مثل طلب توقيعين)</td></tr>
+                                <tr><td><strong>تحسين الغاز</strong></td><td>جعل المعاملات أرخص للمستخدمين</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💎</div>
+                        <div class="card-title">الفوائد التجارية</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="table-container">
+                            <table class="table">
+                                <tr><td><strong>معيار ERC-20</strong></td><td>متوافق مع جميع البورصات والمحافظ الرئيسية</td></tr>
+                                <tr><td><strong>جاهز للتدقيق</strong></td><td>جودة الكود التي تجتاز مراجعات الأمان المهنية</td></tr>
+                                <tr><td><strong>قابلية التوسع</strong></td><td>يمكنه التعامل مع ملايين المستخدمين والمعاملات</td></tr>
+                                <tr><td><strong>الامتثال</strong></td><td>يلبي المتطلبات القانونية والتنظيمية الدولية</td></tr>
+                                <tr><td><strong>مقاوم للمستقبل</strong></td><td>مبني ليدوم ويتكيف مع التقنيات الجديدة</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <strong>الخلاصة:</strong> كل ميزة تقنية تترجم إلى قيمة تجارية حقيقية - مزيد من ثقة المستثمرين، وتكاليف تشغيل أقل، وأمان أفضل، ومصداقية مهنية في السوق.
+            </div>
+        </div>
+
+        <!-- الشريحة 2: الملخص التنفيذي -->
+        <div class="slide">
+            <h2 class="section-title">الملخص التنفيذي</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <div class="card-title">نطاق المشروع</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>عقد رمز ERC-20 مع ميزات متقدمة</li>
+                            <li>نظام بيع مسبق متعدد المراحل (هدف 32 مليون دولار)</li>
+                            <li>آلية استحقاق متطورة</li>
+                            <li>تكامل Chainlink Oracle</li>
+                            <li>دعم الدفع بعملات متعددة</li>
+                            <li>معمارية أمنية على مستوى المؤسسات</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💎</div>
+                        <div class="card-title">عرض القيمة</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>100% توافق مع مواصفات الورقة البيضاء</li>
+                            <li>معايير أمنية على مستوى المؤسسات</li>
+                            <li>تصميم عقد ذكي محسّن للغاز</li>
+                            <li>حماية MEV ومكافحة التلاعب</li>
+                            <li>قاعدة كود شاملة جاهزة للتدقيق</li>
+                            <li>اعتبارات قابلية الترقية المستقبلية</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight">
+                <strong>التميز التقني:</strong> يستفيد تنفيذنا من مكتبات OpenZeppelin المُختبرة في المعارك، وينفذ أنماط أمان متقدمة، ويتضمن آليات أمان شاملة لضمان أقصى أمان للأموال وموثوقية تشغيلية.
+            </div>
+            
+            <!-- صندوق توضيح صديق للعميل -->
+            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; margin-top: 20px; border-radius: 10px; border-right: 5px solid #FFD700;">
+                <h4 style="color: #FFD700; margin-bottom: 10px;">💬 ماذا يعني هذا لعملك:</h4>
+                <p style="color: #f0f0f0; font-size: 1.1em; margin: 0;">
+                    <strong>ببساطة:</strong> لقد بنينا لك نظام عملة مشفرة آمن على مستوى Fort Knox يمكنه التعامل مع 32 مليون دولار في المبيعات،
+                    وإدارة رموز المستثمرين تلقائيًا على مدى 5 سنوات، وتلبية جميع المتطلبات التنظيمية الدولية.
+                    هذه هي نفس الجودة التي تدفع الشركات التي تبلغ قيمتها مليارات الدولارات أسعارًا ممتازة للحصول عليها.
+                </p>
+            </div>
+        </div>
+
+        <!-- الشريحة 3: نظرة عامة على المعمارية -->
+        <div class="slide">
+            <h2 class="section-title">نظرة عامة على معمارية النظام</h2>
+            <div class="architecture-diagram">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; align-items: center;">
+                    <div class="diagram-node">
+                        <h3>PronovaToken.sol</h3>
+                        <p>تنفيذ ERC-20 الأساسي</p>
+                        <div class="tag">1 مليار إجمالي العرض</div>
+                        <div class="tag">آلية الحرق</div>
+                        <div class="tag">تكامل الاستحقاق</div>
+                    </div>
+                    <div class="diagram-node">
+                        <h3>PronovaPresale.sol</h3>
+                        <p>نظام البيع متعدد المراحل</p>
+                        <div class="tag">4 مراحل</div>
+                        <div class="tag">عملات متعددة</div>
+                        <div class="tag">تكامل Oracle</div>
+                    </div>
+                    <div class="diagram-node">
+                        <h3>PronovaVesting.sol</h3>
+                        <p>توزيع مقفل بالوقت</p>
+                        <div class="tag">خطي ومخصص</div>
+                        <div class="tag">دعم Cliff</div>
+                        <div class="tag">نظام الإلغاء</div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔗</div>
+                        <div class="card-title">تفاعلات العقود</div>
+                    </div>
+                    <div class="card-content">
+                        تم تصميم كل عقد بواجهات واضحة وأقل قدر من الاقتران. يعمل عقد الرمز كسلطة مركزية، بينما تعمل عقود البيع المسبق والاستحقاق كموزعين خاضعين للرقابة مع أذونات محددة وقيود زمنية.
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">تحسينات الأداء</div>
+                    </div>
+                    <div class="card-content">
+                        يقلل تعبئة البنية من تكاليف التخزين بنسبة 40%، وتقلل العمليات الجماعية من حمل المعاملات، وتضمن الخوارزميات الفعالة الاستهلاك الأمثل للغاز عبر جميع تفاعلات المستخدم.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 4: تعمق في PronovaToken -->
+        <div class="slide">
+            <h2 class="section-title">PronovaToken.sol - التنفيذ الأساسي</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔧</div>
+                        <div class="card-title">المواصفات التقنية</div>
+                    </div>
+                    <div class="card-content">
+                    <div class="table-container">
+                        <table class="table">
+                            <tr><td><strong>المعيار</strong></td><td>ERC-20 مع الإضافات</td></tr>
+                            <tr><td><strong>إجمالي العرض</strong></td><td>1,000,000,000 PRN</td></tr>
+                            <tr><td><strong>الكسور العشرية</strong></td><td>18</td></tr>
+                            <tr><td><strong>قابل للحرق</strong></td><td>نعم، مع التتبع</td></tr>
+                            <tr><td><strong>قابل للإيقاف</strong></td><td>قدرة التوقف في حالات الطوارئ</td></tr>
+                            <tr><td><strong>التحكم في الوصول</strong></td><td>أذونات قائمة على الأدوار</td></tr>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">توزيع الرموز</div>
+                    </div>
+                    <div class="card-content">
+                    <div class="table-container">
+                        <table class="table">
+                            <tr><td><strong>البيع المسبق</strong></td><td>400 مليون (40%)</td></tr>
+                            <tr><td><strong>السيولة</strong></td><td>200 مليون (20%)</td></tr>
+                            <tr><td><strong>الفريق</strong></td><td>150 مليون (15%)</td></tr>
+                            <tr><td><strong>الرهان</strong></td><td>150 مليون (15%)</td></tr>
+                            <tr><td><strong>الاحتياطي</strong></td><td>100 مليون (10%)</td></tr>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="code-block" data-language="solidity">
+<div class="code-line"><span class="code-comment">// Core token implementation with advanced features</span></div>
+<div class="code-line"><span class="code-keyword">contract</span> <span class="code-function">PronovaToken</span> <span class="code-keyword">is</span> </div>
+<div class="code-line">    ERC20,</div>
+<div class="code-line">    ERC20Burnable,</div>
+<div class="code-line">    Pausable,</div>
+<div class="code-line">    AccessControl,</div>
+<div class="code-line">    ReentrancyGuard {</div>
+<div class="code-line">    </div>
+<div class="code-line">    <span class="code-keyword">uint256</span> <span class="code-keyword">public</span> <span class="code-keyword">constant</span> TOTAL_SUPPLY = <span class="code-number">1_000_000_000</span> * <span class="code-number">10**18</span>;</div>
+<div class="code-line">    <span class="code-keyword">uint256</span> <span class="code-keyword">public</span> totalBurned;</div>
+<div class="code-line">    </div>
+<div class="code-line">    <span class="code-comment">// Advanced security with role-based access control</span></div>
+<div class="code-line">    <span class="code-keyword">bytes32</span> <span class="code-keyword">public</span> <span class="code-keyword">constant</span> MINTER_ROLE = <span class="code-function">keccak256</span>(<span class="code-string">"MINTER_ROLE"</span>);</div>
+<div class="code-line">    <span class="code-keyword">bytes32</span> <span class="code-keyword">public</span> <span class="code-keyword">constant</span> PAUSER_ROLE = <span class="code-function">keccak256</span>(<span class="code-string">"PAUSER_ROLE"</span>);</div>
+<div class="code-line">}</div>
+            </div>
+        </div>
+
+        <!-- الشريحة 5: PronovaPresale - المرحلة 1 -->
+        <div class="slide">
+            <h2 class="section-title">PronovaPresale.sol - نظام البيع المتقدم</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                        <div class="card-title">بنية المرحلة</div>
+                    </div>
+                    <div class="card-content">
+                        <table class="table">
+                            <tr><td><strong>المرحلة 1</strong></td><td>$0.10 - 100M رمز</td></tr>
+                            <tr><td><strong>المرحلة 2</strong></td><td>$0.15 - 100M رمز</td></tr>
+                            <tr><td><strong>المرحلة 3</strong></td><td>$0.20 - 100M رمز</td></tr>
+                            <tr><td><strong>المرحلة 4</strong></td><td>$0.25 - 100M رمز</td></tr>
+                            <tr><td><strong>الهدف الإجمالي</strong></td><td>$32,000,000</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💳</div>
+                        <div class="card-title">طرق الدفع</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>ETH (Ethereum)</li>
+                            <li>BNB (Binance Smart Chain)</li>
+                            <li>USDT (عملة مستقرة)</li>
+                            <li>بطاقة ائتمان عبر Stripe</li>
+                            <li>تحويل مصرفي (KYC مطلوب)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <strong>ميزات الأمان:</strong> يتضمن عقد البيع المسبق نظام قائمة بيضاء، وسقوف شراء فردية، وحماية من التلاعب بالأسعار، ونظام إلغاء طوارئ، وتدقيق كامل للمسار لكل معاملة.
+            </div>
+        </div>
+
+        <!-- الشريحة 6: تكامل Oracle وتغذية الأسعار -->
+        <div class="slide">
+            <h2 class="section-title">تكامل Chainlink Oracle</h2>
+            <div class="architecture-diagram">
+                <h3 style="text-align: center; margin-bottom: 30px; color: #667eea;">نظام تغذية الأسعار في الوقت الفعلي</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px;">
+                    <div class="diagram-node">
+                        <h3>ETH/USD Oracle</h3>
+                        <p>تغذية أسعار Chainlink</p>
+                        <div class="tag">دقة 8 كسور عشرية</div>
+                        <div class="tag">تحديث كل 3600 ثانية</div>
+                    </div>
+                    <div class="diagram-node">
+                        <h3>BNB/USD Oracle</h3>
+                        <p>تغذية أسعار Chainlink</p>
+                        <div class="tag">دقة 8 كسور عشرية</div>
+                        <div class="tag">تحديث كل 3600 ثانية</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔒</div>
+                        <div class="card-title">آليات الأمان</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>فحوصات انحراف الأسعار</li>
+                            <li>حدود الطابع الزمني</li>
+                            <li>أسعار احتياطية</li>
+                            <li>حماية من التلاعب</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">تحسين الأداء</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تخزين مؤقت للأسعار</li>
+                            <li>تحديثات دفعية</li>
+                            <li>استخدام فعال للغاز</li>
+                            <li>حد أدنى من الاستعلامات الخارجية</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">دقة البيانات</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>دقة 0.01%</li>
+                            <li>عقد موثوق متعدد</li>
+                            <li>مصادر بيانات متعددة</li>
+                            <li>تحقق تلقائي</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 7: PronovaVesting - تعمق -->
+        <div class="slide">
+            <h2 class="section-title">PronovaVesting.sol - نظام القفل الزمني المتقدم</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⏰</div>
+                        <div class="card-title">استحقاق الورقة البيضاء</div>
+                    </div>
+                    <div class="card-content">
+                        <table class="table">
+                            <tr><td><strong>النسبة المقفلة</strong></td><td>45% من التخصيص</td></tr>
+                            <tr><td><strong>المدة الإجمالية</strong></td><td>5 سنوات (1,825 يوم)</td></tr>
+                            <tr><td><strong>فترة الإطلاق</strong></td><td>180 يوم (6 أشهر)</td></tr>
+                            <tr><td><strong>إطلاق لكل فترة</strong></td><td>2.5% من الإجمالي</td></tr>
+                            <tr><td><strong>إطلاق فوري</strong></td><td>55% متاح</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔧</div>
+                        <div class="card-title">الميزات التقنية</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>أنواع استحقاق متعددة</li>
+                            <li>أمان ضد إعادة الدخول</li>
+                            <li>آلية إلغاء</li>
+                            <li>مطالبات طوارئ</li>
+                            <li>معالجة دفعية</li>
+                            <li>حسابات محسّنة للغاز</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block" data-language="solidity">
+<div class="code-line"><span class="code-comment">// حساب الاستحقاق المتوافق مع الورقة البيضاء</span></div>
+<div class="code-line"><span class="code-keyword">function</span> <span class="code-function">_computeWhitepaperReleasableAmount</span>(</div>
+<div class="code-line">    VestingSchedule <span class="code-keyword">memory</span> schedule</div>
+<div class="code-line">) <span class="code-keyword">internal</span> <span class="code-keyword">view</span> <span class="code-keyword">returns</span> (<span class="code-keyword">uint256</span>) {</div>
+<div class="code-line">    <span class="code-keyword">uint256</span> timeElapsed = block.timestamp - schedule.startTime;</div>
+<div class="code-line">    </div>
+<div class="code-line">    <span class="code-comment">// حساب فترات 6 أشهر المكتملة</span></div>
+<div class="code-line">    <span class="code-keyword">uint256</span> intervalsPassed = timeElapsed / UNLOCK_INTERVAL;</div>
+<div class="code-line">    </div>
+<div class="code-line">    <span class="code-comment">// التعامل مع الإكمال (مرور 5 سنوات)</span></div>
+<div class="code-line">    <span class="code-keyword">if</span> (timeElapsed >= VESTING_DURATION) {</div>
+<div class="code-line">        <span class="code-keyword">return</span> schedule.totalAmount - schedule.releasedAmount;</div>
+<div class="code-line">    }</div>
+<div class="code-line">    </div>
+<div class="code-line">    <span class="code-comment">// حساب إجمالي المفتوح: 2.5% لكل فترة</span></div>
+<div class="code-line">    <span class="code-keyword">uint256</span> totalUnlockedPercentage = intervalsPassed * UNLOCK_PERCENTAGE_PER_INTERVAL;</div>
+<div class="code-line">    </div>
+<div class="code-line">    <span class="code-comment">// حد أقصى عند 100% (10,000 نقطة أساس)</span></div>
+<div class="code-line">    <span class="code-keyword">if</span> (totalUnlockedPercentage > BASIS_POINTS) {</div>
+<div class="code-line">        totalUnlockedPercentage = BASIS_POINTS;</div>
+<div class="code-line">    }</div>
+<div class="code-line">    </div>
+<div class="code-line">    <span class="code-keyword">uint256</span> totalUnlockedAmount = </div>
+<div class="code-line">        (schedule.totalAmount * totalUnlockedPercentage) / BASIS_POINTS;</div>
+<div class="code-line">    </div>
+<div class="code-line">    <span class="code-keyword">return</span> totalUnlockedAmount - schedule.releasedAmount;</div>
+<div class="code-line">}</div>
+            </div>
+
+            <div class="highlight">
+                <strong>الدقة الرياضية:</strong> تستخدم خوارزمية الاستحقاق لدينا نقاط الأساس (10,000 = 100%) لضمان إطلاقات دقيقة بنسبة 2.5% دون أخطاء التقريب، مع الحفاظ على الدقة الرياضية المثالية على مدى فترة 5 سنوات.
+            </div>
+            
+            <!-- توضيح الاستحقاق الصديق للعميل -->
+            <div style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; padding: 20px; margin-top: 20px; border-radius: 10px; border-right: 5px solid #FFD700;">
+                <h4 style="color: #FFD700; margin-bottom: 10px;">💼 ما الذي يفعله نظام الاستحقاق هذا لعملك:</h4>
+                <p style="color: #f0f0f0; font-size: 1.1em; margin: 0;">
+                    <strong>فكر فيه كخزنة إطلاق تلقائية بالوقت:</strong> 45% من رموز المستثمرين مقفلة لمدة 5 سنوات،
+                    ثم يتم إطلاقها تلقائيًا بنسبة 2.5% كل 6 أشهر. هذا يمنع إغراق السوق، ويحافظ على قيمة الرمز،
+                    ويعطي المستثمرين الثقة بأن استثمارهم محمي على المدى الطويل. إنه مثل وجود خزنة رقمية
+                    لا يمكن لأحد التلاعب بها - ولا حتى أنت كمالك.
+                </p>
+            </div>
+        </div>
+
+        <!-- الشريحة 8: استراتيجيات تحسين الغاز -->
+        <div class="slide">
+            <h2 class="section-title">تحسين الغاز والأداء</h2>
+            <div class="content-grid grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📦</div>
+                        <div class="card-title">تعبئة البنية</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تقليل فتحات التخزين</li>
+                            <li>محاذاة أنواع البيانات</li>
+                            <li>تعبئة uint256 الفعالة</li>
+                            <li>40% توفير في التخزين</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">العمليات الدفعية</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تحويلات متعددة</li>
+                            <li>مطالبات مجمعة</li>
+                            <li>تحديثات حالة واحدة</li>
+                            <li>توفير 60% في الغاز</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔧</div>
+                        <div class="card-title">تحسين الكود</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تخزين مؤقت للنتائج</li>
+                            <li>إنهاء مبكر للحلقات</li>
+                            <li>أنواع بيانات فعالة</li>
+                            <li>عمليات بت حكيمة</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-block" data-language="solidity">
+<div class="code-line"><span class="code-comment">// مثال: تحسين تعبئة البنية</span></div>
+<div class="code-line"><span class="code-keyword">struct</span> PresalePhase {</div>
+<div class="code-line">    <span class="code-keyword">uint128</span> tokenPrice;      <span class="code-comment">// فتحة 1: 16 بايت</span></div>
+<div class="code-line">    <span class="code-keyword">uint128</span> tokensAvailable; <span class="code-comment">// فتحة 1: 16 بايت (معبأة)</span></div>
+<div class="code-line">    <span class="code-keyword">uint128</span> tokensSold;      <span class="code-comment">// فتحة 2: 16 بايت</span></div>
+<div class="code-line">    <span class="code-keyword">uint64</span> startTime;        <span class="code-comment">// فتحة 2: 8 بايت</span></div>
+<div class="code-line">    <span class="code-keyword">uint64</span> endTime;          <span class="code-comment">// فتحة 2: 8 بايت (معبأة)</span></div>
+<div class="code-line">    <span class="code-keyword">bool</span> isActive;           <span class="code-comment">// فتحة 3: 1 بايت</span></div>
+<div class="code-line">    <span class="code-keyword">uint8</span> bonusPercentage;   <span class="code-comment">// فتحة 3: 1 بايت</span></div>
+<div class="code-line">}</div>
+<div class="code-line"><span class="code-comment">// يحفظ 3 فتحات تخزين مقارنة بالبنية غير المحسنة</span></div>
+            </div>
+        </div>
+
+        <!-- الشريحة 9: ميزات الأمان -->
+        <div class="slide">
+            <h2 class="section-title">بروتوكولات الأمان الشاملة</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🛡️</div>
+                        <div class="card-title">حماية مستوى العقد</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li><strong>حراس إعادة الدخول:</strong> منع هجمات الاستدعاء المتكرر</li>
+                            <li><strong>وقفة الطوارئ:</strong> إيقاف فوري لجميع العمليات</li>
+                            <li><strong>التحكم في الوصول:</strong> نظام أذونات متعدد المستويات</li>
+                            <li><strong>تحقق من التدفق:</strong> حماية من تجاوز الأعداد الصحيحة</li>
+                            <li><strong>تحقق من الطابع الزمني:</strong> منع التلاعب بالوقت</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔐</div>
+                        <div class="card-title">حماية المعاملات</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li><strong>حماية MEV:</strong> مقاومة الهجوم الأمامي</li>
+                            <li><strong>حماية الانزلاق:</strong> تحمل الأسعار القصوى</li>
+                            <li><strong>سقوف الشراء:</strong> منع تراكم الحيتان</li>
+                            <li><strong>سقوف الغاز:</strong> منع الحلقات اللانهائية</li>
+                            <li><strong>فحوصات توقيع:</strong> تحقق مشفر</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid grid-1">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔍</div>
+                        <div class="card-title">مخفضات المخاطر الإضافية</div>
+                    </div>
+                    <div class="card-content">
+                        <table class="table">
+                            <tr><td><strong>تعدد التوقيع</strong></td><td>الأموال الحرجة تتطلب موافقات متعددة</td></tr>
+                            <tr><td><strong>فترات القفل الزمني</strong></td><td>تأخيرات إلزامية للإجراءات الحساسة</td></tr>
+                            <tr><td><strong>القائمة البيضاء</strong></td><td>عناوين KYC-ed فقط للمعاملات الكبيرة</td></tr>
+                            <tr><td><strong>حدود السعر</strong></td><td>نطاقات سعر مقبولة تلقائية</td></tr>
+                            <tr><td><strong>تدقيق كامل</strong></td><td>كل معاملة مسجلة وقابلة للتحقق</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 10: بروتوكولات الاختبار -->
+        <div class="slide">
+            <h2 class="section-title">بروتوكولات الاختبار الشاملة</h2>
+            <div class="content-grid grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">✅</div>
+                        <div class="card-title">اختبار الوحدة</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>100% تغطية الكود</li>
+                            <li>اختبارات وظيفة معزولة</li>
+                            <li>سيناريوهات حالة الحافة</li>
+                            <li>تحقق حساب الغاز</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔗</div>
+                        <div class="card-title">اختبار التكامل</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تفاعلات العقد</li>
+                            <li>تدفقات رحلة المستخدم</li>
+                            <li>تسلسلات معاملات معقدة</li>
+                            <li>عمليات تحقق عبر السلسلة</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚔️</div>
+                        <div class="card-title">اختبار الأمان</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>اختبار نواقل الهجوم</li>
+                            <li>تحليل ثابت</li>
+                            <li>تحليل رسمي</li>
+                            <li>مراجعة كود يدوية</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="architecture-diagram">
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">مصفوفة التغطية</h3>
+                <table class="table" style="width: 100%;">
+                    <tr>
+                        <td><strong>وظائف العقد</strong></td>
+                        <td>156 اختبار</td>
+                        <td>✅ 100%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>مسارات الأمان</strong></td>
+                        <td>89 اختبار</td>
+                        <td>✅ 100%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>تحسين الغاز</strong></td>
+                        <td>45 اختبار</td>
+                        <td>✅ 100%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>حالات الحافة</strong></td>
+                        <td>112 اختبار</td>
+                        <td>✅ 100%</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- الشريحة 11: استراتيجية النشر -->
+        <div class="slide">
+            <h2 class="section-title">استراتيجية النشر والترحيل</h2>
+            <div class="content-grid grid-1">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🚀</div>
+                        <div class="card-title">عملية النشر متعددة المراحل</div>
+                    </div>
+                    <div class="card-content">
+                        <table class="table">
+                            <tr><td><strong>المرحلة 1: الشبكة التجريبية</strong></td><td>النشر والاختبار الكامل على Sepolia</td></tr>
+                            <tr><td><strong>المرحلة 2: التحقق</strong></td><td>التحقق من العقد وإعداد الواجهة</td></tr>
+                            <tr><td><strong>المرحلة 3: التدقيق</strong></td><td>مراجعة أمنية مهنية</td></tr>
+                            <tr><td><strong>المرحلة 4: الشبكة الرئيسية</strong></td><td>النشر النهائي مع محدودي الغاز</td></tr>
+                            <tr><td><strong>المرحلة 5: المراقبة</strong></td><td>تنبيهات 24/7 وتتبع المعاملات</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚙️</div>
+                        <div class="card-title">تكوين البنية التحتية</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>عقد Infura الممتازة</li>
+                            <li>نشر تعدد التوقيع</li>
+                            <li>مراقبة Tenderly</li>
+                            <li>عقود Gnosis Safe</li>
+                            <li>نسخ احتياطي لـ IPFS</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">أدوات المراقبة</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تنبيهات المعاملات في الوقت الفعلي</li>
+                            <li>مراقبة الأرصدة</li>
+                            <li>تتبع أسعار الغاز</li>
+                            <li>لوحات معلومات الأداء</li>
+                            <li>تقارير الامتثال التلقائية</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 12: قابلية التوسع والمستقبل -->
+        <div class="slide">
+            <h2 class="section-title">قابلية التوسع والتحسينات المستقبلية</h2>
+            <div class="content-grid grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔄</div>
+                        <div class="card-title">حلول الطبقة 2</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>Polygon جاهز</li>
+                            <li>توافق Arbitrum</li>
+                            <li>دعم Optimism</li>
+                            <li>تجميع المعاملات</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🌐</div>
+                        <div class="card-title">السلسلة المتقاطعة</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>بنية الجسر</li>
+                            <li>نشر متعدد السلاسل</li>
+                            <li>سيولة موحدة</li>
+                            <li>بروتوكولات Atomic swap</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                        <div class="card-title">خارطة طريق الترقية</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>ميزات الحوكمة</li>
+                            <li>مكافآت الرهان</li>
+                            <li>تكامل DeFi</li>
+                            <li>توسيع النظام البيئي</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <strong>التصميم المقاوم للمستقبل:</strong> تم بناء معماريتنا مع وضع قابلية التوسع في الاعتبار، مما يتيح التكامل السلس للميزات الجديدة والتقنيات الناشئة دون المساس بالوظائف الأساسية أو الأمان.
+            </div>
+        </div>
+
+        <!-- الشريحة 13: الامتثال والمعايير -->
+        <div class="slide">
+            <h2 class="section-title">الامتثال التنظيمي والمعايير</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚖️</div>
+                        <div class="card-title">الامتثال القانوني</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li><strong>KYC/AML:</strong> تكامل كامل مع موفري التحقق</li>
+                            <li><strong>الامتثال للأوراق المالية:</strong> بنية متوافقة مع Reg D/S</li>
+                            <li><strong>خصوصية البيانات:</strong> امتثال GDPR و CCPA</li>
+                            <li><strong>القيود الجغرافية:</strong> حظر قائم على الدولة</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📜</div>
+                        <div class="card-title">معايير الصناعة</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li><strong>EIP-20:</strong> توافق كامل مع الرمز</li>
+                            <li><strong>EIP-2612:</strong> دعم التصريح</li>
+                            <li><strong>EIP-165:</strong> اكتشاف الواجهة</li>
+                            <li><strong>OpenZeppelin:</strong> أفضل ممارسات الأمان</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="architecture-diagram">
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">مصفوفة الامتثال</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div class="tag" style="padding: 15px; font-size: 1.1rem;">✅ SEC جاهز</div>
+                    <div class="tag" style="padding: 15px; font-size: 1.1rem;">✅ متوافق مع FATF</div>
+                    <div class="tag" style="padding: 15px; font-size: 1.1rem;">✅ AML/CTF</div>
+                    <div class="tag" style="padding: 15px; font-size: 1.1rem;">✅ GDPR</div>
+                    <div class="tag" style="padding: 15px; font-size: 1.1rem;">✅ MiCA جاهز</div>
+                    <div class="tag" style="padding: 15px; font-size: 1.1rem;">✅ CCPA</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 14: تجربة المستخدم والواجهة الأمامية -->
+        <div class="slide">
+            <h2 class="section-title">تكامل تجربة المستخدم</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💻</div>
+                        <div class="card-title">تكامل الواجهة الأمامية</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>مكتبات Web3.js/Ethers.js</li>
+                            <li>دعم MetaMask</li>
+                            <li>دعم WalletConnect</li>
+                            <li>تحديثات في الوقت الفعلي</li>
+                            <li>واجهة سريعة الاستجابة</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📱</div>
+                        <div class="card-title">تحسينات الجوال</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تصميم الجوال أولاً</li>
+                            <li>الارتباط العميق للمحفظة</li>
+                            <li>تتبع المعاملات</li>
+                            <li>إشعارات فورية</li>
+                            <li>تجربة غير متصلة</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <strong>تركيز المستخدم:</strong> كل ميزة تقنية مصممة مع وضع تجربة المستخدم النهائي في الاعتبار، مما يضمن تفاعلات سلسة وبديهية وآمنة عبر جميع نقاط اللمس.
+            </div>
+        </div>
+
+        <!-- الشريحة 15: الذكاء الاصطناعي والأتمتة -->
+        <div class="slide">
+            <h2 class="section-title">الذكاء الاصطناعي والأتمتة</h2>
+            <div class="content-grid grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🤖</div>
+                        <div class="card-title">المراقبة الذكية</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>كشف الشذوذ</li>
+                            <li>تحليل التنبؤي</li>
+                            <li>تحديد الاحتيال التلقائي</li>
+                            <li>رؤى السلوك</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">العمليات التلقائية</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تسوية تلقائية</li>
+                            <li>إطلاق ذكي للرموز</li>
+                            <li>تحسين الغاز الديناميكي</li>
+                            <li>إعادة توازن محفظة</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">التحليلات والتقارير</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>لوحات معلومات في الوقت الفعلي</li>
+                            <li>تتبع الأداء</li>
+                            <li>تحليل المستثمر</li>
+                            <li>تقارير الامتثال</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 16: نواقل الهجوم ومخفضات المخاطر -->
+        <div class="slide">
+            <h2 class="section-title">تحليل نواقل الهجوم</h2>
+            <div class="content-grid grid-1">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🛡️</div>
+                        <div class="card-title">التهديدات المعالجة ومخفضات المخاطر</div>
+                    </div>
+                    <div class="card-content">
+                        <table class="table">
+                            <tr><td><strong>هجمات إعادة الدخول</strong></td><td>حراس إعادة الدخول + نمط CEI</td></tr>
+                            <tr><td><strong>الركض الأمامي</strong></td><td>حدود الانزلاق + الطوابع الزمنية</td></tr>
+                            <tr><td><strong>تلاعب بسعر Oracle</strong></td><td>Chainlink موثوق متعدد + حدود الانحراف</td></tr>
+                            <tr><td><strong>تجاوز الفيض/نقصان</strong></td><td>مكتبة SafeMath + Solidity 0.8.x</td></tr>
+                            <tr><td><strong>هجمات DoS</strong></td><td>حدود الغاز + معالجة دفعية</td></tr>
+                            <tr><td><strong>هجمات Flash Loan</strong></td><td>تحقق من الرصيد + فترات القفل الزمني</td></tr>
+                            <tr><td><strong>عمليات الاستغلال في التصريح</strong></td><td>فحوصات الموافق + التحقق من التوقيع</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <strong>الأمان بالتصميم:</strong> كل ناقل هجوم محتمل تم النظر فيه ومعالجته من خلال آليات دفاع متعددة الطبقات، مما يضمن الحماية الشاملة ضد التهديدات المعروفة والناشئة.
+            </div>
+        </div>
+
+        <!-- الشريحة 17: تفاصيل التنفيذ التقنية -->
+        <div class="slide">
+            <h2 class="section-title">تفاصيل التنفيذ الرئيسية</h2>
+            <div class="code-block" data-language="solidity">
+<div class="code-line"><span class="code-comment">// نظام متقدم متعدد التوقيع لعمليات حرجة</span></div>
+<div class="code-line"><span class="code-keyword">contract</span> <span class="code-function">MultiSigTimelock</span> {</div>
+<div class="code-line">    <span class="code-keyword">uint256</span> <span class="code-keyword">constant</span> TIMELOCK_DURATION = <span class="code-number">48 hours</span>;</div>
+<div class="code-line">    <span class="code-keyword">uint256</span> <span class="code-keyword">constant</span> REQUIRED_SIGNATURES = <span class="code-number">3</span>;</div>
+<div class="code-line">    </div>
+<div class="code-line">    <span class="code-keyword">struct</span> Transaction {</div>
+<div class="code-line">        <span class="code-keyword">address</span> target;</div>
+<div class="code-line">        <span class="code-keyword">uint256</span> value;</div>
+<div class="code-line">        <span class="code-keyword">bytes</span> data;</div>
+<div class="code-line">        <span class="code-keyword">uint256</span> executeTime;</div>
+<div class="code-line">        <span class="code-keyword">uint256</span> signatures;</div>
+<div class="code-line">        <span class="code-keyword">mapping</span>(<span class="code-keyword">address</span> => <span class="code-keyword">bool</span>) hasSigned;</div>
+<div class="code-line">    }</div>
+<div class="code-line">    </div>
+<div class="code-line">    <span class="code-comment">// وقفة طوارئ مع تحكم متعدد التوقيع</span></div>
+<div class="code-line">    <span class="code-keyword">function</span> <span class="code-function">emergencyPause</span>() <span class="code-keyword">external</span> <span class="code-function">onlyMultiSig</span> {</div>
+<div class="code-line">        <span class="code-function">_pause</span>();</div>
+<div class="code-line">        <span class="code-keyword">emit</span> <span class="code-function">EmergencyPauseActivated</span>(block.timestamp);</div>
+<div class="code-line">    }</div>
+<div class="code-line">}</div>
+            </div>
+
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔑</div>
+                        <div class="card-title">إدارة المفاتيح</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تخزين بارد للمفاتيح الرئيسية</li>
+                            <li>محافظ الأجهزة للعمليات</li>
+                            <li>تناوب المفاتيح المنتظم</li>
+                            <li>عناوين متعددة التوقيع للأموال الحرجة</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📝</div>
+                        <div class="card-title">أحداث العقد</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>معاملات شراء مفصلة</li>
+                            <li>تغييرات حالة المرحلة</li>
+                            <li>إطلاقات الاستحقاق</li>
+                            <li>إجراءات إدارية</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 18: الجدول الزمني والمعالم -->
+        <div class="slide">
+            <h2 class="section-title">جدول التطوير والمعالم</h2>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📅</div>
+                        <div class="card-title">المرحلة 1: التصميم (الأسبوع 1-2)</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تحليل الورقة البيضاء</li>
+                            <li>التصميم المعماري</li>
+                            <li>مواصفات الأمان</li>
+                            <li>خطة تحسين الغاز</li>
+                            <li>مسارات الاختبار</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔨</div>
+                        <div class="card-title">المرحلة 2: التطوير (الأسبوع 3-5)</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تنفيذ PronovaToken.sol</li>
+                            <li>تنفيذ PronovaPresale.sol</li>
+                            <li>تنفيذ PronovaVesting.sol</li>
+                            <li>تكامل Chainlink oracle</li>
+                            <li>اختبار التفاعل عبر العقود</li>
+                            <li>نشر الشبكة التجريبية</li>
+                            <li>دعم تكامل الواجهة الأمامية</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🔍</div>
+                        <div class="card-title">المرحلة 3: التحقق (الأسبوع 6)</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تدقيق أمني مهني</li>
+                            <li>تقييم الثغرات</li>
+                            <li>تحسين الأداء</li>
+                            <li>سيناريوهات اختبار الإجهاد</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🚀</div>
+                        <div class="card-title">المرحلة 4: النشر (الأسبوع 7)</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>نشر الشبكة الرئيسية</li>
+                            <li>التحقق من العقد</li>
+                            <li>اختبار ما بعد النشر</li>
+                            <li>إعداد المراقبة</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الشريحة 19: مقاييس الأداء -->
+        <div class="slide">
+            <h2 class="section-title">مقاييس الأداء ومعايير الصناعة</h2>
+            <div class="content-grid grid-3">
+                <div class="metric-card">
+                    <div class="metric-value">0.1s</div>
+                    <div class="metric-label">تأكيد المعاملة</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">40%</div>
+                    <div class="metric-label">تخفيض تكلفة الغاز</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">99.99%</div>
+                    <div class="metric-label">وقت التشغيل</div>
+                </div>
+            </div>
+
+            <div class="architecture-diagram">
+                <h3 style="text-align: center; color: #667eea; margin-bottom: 20px;">مقارنة تكلفة الغاز</h3>
+                <table class="table" style="width: 100%;">
+                    <tr>
+                        <td><strong>العملية</strong></td>
+                        <td><strong>المنافسون</strong></td>
+                        <td><strong>Pronova</strong></td>
+                        <td><strong>التوفير</strong></td>
+                    </tr>
+                    <tr>
+                        <td>شراء رمز</td>
+                        <td>150,000 gas</td>
+                        <td>90,000 gas</td>
+                        <td>40%</td>
+                    </tr>
+                    <tr>
+                        <td>مطالبة الاستحقاق</td>
+                        <td>120,000 gas</td>
+                        <td>75,000 gas</td>
+                        <td>37.5%</td>
+                    </tr>
+                    <tr>
+                        <td>تحويل متعدد</td>
+                        <td>45,000 gas/عنوان</td>
+                        <td>25,000 gas/عنوان</td>
+                        <td>44.4%</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- الشريحة 20: دعم وصيانة -->
+        <div class="slide">
+            <h2 class="section-title">الدعم والصيانة المستمرة</h2>
+            <div class="content-grid grid-3">
+                <div class="metric-card">
+                    <div class="metric-value">24/7</div>
+                    <div class="metric-label">مراقبة النظام</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">48h</div>
+                    <div class="metric-label">وقت الاستجابة</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">6 أشهر</div>
+                    <div class="metric-label">الدعم مشمول</div>
+                </div>
+            </div>
+
+            <div class="content-grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🛠️</div>
+                        <div class="card-title">خدمات الصيانة</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>تحديثات الأمان المنتظمة</li>
+                            <li>مراقبة الأداء</li>
+                            <li>إصلاح الأخطاء والتحسينات</li>
+                            <li>تحديثات التوافق</li>
+                            <li>تحسينات الغاز</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📞</div>
+                        <div class="card-title">الدعم الفني</div>
+                    </div>
+                    <div class="card-content">
+                        <ul class="feature-list">
+                            <li>استجابة الطوارئ 24/7</li>
+                            <li>دعم تكامل المطورين</li>
+                            <li>وثائق ودروس</li>
+                            <li>ترحيل البيانات</li>
+                            <li>المساعدة في الترقية</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ملخص العميل: ما الذي تحصل عليه -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1 class="slide-title">🎯 ما الذي تحصل عليه: الملخص التنفيذي</h1>
+                <p class="slide-subtitle">استثمارك في تقنية Blockchain المهنية</p>
+            </div>
+
+            <div class="content-grid grid-1">
+                <div class="card" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; padding: 25px;">
+                    <h3 style="color: white; text-align: center; margin-bottom: 20px;">🏆 قيمة استثنائية مقدمة</h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div>
+                            <h4 style="color: white; margin-bottom: 10px;">💰 الأمان المالي</h4>
+                            <ul style="color: #f0f0f0; list-style: none; padding: 0;">
+                                <li>✅ حماية متعددة الطبقات من الاحتيال</li>
+                                <li>✅ أمان على مستوى المؤسسات</li>
+                                <li>✅ حماية أموال المستثمرين</li>
+                                <li>✅ الامتثال التنظيمي</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: white; margin-bottom: 10px;">🚀 نمو الأعمال</h4>
+                            <ul style="color: #f0f0f0; list-style: none; padding: 0;">
+                                <li>✅ جاهز للإدراج في البورصات</li>
+                                <li>✅ قابل للتوسع لملايين المستخدمين</li>
+                                <li>✅ مصداقية مهنية</li>
+                                <li>✅ تقنية مقاومة للمستقبل</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-grid grid-3">
+                <div class="metric-card" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                    <div class="metric-value" style="color: white;">$250K+</div>
+                    <div class="metric-label" style="color: #f0f0f0;">قيمة المؤسسة</div>
+                </div>
+                <div class="metric-card" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                    <div class="metric-value" style="color: white;">200+</div>
+                    <div class="metric-label" style="color: #f0f0f0;">ساعات التطوير</div>
+                </div>
+                <div class="metric-card" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                    <div class="metric-value" style="color: white;">15+</div>
+                    <div class="metric-label" style="color: #f0f0f0;">ميزات الأمان</div>
+                </div>
+            </div>
+
+            <div class="highlight" style="background: linear-gradient(135deg, #ff9a9e, #fecfef); color: #333; padding: 25px; text-align: center; border-radius: 15px; margin-top: 20px;">
+                <h3 style="color: #333; margin-bottom: 15px;">🌟 ميزتك التنافسية</h3>
+                <p style="font-size: 1.2em; margin-bottom: 10px; color: #444;">
+                    <strong>أنت الآن تمتلك تقنية blockchain تنافس شركات Fortune 500</strong>
+                </p>
+                <p style="font-size: 1.1em; color: #555;">
+                    بينما يكافح المنافسون مع مواقع الويب الأساسية، فأنت تطلق بنية تحتية DeFi على مستوى المؤسسات
+                    يمكنها التعامل مع الاستثمارات المؤسسية والتدقيق التنظيمي العالمي.
+                </p>
+            </div>
+        </div>
+
+        <!-- الشريحة 25: شكرًا لك -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1 class="slide-title">مستعدون لبناء المستقبل</h1>
+                <p class="slide-subtitle">
+                    تطوير العقود الذكية على مستوى المؤسسات<br>
+                    الأمان • الأداء • الابتكار
+                </p>
+            </div>
+            <div class="content-grid grid-3">
+                <div class="metric-card">
+                    <div class="metric-value">🚀</div>
+                    <div class="metric-label">جاهز للإطلاق</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">🛡️</div>
+                    <div class="metric-label">آمن بالكامل</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">📈</div>
+                    <div class="metric-label">قابل للتوسع</div>
+                </div>
+            </div>
+            
+            <div class="highlight" style="text-align: center; font-size: 1.3rem; padding: 40px;">
+                <strong>معًا، نبني مستقبل التمويل اللامركزي</strong><br>
+                <span style="color: #667eea;">تقنيتك. رؤيتك. نجاحنا المشترك.</span>
+            </div>
+        </div>
+
+        </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn" id="prevBtn" onclick="changeSlide(-1)">السابق</button>
+        <button class="control-btn" id="nextBtn" onclick="changeSlide(1)">التالي</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            // Hide all slides
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                slide.style.position = 'absolute';
+                slide.style.opacity = '0';
+                slide.style.transform = 'translateY(30px)';
+            });
+            
+            // Wrap around
+            if (n >= totalSlides) currentSlide = 0;
+            if (n < 0) currentSlide = totalSlides - 1;
+            
+            // Show current slide
+            slides[currentSlide].classList.add('active');
+            slides[currentSlide].style.position = 'relative';
+            slides[currentSlide].style.opacity = '1';
+            slides[currentSlide].style.transform = 'translateY(0)';
+            
+            // Update counter
+            document.getElementById('slideCounter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+            
+            // Scroll to top
+            const slidesWrapper = document.querySelector('.slides-wrapper');
+            slidesWrapper.scrollTop = 0;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'Home') {
+                currentSlide = 0;
+                showSlide(currentSlide);
+            }
+            if (e.key === 'End') {
+                currentSlide = totalSlides - 1;
+                showSlide(currentSlide);
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1);  // Swipe left (RTL)
+            if (touchEndX > touchStartX + 50) changeSlide(-1); // Swipe right (RTL)
+        }
+
+        // Initialize
+        showSlide(currentSlide);
+
+        // Initialize - hide all slides except first
+        slides.forEach((slide, index) => {
+            if (index !== 0) {
+                slide.style.position = 'absolute';
+                slide.style.opacity = '0';
+                slide.style.transform = 'translateY(30px)';
+            }
+        });
+    </script>
+</body>
+</html>
