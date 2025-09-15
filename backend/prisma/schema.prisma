@@ -1,0 +1,179 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum KycStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+}
+
+enum PaymentMethod {
+  ETH
+  BNB
+  USDT
+  USD
+}
+
+enum DocumentType {
+  PASSPORT
+  DRIVERS_LICENSE
+  NATIONAL_ID
+  PROOF_OF_ADDRESS
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id              String        @id @default(uuid())
+  email           String        @unique
+  passwordHash    String
+  walletAddress   String?       @unique
+  role            UserRole      @default(USER)
+  emailVerified   Boolean       @default(false)
+  kycStatus       KycStatus     @default(PENDING)
+  kycData         Json?
+  referralCode    String        @unique @default(cuid())
+  referredBy      User?         @relation("ReferralSystem", fields: [referredById], references: [id])
+  referredById    String?
+  referrals       User[]        @relation("ReferralSystem")
+  totalInvested   Float         @default(0)
+  totalTokens     Float         @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  transactions    Transaction[]
+  kycDocuments    KycDocument[]
+  referralRewards ReferralReward[]
+  notifications   Notification[]
+  
+  @@index([email])
+  @@index([walletAddress])
+  @@index([referralCode])
+}
+
+model Transaction {
+  id              String            @id @default(uuid())
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String
+  transactionHash String?           @unique
+  paymentMethod   PaymentMethod
+  amountPaid      Float
+  tokensPurchased Float
+  pricePerToken   Float
+  phase           Int
+  status          TransactionStatus @default(PENDING)
+  metadata        Json?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([transactionHash])
+  @@index([status])
+}
+
+model ReferralReward {
+  id              String   @id @default(uuid())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  referredEmail   String
+  transactionId   String
+  commissionRate  Float
+  rewardAmount    Float
+  tokenAmount     Float
+  claimed         Boolean  @default(false)
+  claimedAt       DateTime?
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+}
+
+model KycDocument {
+  id                 String       @id @default(uuid())
+  user               User         @relation(fields: [userId], references: [id])
+  userId             String
+  documentType       DocumentType
+  documentUrl        String
+  verificationStatus KycStatus    @default(PENDING)
+  verifiedBy         String?
+  verificationNotes  String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@index([userId])
+}
+
+model Whitelist {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  walletAddress String?  @unique
+  tier          String   @default("bronze") // bronze, silver, gold
+  allocation    Float?
+  createdAt     DateTime @default(now())
+
+  @@index([email])
+  @@index([walletAddress])
+}
+
+model PresalePhase {
+  id              Int      @id @default(autoincrement())
+  phaseNumber     Int      @unique
+  name            String
+  pricePerToken   Float
+  tokenSupply     Float
+  tokensSold      Float    @default(0)
+  startDate       DateTime
+  endDate         DateTime
+  minPurchase     Float
+  maxPurchase     Float
+  isActive        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([phaseNumber])
+  @@index([isActive])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  type      String   // email, sms, in-app
+  subject   String
+  message   String
+  read      Boolean  @default(false)
+  sentAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([read])
+}
+
+model SystemSettings {
+  id                    String   @id @default(uuid())
+  key                   String   @unique
+  value                 Json
+  description           String?
+  updatedBy             String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([key])
+}
