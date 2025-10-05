@@ -11,14 +11,14 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
 
     const TOTAL_SUPPLY = ethers.parseEther("1000000000"); // 1 billion tokens
     const PRESALE_ALLOCATION = ethers.parseEther("250000000"); // 25% (250M)
-    const FOUNDERS_ALLOCATION = ethers.parseEther("75000000"); // 7.5% (75M)
-    const LIQUIDITY_ALLOCATION = ethers.parseEther("120000000"); // 12% (120M)
+    const FOUNDERS_ALLOCATION = ethers.parseEther("140000000"); // 14% (140M)
+    const LIQUIDITY_ALLOCATION = ethers.parseEther("150000000"); // 15% (150M)
     const PARTNERSHIPS_ALLOCATION = ethers.parseEther("150000000"); // 15% (150M)
-    const TEAM_ALLOCATION = ethers.parseEther("25000000"); // 2.5% (25M)
-    const COMMUNITY_ALLOCATION = ethers.parseEther("50000000"); // 5% (50M)
+    const TEAM_ALLOCATION = ethers.parseEther("50000000"); // 5% (50M)
+    const COMMUNITY_ALLOCATION = ethers.parseEther("80000000"); // 8% (80M)
     const STRATEGIC_RESERVES_ALLOCATION = ethers.parseEther("60000000"); // 6% (60M)
     const MARKETING_ALLOCATION = ethers.parseEther("120000000"); // 12% (120M)
-    const STAKING_REWARDS_ALLOCATION = ethers.parseEther("150000000"); // 15% (150M)
+    const STAKING_REWARDS_ALLOCATION = ethers.parseEther("0"); // 0% (removed)
 
     beforeEach(async function () {
         [owner, admin1, admin2, user1, user2, presaleContract, vestingContract,
@@ -50,24 +50,23 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
         });
     });
 
-    describe("Allocation Percentages (Whitepaper Compliance)", function () {
-        it("Should have correct allocation amounts as per whitepaper", async function () {
+    describe("Allocation Percentages (Optimized Model)", function () {
+        it("Should have correct allocation amounts as per optimized model", async function () {
             const allocations = await pronovaToken.getAllocationInfo();
 
-            expect(allocations.presale).to.equal(PRESALE_ALLOCATION);
-            expect(allocations.founders).to.equal(FOUNDERS_ALLOCATION);
-            expect(allocations.liquidity).to.equal(LIQUIDITY_ALLOCATION);
-            expect(allocations.partnerships).to.equal(PARTNERSHIPS_ALLOCATION);
-            expect(allocations.team).to.equal(TEAM_ALLOCATION);
-            expect(allocations.community).to.equal(COMMUNITY_ALLOCATION);
-            expect(allocations.strategic).to.equal(STRATEGIC_RESERVES_ALLOCATION);
-            expect(allocations.marketing).to.equal(MARKETING_ALLOCATION);
-            expect(allocations.staking).to.equal(STAKING_REWARDS_ALLOCATION);
+            expect(allocations[0]).to.equal(PRESALE_ALLOCATION);
+            expect(allocations[1]).to.equal(FOUNDERS_ALLOCATION);
+            expect(allocations[2]).to.equal(LIQUIDITY_ALLOCATION);
+            expect(allocations[3]).to.equal(PARTNERSHIPS_ALLOCATION);
+            expect(allocations[4]).to.equal(TEAM_ALLOCATION);
+            expect(allocations[5]).to.equal(COMMUNITY_ALLOCATION);
+            expect(allocations[6]).to.equal(STRATEGIC_RESERVES_ALLOCATION);
+            expect(allocations[7]).to.equal(MARKETING_ALLOCATION);
 
-            // Verify total equals 100%
+            // Verify total equals 100% (excluding staking which was removed)
             const total = PRESALE_ALLOCATION + FOUNDERS_ALLOCATION + LIQUIDITY_ALLOCATION +
                          PARTNERSHIPS_ALLOCATION + TEAM_ALLOCATION + COMMUNITY_ALLOCATION +
-                         STRATEGIC_RESERVES_ALLOCATION + MARKETING_ALLOCATION + STAKING_REWARDS_ALLOCATION;
+                         STRATEGIC_RESERVES_ALLOCATION + MARKETING_ALLOCATION;
             expect(total).to.equal(TOTAL_SUPPLY);
         });
     });

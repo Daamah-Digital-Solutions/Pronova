@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export { MockUSDT__factory } from "./MockUSDT__factory";
+export { MockV3Aggregator__factory } from "./MockV3Aggregator__factory";
 export { PronovaPresale__factory } from "./PronovaPresale__factory";
 export { PronovaToken__factory } from "./PronovaToken__factory";
 export { PronovaVesting__factory } from "./PronovaVesting__factory";

@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { MockUSDT } from "./MockUSDT";
+export type { MockV3Aggregator } from "./MockV3Aggregator";
 export type { PronovaPresale } from "./PronovaPresale";
 export type { PronovaToken } from "./PronovaToken";
 export type { PronovaVesting } from "./PronovaVesting";

@@ -351,7 +351,7 @@ contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Ree
         address _marketingWallet,
         address _vestingContract
     ) external onlyRole(ADMIN_ROLE) {
-        setAllocationWallets(
+        this.setAllocationWallets(
             _presaleContract,
             _foundersWallet,
             _liquidityWallet,
@@ -368,7 +368,7 @@ contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Ree
      * @dev Wrapper function for distributeAllocations to match deployment script
      */
     function confirmDistributeAllocations() external onlyRole(ADMIN_ROLE) {
-        distributeAllocations();
+        this.distributeAllocations();
     }
 
     /**

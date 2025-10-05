@@ -40,7 +40,6 @@ export interface PronovaTokenInterface extends Interface {
       | "PAUSER_ROLE"
       | "PRESALE_ALLOCATION"
       | "REQUIRED_CONFIRMATIONS"
-      | "STAKING_REWARDS_ALLOCATION"
       | "STRATEGIC_RESERVES_ALLOCATION"
       | "TEAM_ALLOCATION"
       | "TOTAL_SUPPLY"
@@ -56,6 +55,8 @@ export interface PronovaTokenInterface extends Interface {
       | "burn"
       | "burnFrom"
       | "communityWallet"
+      | "confirmDistributeAllocations"
+      | "confirmSetAllocationWallets"
       | "decimals"
       | "distributeAllocations"
       | "emergencyWithdraw"
@@ -80,7 +81,6 @@ export interface PronovaTokenInterface extends Interface {
       | "revokeRole"
       | "setAllocationWallets"
       | "setAutoBurn"
-      | "stakingContract"
       | "strategicReservesWallet"
       | "supportsInterface"
       | "symbol"
@@ -166,10 +166,6 @@ export interface PronovaTokenInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "STAKING_REWARDS_ALLOCATION",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "STRATEGIC_RESERVES_ALLOCATION",
     values?: undefined
   ): string;
@@ -225,6 +221,24 @@ export interface PronovaTokenInterface extends Interface {
   encodeFunctionData(
     functionFragment: "communityWallet",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "confirmDistributeAllocations",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "confirmSetAllocationWallets",
+    values: [
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike
+    ]
   ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
@@ -313,17 +327,12 @@ export interface PronovaTokenInterface extends Interface {
       AddressLike,
       AddressLike,
       AddressLike,
-      AddressLike,
       AddressLike
     ]
   ): string;
   encodeFunctionData(
     functionFragment: "setAutoBurn",
     values: [boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "stakingContract",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "strategicReservesWallet",
@@ -415,10 +424,6 @@ export interface PronovaTokenInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "STAKING_REWARDS_ALLOCATION",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "STRATEGIC_RESERVES_ALLOCATION",
     data: BytesLike
   ): Result;
@@ -458,6 +463,14 @@ export interface PronovaTokenInterface extends Interface {
   decodeFunctionResult(functionFragment: "burnFrom", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "communityWallet",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "confirmDistributeAllocations",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "confirmSetAllocationWallets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
@@ -533,10 +546,6 @@ export interface PronovaTokenInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setAutoBurn",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "stakingContract",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -848,8 +857,6 @@ export interface PronovaToken extends BaseContract {
 
   REQUIRED_CONFIRMATIONS: TypedContractMethod<[], [bigint], "view">;
 
-  STAKING_REWARDS_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
-
   STRATEGIC_RESERVES_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
 
   TEAM_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
@@ -892,6 +899,24 @@ export interface PronovaToken extends BaseContract {
 
   communityWallet: TypedContractMethod<[], [string], "view">;
 
+  confirmDistributeAllocations: TypedContractMethod<[], [void], "nonpayable">;
+
+  confirmSetAllocationWallets: TypedContractMethod<
+    [
+      _presaleContract: AddressLike,
+      _foundersWallet: AddressLike,
+      _liquidityWallet: AddressLike,
+      _partnershipsWallet: AddressLike,
+      _teamWallet: AddressLike,
+      _communityWallet: AddressLike,
+      _strategicReservesWallet: AddressLike,
+      _marketingWallet: AddressLike,
+      _vestingContract: AddressLike
+    ],
+    [void],
+    "nonpayable"
+  >;
+
   decimals: TypedContractMethod<[], [bigint], "view">;
 
   distributeAllocations: TypedContractMethod<[], [void], "nonpayable">;
@@ -903,17 +928,7 @@ export interface PronovaToken extends BaseContract {
   getAllocationInfo: TypedContractMethod<
     [],
     [
-      [
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        bigint
-      ] & {
+      [bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint] & {
         presale: bigint;
         founders: bigint;
         liquidity: bigint;
@@ -922,7 +937,6 @@ export interface PronovaToken extends BaseContract {
         community: bigint;
         strategic: bigint;
         marketing: bigint;
-        staking: bigint;
       }
     ],
     "view"
@@ -1007,7 +1021,6 @@ export interface PronovaToken extends BaseContract {
       _communityWallet: AddressLike,
       _strategicReservesWallet: AddressLike,
       _marketingWallet: AddressLike,
-      _stakingContract: AddressLike,
       _vestingContract: AddressLike
     ],
     [void],
@@ -1015,8 +1028,6 @@ export interface PronovaToken extends BaseContract {
   >;
 
   setAutoBurn: TypedContractMethod<[_enabled: boolean], [void], "nonpayable">;
-
-  stakingContract: TypedContractMethod<[], [string], "view">;
 
   strategicReservesWallet: TypedContractMethod<[], [string], "view">;
 
@@ -1099,9 +1110,6 @@ export interface PronovaToken extends BaseContract {
     nameOrSignature: "REQUIRED_CONFIRMATIONS"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "STAKING_REWARDS_ALLOCATION"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
     nameOrSignature: "STRATEGIC_RESERVES_ALLOCATION"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
@@ -1159,6 +1167,26 @@ export interface PronovaToken extends BaseContract {
     nameOrSignature: "communityWallet"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
+    nameOrSignature: "confirmDistributeAllocations"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "confirmSetAllocationWallets"
+  ): TypedContractMethod<
+    [
+      _presaleContract: AddressLike,
+      _foundersWallet: AddressLike,
+      _liquidityWallet: AddressLike,
+      _partnershipsWallet: AddressLike,
+      _teamWallet: AddressLike,
+      _communityWallet: AddressLike,
+      _strategicReservesWallet: AddressLike,
+      _marketingWallet: AddressLike,
+      _vestingContract: AddressLike
+    ],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "decimals"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
@@ -1175,17 +1203,7 @@ export interface PronovaToken extends BaseContract {
   ): TypedContractMethod<
     [],
     [
-      [
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        bigint
-      ] & {
+      [bigint, bigint, bigint, bigint, bigint, bigint, bigint, bigint] & {
         presale: bigint;
         founders: bigint;
         liquidity: bigint;
@@ -1194,7 +1212,6 @@ export interface PronovaToken extends BaseContract {
         community: bigint;
         strategic: bigint;
         marketing: bigint;
-        staking: bigint;
       }
     ],
     "view"
@@ -1293,7 +1310,6 @@ export interface PronovaToken extends BaseContract {
       _communityWallet: AddressLike,
       _strategicReservesWallet: AddressLike,
       _marketingWallet: AddressLike,
-      _stakingContract: AddressLike,
       _vestingContract: AddressLike
     ],
     [void],
@@ -1302,9 +1318,6 @@ export interface PronovaToken extends BaseContract {
   getFunction(
     nameOrSignature: "setAutoBurn"
   ): TypedContractMethod<[_enabled: boolean], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "stakingContract"
-  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "strategicReservesWallet"
   ): TypedContractMethod<[], [string], "view">;

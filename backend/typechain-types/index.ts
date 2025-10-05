@@ -50,6 +50,8 @@ export type { ReentrancyGuard } from "./@openzeppelin/contracts/utils/Reentrancy
 export { ReentrancyGuard__factory } from "./factories/@openzeppelin/contracts/utils/ReentrancyGuard__factory";
 export type { MockUSDT } from "./contracts/contracts/MockUSDT";
 export { MockUSDT__factory } from "./factories/contracts/contracts/MockUSDT__factory";
+export type { MockV3Aggregator } from "./contracts/contracts/MockV3Aggregator";
+export { MockV3Aggregator__factory } from "./factories/contracts/contracts/MockV3Aggregator__factory";
 export type { PronovaPresale } from "./contracts/contracts/PronovaPresale";
 export { PronovaPresale__factory } from "./factories/contracts/contracts/PronovaPresale__factory";
 export type { PronovaToken } from "./contracts/contracts/PronovaToken";

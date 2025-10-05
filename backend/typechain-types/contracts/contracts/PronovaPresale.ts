@@ -47,6 +47,7 @@ export interface PronovaPresaleInterface extends Interface {
       | "claimEnabled"
       | "claimTokens"
       | "commitPurchase"
+      | "confirmStartPresale"
       | "currentPhase"
       | "ethToUsdPrice"
       | "ethUsdPriceFeed"
@@ -184,6 +185,10 @@ export interface PronovaPresaleInterface extends Interface {
   encodeFunctionData(
     functionFragment: "commitPurchase",
     values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "confirmStartPresale",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "currentPhase",
@@ -383,6 +388,10 @@ export interface PronovaPresaleInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "commitPurchase",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "confirmStartPresale",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -820,6 +829,8 @@ export interface PronovaPresale extends BaseContract {
     "nonpayable"
   >;
 
+  confirmStartPresale: TypedContractMethod<[], [void], "nonpayable">;
+
   currentPhase: TypedContractMethod<[], [bigint], "view">;
 
   ethToUsdPrice: TypedContractMethod<[], [bigint], "view">;
@@ -1095,6 +1106,9 @@ export interface PronovaPresale extends BaseContract {
   getFunction(
     nameOrSignature: "commitPurchase"
   ): TypedContractMethod<[_commitment: BytesLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "confirmStartPresale"
+  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "currentPhase"
   ): TypedContractMethod<[], [bigint], "view">;

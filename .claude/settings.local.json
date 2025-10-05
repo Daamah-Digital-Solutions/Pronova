@@ -30,7 +30,8 @@
       "Bash(wmic process where processid=10328 delete:*)",
       "Bash(touch:*)",
       "Bash(findstr:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }

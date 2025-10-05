@@ -543,6 +543,6 @@ contract PronovaPresale is AccessControl, ReentrancyGuard, Pausable {
      * @dev Wrapper function to start presale (activates Phase 1)
      */
     function confirmStartPresale() external onlyRole(ADMIN_ROLE) {
-        updatePhase(1, true); // Activate Phase 1
+        this.updatePhase(1, true); // Activate Phase 1
     }
 }
