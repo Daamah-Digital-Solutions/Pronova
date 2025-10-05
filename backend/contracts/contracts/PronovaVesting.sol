@@ -3,18 +3,23 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title PronovaVesting
- * @dev Vesting contract based on whitepaper specifications
- * 45% of tokens locked for 5 years, 2.5% unlock every 6 months
+ * @dev CORRECTED Vesting contract to match whitepaper specifications exactly
+ * 45% of tokens locked for 9 YEARS (not 5), 2.5% unlock every 6 months
+ * @notice Enhanced with multi-sig controls and improved security
  */
-contract PronovaVesting is Ownable, ReentrancyGuard {
+contract PronovaVesting is AccessControl, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
-    IERC20 public pronovaToken;
+    // Access control roles
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    bytes32 public constant VESTING_MANAGER_ROLE = keccak256("VESTING_MANAGER_ROLE");
+
+    IERC20 public immutable pronovaToken;
 
     struct VestingSchedule {
         uint256 totalAmount;
@@ -22,49 +27,184 @@ contract PronovaVesting is Ownable, ReentrancyGuard {
         uint256 cliffDuration;
         uint256 vestingDuration;
         uint256 releasedAmount;
+        uint256 lastReleaseTime;
         bool revocable;
         bool revoked;
-        uint8 vestingType; // 0: Linear, 1: Whitepaper (45% locked for 5 years)
+        uint8 vestingType; // 0: Linear, 1: Whitepaper (45% locked for 9 years)
+        address beneficiary;
     }
 
-    // Whitepaper vesting constants
+    // CORRECTED Whitepaper vesting constants - 9 YEARS not 5
     uint256 public constant LOCKED_PERCENTAGE = 45; // 45% locked
-    uint256 public constant VESTING_DURATION = 5 * 365 days; // 5 years
+    uint256 public constant VESTING_DURATION = 9 * 365 days; // 9 years as per whitepaper
     uint256 public constant UNLOCK_INTERVAL = 180 days; // 6 months
-    uint256 public constant UNLOCK_PERCENTAGE_PER_INTERVAL = 250; // 2.5% in basis points (2.5% = 250/10000)
+    uint256 public constant UNLOCK_PERCENTAGE_PER_INTERVAL = 250; // 2.5% in basis points
+    uint256 public constant TOTAL_UNLOCK_PERIODS = 18; // 9 years / 6 months = 18 periods
     uint256 public constant BASIS_POINTS = 10000;
 
+    // Enhanced tracking
     mapping(address => VestingSchedule[]) public vestingSchedules;
     mapping(address => uint256) public totalVestedAmount;
     mapping(address => uint256) public totalReleasedAmount;
+    mapping(address => uint256) public totalLockedAmount;
 
+    // Allocation tracking for whitepaper compliance
+    mapping(string => uint256) public allocationAmounts;
+    mapping(string => address) public allocationBeneficiaries;
+
+    uint256 public totalTokensManaged;
+    uint256 public totalTokensReleased;
+
+    // Multi-sig for critical operations
+    uint256 public constant REQUIRED_CONFIRMATIONS = 2;
+    mapping(bytes32 => mapping(address => bool)) public operationConfirmations;
+    mapping(bytes32 => uint256) public operationConfirmationCount;
+    mapping(bytes32 => bool) public operationExecuted;
+
+    // Events
     event VestingScheduleCreated(
         address indexed beneficiary,
         uint256 amount,
         uint256 startTime,
-        uint256 cliffDuration,
         uint256 vestingDuration,
-        uint8 vestingType
+        uint8 vestingType,
+        string allocation
     );
     event TokensReleased(address indexed beneficiary, uint256 amount);
     event VestingRevoked(address indexed beneficiary, uint256 scheduleIndex);
+    event AllocationSet(string allocation, address beneficiary, uint256 amount);
+    event OperationConfirmed(bytes32 indexed operation, address indexed admin);
+    event OperationExecuted(bytes32 indexed operation);
 
-    constructor(address _pronovaToken) Ownable(msg.sender) {
-        require(_pronovaToken != address(0), "Invalid token address");
+    constructor(address _pronovaToken) {
+        require(_pronovaToken != address(0), "Invalid token");
         pronovaToken = IERC20(_pronovaToken);
+
+        // Setup roles
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(ADMIN_ROLE, msg.sender);
+        _grantRole(VESTING_MANAGER_ROLE, msg.sender);
     }
 
     /**
-     * @dev Create standard vesting schedule
+     * @dev Create vesting schedules for all whitepaper allocations
+     * @notice This should be called after token distribution to set up proper vesting
      */
-    function createVestingSchedule(
+    function setupWhitepaperAllocations(
+        address _foundersWallet,
+        address _teamWallet,
+        address _partnershipsWallet
+    ) external onlyRole(ADMIN_ROLE) {
+        require(_foundersWallet != address(0), "Invalid founders wallet");
+        require(_teamWallet != address(0), "Invalid team wallet");
+        require(_partnershipsWallet != address(0), "Invalid partnerships wallet");
+
+        bytes32 operationId = keccak256(abi.encodePacked("SETUP_ALLOCATIONS", block.timestamp));
+
+        // Multi-sig confirmation
+        if (!operationConfirmations[operationId][msg.sender]) {
+            operationConfirmations[operationId][msg.sender] = true;
+            operationConfirmationCount[operationId]++;
+            emit OperationConfirmed(operationId, msg.sender);
+
+            if (operationConfirmationCount[operationId] < REQUIRED_CONFIRMATIONS) {
+                return;
+            }
+        }
+
+        require(!operationExecuted[operationId], "Already executed");
+        operationExecuted[operationId] = true;
+
+        // Set up optimized allocations
+        // Founders: 14% = 140M tokens
+        allocationAmounts["FOUNDERS"] = 140_000_000 * 10**18;
+        allocationBeneficiaries["FOUNDERS"] = _foundersWallet;
+        _createWhitepaperVesting(_foundersWallet, 140_000_000 * 10**18, "FOUNDERS");
+
+        // Team: 5% = 50M tokens
+        allocationAmounts["TEAM"] = 50_000_000 * 10**18;
+        allocationBeneficiaries["TEAM"] = _teamWallet;
+        _createWhitepaperVesting(_teamWallet, 50_000_000 * 10**18, "TEAM");
+
+        // Partnerships: 15% = 150M tokens
+        allocationAmounts["PARTNERSHIPS"] = 150_000_000 * 10**18;
+        allocationBeneficiaries["PARTNERSHIPS"] = _partnershipsWallet;
+        _createWhitepaperVesting(_partnershipsWallet, 150_000_000 * 10**18, "PARTNERSHIPS");
+
+        emit OperationExecuted(operationId);
+    }
+
+    /**
+     * @dev Internal function to create whitepaper-compliant vesting
+     */
+    function _createWhitepaperVesting(
+        address beneficiary,
+        uint256 amount,
+        string memory allocation
+    ) internal {
+        require(beneficiary != address(0), "Invalid beneficiary");
+        require(amount > 0, "Amount must be > 0");
+
+        // Calculate immediate and locked amounts
+        uint256 lockedAmount = (amount * LOCKED_PERCENTAGE) / 100; // 45% locked
+        uint256 immediateAmount = amount - lockedAmount; // 55% immediate
+
+        // Create immediate release schedule for unlocked portion (55%)
+        if (immediateAmount > 0) {
+            vestingSchedules[beneficiary].push(VestingSchedule({
+                totalAmount: immediateAmount,
+                startTime: block.timestamp,
+                cliffDuration: 0,
+                vestingDuration: 1, // Immediate
+                releasedAmount: 0,
+                lastReleaseTime: 0,
+                revocable: false,
+                revoked: false,
+                vestingType: 0,
+                beneficiary: beneficiary
+            }));
+        }
+
+        // Create 9-year vesting for locked portion (45%)
+        vestingSchedules[beneficiary].push(VestingSchedule({
+            totalAmount: lockedAmount,
+            startTime: block.timestamp,
+            cliffDuration: 0,
+            vestingDuration: VESTING_DURATION, // 9 years
+            releasedAmount: 0,
+            lastReleaseTime: block.timestamp,
+            revocable: true,
+            revoked: false,
+            vestingType: 1, // Whitepaper vesting
+            beneficiary: beneficiary
+        }));
+
+        totalVestedAmount[beneficiary] += amount;
+        totalLockedAmount[beneficiary] += lockedAmount;
+        totalTokensManaged += amount;
+
+        emit VestingScheduleCreated(
+            beneficiary,
+            amount,
+            block.timestamp,
+            VESTING_DURATION,
+            1,
+            allocation
+        );
+        emit AllocationSet(allocation, beneficiary, amount);
+    }
+
+    /**
+     * @dev Create custom vesting schedule
+     */
+    function createCustomVesting(
         address beneficiary,
         uint256 amount,
         uint256 startTime,
         uint256 cliffDuration,
         uint256 vestingDuration,
         bool revocable
-    ) external onlyOwner {
+    ) external onlyRole(VESTING_MANAGER_ROLE) {
         require(beneficiary != address(0), "Invalid beneficiary");
         require(amount > 0, "Amount must be > 0");
         require(vestingDuration > 0, "Duration must be > 0");
@@ -76,74 +216,23 @@ contract PronovaVesting is Ownable, ReentrancyGuard {
             cliffDuration: cliffDuration,
             vestingDuration: vestingDuration,
             releasedAmount: 0,
+            lastReleaseTime: startTime,
             revocable: revocable,
             revoked: false,
-            vestingType: 0 // Linear vesting
+            vestingType: 0, // Linear
+            beneficiary: beneficiary
         }));
 
         totalVestedAmount[beneficiary] += amount;
+        totalTokensManaged += amount;
 
         emit VestingScheduleCreated(
             beneficiary,
             amount,
             startTime,
-            cliffDuration,
             vestingDuration,
-            0
-        );
-    }
-
-    /**
-     * @dev Create whitepaper-based vesting schedule (45% locked, 5-year vesting)
-     */
-    function createWhitepaperVestingSchedule(
-        address beneficiary,
-        uint256 amount,
-        uint256 startTime,
-        bool revocable
-    ) external onlyOwner {
-        require(beneficiary != address(0), "Invalid beneficiary");
-        require(amount > 0, "Amount must be > 0");
-
-        // Calculate locked amount (45% of total)
-        uint256 lockedAmount = (amount * LOCKED_PERCENTAGE) / 100;
-        uint256 immediateAmount = amount - lockedAmount;
-
-        // Create immediate release schedule for unlocked tokens (55%)
-        if (immediateAmount > 0) {
-            vestingSchedules[beneficiary].push(VestingSchedule({
-                totalAmount: immediateAmount,
-                startTime: startTime,
-                cliffDuration: 0,
-                vestingDuration: 1, // Immediate release
-                releasedAmount: 0,
-                revocable: false,
-                revoked: false,
-                vestingType: 0
-            }));
-        }
-
-        // Create 5-year vesting schedule for locked tokens (45%)
-        vestingSchedules[beneficiary].push(VestingSchedule({
-            totalAmount: lockedAmount,
-            startTime: startTime,
-            cliffDuration: 0, // No cliff, but gradual unlock every 6 months
-            vestingDuration: VESTING_DURATION, // 5 years
-            releasedAmount: 0,
-            revocable: revocable,
-            revoked: false,
-            vestingType: 1 // Whitepaper vesting
-        }));
-
-        totalVestedAmount[beneficiary] += amount;
-
-        emit VestingScheduleCreated(
-            beneficiary,
-            amount,
-            startTime,
             0,
-            VESTING_DURATION,
-            1
+            "CUSTOM"
         );
     }
 
@@ -151,22 +240,32 @@ contract PronovaVesting is Ownable, ReentrancyGuard {
      * @dev Release vested tokens for a specific schedule
      */
     function release(uint256 scheduleIndex) external nonReentrant {
+        require(scheduleIndex < vestingSchedules[msg.sender].length, "Invalid index");
+
         VestingSchedule storage schedule = vestingSchedules[msg.sender][scheduleIndex];
-        require(schedule.totalAmount > 0, "No vesting schedule");
         require(!schedule.revoked, "Schedule revoked");
 
         uint256 releasableAmount = _computeReleasableAmount(schedule);
         require(releasableAmount > 0, "No tokens to release");
 
+        // Update state before transfer
         schedule.releasedAmount += releasableAmount;
+        schedule.lastReleaseTime = block.timestamp;
         totalReleasedAmount[msg.sender] += releasableAmount;
+        totalTokensReleased += releasableAmount;
+
+        // For locked tokens, update tracking
+        if (schedule.vestingType == 1) {
+            uint256 remainingLocked = schedule.totalAmount - schedule.releasedAmount;
+            totalLockedAmount[msg.sender] = remainingLocked;
+        }
 
         pronovaToken.safeTransfer(msg.sender, releasableAmount);
         emit TokensReleased(msg.sender, releasableAmount);
     }
 
     /**
-     * @dev Release all available tokens for the caller
+     * @dev Release all available tokens
      */
     function releaseAll() external nonReentrant {
         uint256 totalReleasable = 0;
@@ -177,40 +276,24 @@ contract PronovaVesting is Ownable, ReentrancyGuard {
                 uint256 releasableAmount = _computeReleasableAmount(schedules[i]);
                 if (releasableAmount > 0) {
                     schedules[i].releasedAmount += releasableAmount;
+                    schedules[i].lastReleaseTime = block.timestamp;
                     totalReleasable += releasableAmount;
+
+                    if (schedules[i].vestingType == 1) {
+                        uint256 remainingLocked = schedules[i].totalAmount - schedules[i].releasedAmount;
+                        totalLockedAmount[msg.sender] = remainingLocked;
+                    }
                 }
             }
         }
 
         require(totalReleasable > 0, "No tokens to release");
+
         totalReleasedAmount[msg.sender] += totalReleasable;
+        totalTokensReleased += totalReleasable;
 
         pronovaToken.safeTransfer(msg.sender, totalReleasable);
         emit TokensReleased(msg.sender, totalReleasable);
-    }
-
-    /**
-     * @dev Revoke a vesting schedule
-     */
-    function revoke(address beneficiary, uint256 scheduleIndex) external onlyOwner {
-        VestingSchedule storage schedule = vestingSchedules[beneficiary][scheduleIndex];
-        require(schedule.revocable, "Not revocable");
-        require(!schedule.revoked, "Already revoked");
-
-        uint256 releasableAmount = _computeReleasableAmount(schedule);
-        if (releasableAmount > 0) {
-            schedule.releasedAmount += releasableAmount;
-            totalReleasedAmount[beneficiary] += releasableAmount;
-            pronovaToken.safeTransfer(beneficiary, releasableAmount);
-        }
-
-        uint256 remainingAmount = schedule.totalAmount - schedule.releasedAmount;
-        if (remainingAmount > 0) {
-            pronovaToken.safeTransfer(owner(), remainingAmount);
-        }
-
-        schedule.revoked = true;
-        emit VestingRevoked(beneficiary, scheduleIndex);
     }
 
     /**
@@ -222,7 +305,7 @@ contract PronovaVesting is Ownable, ReentrancyGuard {
         }
 
         if (schedule.vestingType == 1) {
-            // Whitepaper vesting: 2.5% every 6 months
+            // Whitepaper vesting: 2.5% every 6 months for 9 years
             return _computeWhitepaperReleasableAmount(schedule);
         } else {
             // Standard linear vesting
@@ -231,34 +314,41 @@ contract PronovaVesting is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @dev Compute releasable amount for whitepaper vesting (2.5% every 6 months)
+     * @dev CORRECTED: Compute releasable for whitepaper vesting (9 years, 2.5% every 6 months)
      */
     function _computeWhitepaperReleasableAmount(VestingSchedule memory schedule) internal view returns (uint256) {
         uint256 timeElapsed = block.timestamp - schedule.startTime;
-        
-        // Calculate how many 6-month intervals have passed
-        uint256 intervalsPassed = timeElapsed / UNLOCK_INTERVAL;
-        
-        // If more than 5 years have passed, release everything
+
+        // If 9 years have passed, release everything
         if (timeElapsed >= VESTING_DURATION) {
             return schedule.totalAmount - schedule.releasedAmount;
         }
-        
-        // Calculate total unlocked amount (2.5% per interval)
-        uint256 totalUnlockedPercentage = intervalsPassed * UNLOCK_PERCENTAGE_PER_INTERVAL;
-        
-        // Cap at 100%
-        if (totalUnlockedPercentage > BASIS_POINTS) {
-            totalUnlockedPercentage = BASIS_POINTS;
+
+        // Calculate how many 6-month periods have passed
+        uint256 periodsPassed = timeElapsed / UNLOCK_INTERVAL;
+
+        // Cap at 18 periods (9 years / 6 months)
+        if (periodsPassed > TOTAL_UNLOCK_PERIODS) {
+            periodsPassed = TOTAL_UNLOCK_PERIODS;
         }
-        
-        uint256 totalUnlockedAmount = (schedule.totalAmount * totalUnlockedPercentage) / BASIS_POINTS;
-        
-        return totalUnlockedAmount - schedule.releasedAmount;
+
+        // Each period unlocks 2.5% of the original locked amount
+        // After 18 periods: 18 * 2.5% = 45% (the total locked amount)
+        uint256 unlockedPercentage = periodsPassed * UNLOCK_PERCENTAGE_PER_INTERVAL;
+
+        // Calculate total unlocked amount
+        uint256 totalUnlocked = (schedule.totalAmount * unlockedPercentage) / BASIS_POINTS;
+
+        // Return only what hasn't been released yet
+        if (totalUnlocked > schedule.releasedAmount) {
+            return totalUnlocked - schedule.releasedAmount;
+        }
+
+        return 0;
     }
 
     /**
-     * @dev Compute releasable amount for linear vesting
+     * @dev Compute releasable for linear vesting
      */
     function _computeLinearReleasableAmount(VestingSchedule memory schedule) internal view returns (uint256) {
         if (block.timestamp < schedule.startTime + schedule.cliffDuration) {
@@ -273,168 +363,147 @@ contract PronovaVesting is Ownable, ReentrancyGuard {
     }
 
     /**
-     * @dev Get releasable amount for a specific schedule
+     * @dev Revoke vesting (requires multi-sig)
      */
-    function getReleasableAmount(address beneficiary, uint256 scheduleIndex) external view returns (uint256) {
-        if (scheduleIndex >= vestingSchedules[beneficiary].length) {
-            return 0;
-        }
-        
-        VestingSchedule memory schedule = vestingSchedules[beneficiary][scheduleIndex];
-        if (schedule.revoked) {
-            return 0;
-        }
-        return _computeReleasableAmount(schedule);
-    }
+    function revoke(address beneficiary, uint256 scheduleIndex) external onlyRole(ADMIN_ROLE) {
+        require(scheduleIndex < vestingSchedules[beneficiary].length, "Invalid index");
 
-    /**
-     * @dev Get total releasable amount for a beneficiary
-     */
-    function getTotalReleasableAmount(address beneficiary) external view returns (uint256) {
-        uint256 totalReleasable = 0;
-        VestingSchedule[] memory schedules = vestingSchedules[beneficiary];
-        
-        for (uint256 i = 0; i < schedules.length; i++) {
-            if (!schedules[i].revoked) {
-                totalReleasable += _computeReleasableAmount(schedules[i]);
+        VestingSchedule storage schedule = vestingSchedules[beneficiary][scheduleIndex];
+        require(schedule.revocable, "Not revocable");
+        require(!schedule.revoked, "Already revoked");
+
+        bytes32 operationId = keccak256(abi.encodePacked("REVOKE", beneficiary, scheduleIndex));
+
+        // Multi-sig confirmation
+        if (!operationConfirmations[operationId][msg.sender]) {
+            operationConfirmations[operationId][msg.sender] = true;
+            operationConfirmationCount[operationId]++;
+            emit OperationConfirmed(operationId, msg.sender);
+
+            if (operationConfirmationCount[operationId] < REQUIRED_CONFIRMATIONS) {
+                return;
             }
         }
-        
-        return totalReleasable;
+
+        require(!operationExecuted[operationId], "Already executed");
+        operationExecuted[operationId] = true;
+
+        // Release any vested tokens
+        uint256 releasableAmount = _computeReleasableAmount(schedule);
+        if (releasableAmount > 0) {
+            schedule.releasedAmount += releasableAmount;
+            totalReleasedAmount[beneficiary] += releasableAmount;
+            totalTokensReleased += releasableAmount;
+            pronovaToken.safeTransfer(beneficiary, releasableAmount);
+        }
+
+        // Return unvested tokens to treasury
+        uint256 remainingAmount = schedule.totalAmount - schedule.releasedAmount;
+        if (remainingAmount > 0) {
+            pronovaToken.safeTransfer(msg.sender, remainingAmount);
+        }
+
+        schedule.revoked = true;
+        emit VestingRevoked(beneficiary, scheduleIndex);
+        emit OperationExecuted(operationId);
     }
 
-    /**
-     * @dev Get vesting schedule count for a beneficiary
-     */
-    function getVestingScheduleCount(address beneficiary) external view returns (uint256) {
-        return vestingSchedules[beneficiary].length;
-    }
-
-    /**
-     * @dev Get vesting schedule details
-     */
+    // View functions
     function getVestingSchedule(address beneficiary, uint256 index) external view returns (
         uint256 totalAmount,
         uint256 startTime,
-        uint256 cliffDuration,
         uint256 vestingDuration,
         uint256 releasedAmount,
-        bool revocable,
+        uint256 releasableAmount,
         bool revoked,
         uint8 vestingType
     ) {
         require(index < vestingSchedules[beneficiary].length, "Invalid index");
         VestingSchedule memory schedule = vestingSchedules[beneficiary][index];
+
         return (
             schedule.totalAmount,
             schedule.startTime,
-            schedule.cliffDuration,
             schedule.vestingDuration,
             schedule.releasedAmount,
-            schedule.revocable,
+            _computeReleasableAmount(schedule),
             schedule.revoked,
             schedule.vestingType
         );
     }
 
-    /**
-     * @dev Get next unlock time for whitepaper vesting
-     */
+    function getTotalReleasableAmount(address beneficiary) external view returns (uint256) {
+        uint256 totalReleasable = 0;
+        VestingSchedule[] memory schedules = vestingSchedules[beneficiary];
+
+        for (uint256 i = 0; i < schedules.length; i++) {
+            if (!schedules[i].revoked) {
+                totalReleasable += _computeReleasableAmount(schedules[i]);
+            }
+        }
+
+        return totalReleasable;
+    }
+
     function getNextUnlockTime(address beneficiary, uint256 scheduleIndex) external view returns (uint256) {
         require(scheduleIndex < vestingSchedules[beneficiary].length, "Invalid index");
         VestingSchedule memory schedule = vestingSchedules[beneficiary][scheduleIndex];
-        
-        if (schedule.vestingType != 1) {
-            return 0; // Not whitepaper vesting
+
+        if (schedule.vestingType != 1 || schedule.revoked) {
+            return 0;
         }
-        
+
         uint256 timeElapsed = block.timestamp - schedule.startTime;
-        uint256 intervalsPassed = timeElapsed / UNLOCK_INTERVAL;
-        
-        return schedule.startTime + ((intervalsPassed + 1) * UNLOCK_INTERVAL);
+        if (timeElapsed >= VESTING_DURATION) {
+            return 0; // Fully vested
+        }
+
+        uint256 periodsPassed = timeElapsed / UNLOCK_INTERVAL;
+        return schedule.startTime + ((periodsPassed + 1) * UNLOCK_INTERVAL);
     }
 
-    /**
-     * @dev Get vesting progress percentage (0-100)
-     */
     function getVestingProgress(address beneficiary, uint256 scheduleIndex) external view returns (uint256) {
         require(scheduleIndex < vestingSchedules[beneficiary].length, "Invalid index");
         VestingSchedule memory schedule = vestingSchedules[beneficiary][scheduleIndex];
-        
+
         if (schedule.totalAmount == 0) {
             return 0;
         }
-        
+
         return (schedule.releasedAmount * 100) / schedule.totalAmount;
     }
 
-    /**
-     * @dev Get comprehensive beneficiary information
-     */
     function getBeneficiaryInfo(address beneficiary) external view returns (
         uint256 totalVested,
         uint256 totalReleased,
+        uint256 totalLocked,
         uint256 totalReleasable,
         uint256 scheduleCount
     ) {
         return (
             totalVestedAmount[beneficiary],
             totalReleasedAmount[beneficiary],
+            totalLockedAmount[beneficiary],
             this.getTotalReleasableAmount(beneficiary),
             vestingSchedules[beneficiary].length
         );
     }
 
-    /**
-     * @dev Get detailed schedule information
-     */
-    function getScheduleDetails(address beneficiary, uint256 scheduleIndex) external view returns (
-        uint256 totalAmount,
-        uint256 releasedAmount,
-        uint256 releasableAmount,
-        uint256 nextUnlockTime,
-        uint256 progressPercentage,
-        string memory vestingTypeName
+    function getContractStats() external view returns (
+        uint256 managed,
+        uint256 released,
+        uint256 remaining,
+        uint256 vestingDurationYears,
+        uint256 unlockPercentagePerPeriod,
+        uint256 totalPeriods
     ) {
-        require(scheduleIndex < vestingSchedules[beneficiary].length, "Invalid index");
-        VestingSchedule memory schedule = vestingSchedules[beneficiary][scheduleIndex];
-        
-        string memory typeName = schedule.vestingType == 1 ? "Whitepaper" : "Linear";
-        
         return (
-            schedule.totalAmount,
-            schedule.releasedAmount,
-            _computeReleasableAmount(schedule),
-            this.getNextUnlockTime(beneficiary, scheduleIndex),
-            this.getVestingProgress(beneficiary, scheduleIndex),
-            typeName
+            totalTokensManaged,
+            totalTokensReleased,
+            totalTokensManaged - totalTokensReleased,
+            VESTING_DURATION / 365 days,
+            UNLOCK_PERCENTAGE_PER_INTERVAL,
+            TOTAL_UNLOCK_PERIODS
         );
-    }
-
-    /**
-     * @dev Get all schedules for a beneficiary
-     */
-    function getAllSchedules(address beneficiary) external view returns (
-        uint256[] memory totalAmounts,
-        uint256[] memory releasedAmounts,
-        uint256[] memory releasableAmounts,
-        uint8[] memory vestingTypes,
-        bool[] memory revokedStatuses
-    ) {
-        uint256 count = vestingSchedules[beneficiary].length;
-        totalAmounts = new uint256[](count);
-        releasedAmounts = new uint256[](count);
-        releasableAmounts = new uint256[](count);
-        vestingTypes = new uint8[](count);
-        revokedStatuses = new bool[](count);
-        
-        for (uint256 i = 0; i < count; i++) {
-            VestingSchedule memory schedule = vestingSchedules[beneficiary][i];
-            totalAmounts[i] = schedule.totalAmount;
-            releasedAmounts[i] = schedule.releasedAmount;
-            releasableAmounts[i] = _computeReleasableAmount(schedule);
-            vestingTypes[i] = schedule.vestingType;
-            revokedStatuses[i] = schedule.revoked;
-        }
     }
 }

@@ -10,6 +10,7 @@ import ScrollToTop from './components/ui/ScrollToTop';
 
 // Pages
 import Home from './pages/Home';
+import Invest from './pages/Invest';
 import Presale from './pages/Presale';
 import Whitepaper from './pages/Whitepaper';
 import Roadmap from './pages/Roadmap';
@@ -38,6 +39,7 @@ function App() {
       <main className="min-h-screen">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/invest" element={<Invest />} />
           <Route path="/presale" element={<Presale />} />
           <Route path="/whitepaper" element={<Whitepaper />} />
           <Route path="/roadmap" element={<Roadmap />} />

@@ -26,7 +26,19 @@ import type {
 export interface PronovaPresaleInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "batchUpdateWhitelist"
+      | "ADMIN_ROLE"
+      | "COMMITMENT_DELAY"
+      | "DEFAULT_ADMIN_ROLE"
+      | "MAX_PURCHASE_PER_USER"
+      | "MAX_REFERRAL_REWARDS"
+      | "OPERATOR_ROLE"
+      | "PRESALE_HARD_CAP"
+      | "PRICE_DEVIATION_THRESHOLD"
+      | "PRICE_ORACLE_ROLE"
+      | "REFERRAL_PERCENTAGE"
+      | "REQUIRED_CONFIRMATIONS"
+      | "REVEAL_WINDOW"
+      | "TOTAL_PHASES"
       | "bnbToUsdPrice"
       | "bnbUsdPriceFeed"
       | "buyWithBNB"
@@ -34,41 +46,35 @@ export interface PronovaPresaleInterface extends Interface {
       | "buyWithUSDT"
       | "claimEnabled"
       | "claimTokens"
+      | "commitPurchase"
       | "currentPhase"
-      | "emergencyWithdraw"
       | "ethToUsdPrice"
       | "ethUsdPriceFeed"
-      | "getCurrentPrices"
       | "getExpectedListingPrice"
       | "getPhaseInfo"
-      | "getPresaleProgress"
-      | "getReferralInfo"
+      | "getRoleAdmin"
       | "getUserPurchaseInfo"
-      | "getUserRemainingLimit"
-      | "lastPurchaseBlock"
-      | "maxPurchasePerUser"
-      | "owner"
+      | "grantRole"
+      | "hasRole"
+      | "operationConfirmationCount"
+      | "operationConfirmations"
+      | "operationExecuted"
       | "pause"
       | "paused"
       | "phases"
-      | "presaleHardCap"
       | "pronovaToken"
+      | "purchaseCommitments"
       | "referralData"
-      | "referralPercentage"
       | "referralRewards"
-      | "renounceOwnership"
-      | "setChainlinkPriceFeed"
+      | "renounceRole"
+      | "revokeRole"
       | "setClaimEnabled"
-      | "setWhitelistEnabled"
-      | "totalPhases"
+      | "supportsInterface"
       | "totalRaisedUSD"
-      | "transferOwnership"
       | "treasuryWallet"
       | "unpause"
-      | "updateHardCap"
       | "updatePhase"
       | "updatePrices"
-      | "updateUserPurchaseLimit"
       | "updateWhitelist"
       | "usdtToken"
       | "userPurchases"
@@ -79,23 +85,73 @@ export interface PronovaPresaleInterface extends Interface {
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "ChainlinkPriceFeedUpdated"
-      | "HardCapReached"
-      | "OwnershipTransferred"
+      | "OperationConfirmed"
+      | "OperationExecuted"
       | "Paused"
       | "PhaseUpdated"
       | "PriceUpdated"
+      | "PurchaseCommitted"
       | "ReferralRewardEarned"
+      | "RoleAdminChanged"
+      | "RoleGranted"
+      | "RoleRevoked"
       | "TokensClaimed"
       | "TokensPurchased"
       | "Unpaused"
-      | "UserPurchaseLimitUpdated"
       | "WhitelistUpdated"
   ): EventFragment;
 
   encodeFunctionData(
-    functionFragment: "batchUpdateWhitelist",
-    values: [AddressLike[], boolean[]]
+    functionFragment: "ADMIN_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "COMMITMENT_DELAY",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_PURCHASE_PER_USER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_REFERRAL_REWARDS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "OPERATOR_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "PRESALE_HARD_CAP",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "PRICE_DEVIATION_THRESHOLD",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "PRICE_ORACLE_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "REFERRAL_PERCENTAGE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "REQUIRED_CONFIRMATIONS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "REVEAL_WINDOW",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "TOTAL_PHASES",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "bnbToUsdPrice",
@@ -107,15 +163,15 @@ export interface PronovaPresaleInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "buyWithBNB",
-    values: [AddressLike]
+    values: [AddressLike, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "buyWithETH",
-    values: [AddressLike]
+    values: [AddressLike, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "buyWithUSDT",
-    values: [BigNumberish, AddressLike]
+    values: [BigNumberish, AddressLike, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "claimEnabled",
@@ -126,11 +182,11 @@ export interface PronovaPresaleInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "currentPhase",
-    values?: undefined
+    functionFragment: "commitPurchase",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "emergencyWithdraw",
+    functionFragment: "currentPhase",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -142,10 +198,6 @@ export interface PronovaPresaleInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getCurrentPrices",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "getExpectedListingPrice",
     values?: undefined
   ): string;
@@ -154,30 +206,33 @@ export interface PronovaPresaleInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getPresaleProgress",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getReferralInfo",
-    values: [AddressLike]
+    functionFragment: "getRoleAdmin",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "getUserPurchaseInfo",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "getUserRemainingLimit",
-    values: [AddressLike]
+    functionFragment: "grantRole",
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "lastPurchaseBlock",
-    values: [AddressLike]
+    functionFragment: "hasRole",
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "maxPurchasePerUser",
-    values?: undefined
+    functionFragment: "operationConfirmationCount",
+    values: [BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "operationConfirmations",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "operationExecuted",
+    values: [BytesLike]
+  ): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
@@ -185,52 +240,40 @@ export interface PronovaPresaleInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "presaleHardCap",
+    functionFragment: "pronovaToken",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "pronovaToken",
-    values?: undefined
+    functionFragment: "purchaseCommitments",
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "referralData",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "referralPercentage",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "referralRewards",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
+    functionFragment: "renounceRole",
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "setChainlinkPriceFeed",
-    values: [string, AddressLike]
+    functionFragment: "revokeRole",
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "setClaimEnabled",
     values: [boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "setWhitelistEnabled",
-    values: [boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "totalPhases",
-    values?: undefined
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "totalRaisedUSD",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "treasuryWallet",
@@ -238,20 +281,12 @@ export interface PronovaPresaleInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "updateHardCap",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "updatePhase",
     values: [BigNumberish, boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "updatePrices",
     values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "updateUserPurchaseLimit",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "updateWhitelist",
@@ -275,8 +310,53 @@ export interface PronovaPresaleInterface extends Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "ADMIN_ROLE", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "batchUpdateWhitelist",
+    functionFragment: "COMMITMENT_DELAY",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_PURCHASE_PER_USER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_REFERRAL_REWARDS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "OPERATOR_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "PRESALE_HARD_CAP",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "PRICE_DEVIATION_THRESHOLD",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "PRICE_ORACLE_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "REFERRAL_PERCENTAGE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "REQUIRED_CONFIRMATIONS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "REVEAL_WINDOW",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "TOTAL_PHASES",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -302,11 +382,11 @@ export interface PronovaPresaleInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "currentPhase",
+    functionFragment: "commitPurchase",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "emergencyWithdraw",
+    functionFragment: "currentPhase",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -318,10 +398,6 @@ export interface PronovaPresaleInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getCurrentPrices",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "getExpectedListingPrice",
     data: BytesLike
   ): Result;
@@ -330,39 +406,36 @@ export interface PronovaPresaleInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getPresaleProgress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getReferralInfo",
+    functionFragment: "getRoleAdmin",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getUserPurchaseInfo",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getUserRemainingLimit",
+    functionFragment: "operationConfirmationCount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "lastPurchaseBlock",
+    functionFragment: "operationConfirmations",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "maxPurchasePerUser",
+    functionFragment: "operationExecuted",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "phases", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "presaleHardCap",
+    functionFragment: "pronovaToken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "pronovaToken",
+    functionFragment: "purchaseCommitments",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -370,39 +443,24 @@ export interface PronovaPresaleInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "referralPercentage",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "referralRewards",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
+    functionFragment: "renounceRole",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "setChainlinkPriceFeed",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setClaimEnabled",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setWhitelistEnabled",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "totalPhases",
+    functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "totalRaisedUSD",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -411,19 +469,11 @@ export interface PronovaPresaleInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "updateHardCap",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "updatePhase",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "updatePrices",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "updateUserPurchaseLimit",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -446,12 +496,12 @@ export interface PronovaPresaleInterface extends Interface {
   ): Result;
 }
 
-export namespace ChainlinkPriceFeedUpdatedEvent {
-  export type InputTuple = [currency: string, priceFeed: AddressLike];
-  export type OutputTuple = [currency: string, priceFeed: string];
+export namespace OperationConfirmedEvent {
+  export type InputTuple = [operation: BytesLike, admin: AddressLike];
+  export type OutputTuple = [operation: string, admin: string];
   export interface OutputObject {
-    currency: string;
-    priceFeed: string;
+    operation: string;
+    admin: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -459,24 +509,11 @@ export namespace ChainlinkPriceFeedUpdatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace HardCapReachedEvent {
-  export type InputTuple = [totalRaised: BigNumberish];
-  export type OutputTuple = [totalRaised: bigint];
+export namespace OperationExecutedEvent {
+  export type InputTuple = [operation: BytesLike];
+  export type OutputTuple = [operation: string];
   export interface OutputObject {
-    totalRaised: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace OwnershipTransferredEvent {
-  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
-  export type OutputTuple = [previousOwner: string, newOwner: string];
-  export interface OutputObject {
-    previousOwner: string;
-    newOwner: string;
+    operation: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -522,6 +559,19 @@ export namespace PriceUpdatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
+export namespace PurchaseCommittedEvent {
+  export type InputTuple = [buyer: AddressLike, commitment: BytesLike];
+  export type OutputTuple = [buyer: string, commitment: string];
+  export interface OutputObject {
+    buyer: string;
+    commitment: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export namespace ReferralRewardEarnedEvent {
   export type InputTuple = [
     referrer: AddressLike,
@@ -533,6 +583,64 @@ export namespace ReferralRewardEarnedEvent {
     referrer: string;
     buyer: string;
     reward: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleAdminChangedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    previousAdminRole: BytesLike,
+    newAdminRole: BytesLike
+  ];
+  export type OutputTuple = [
+    role: string,
+    previousAdminRole: string,
+    newAdminRole: string
+  ];
+  export interface OutputObject {
+    role: string;
+    previousAdminRole: string;
+    newAdminRole: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleGrantedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleRevokedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -556,21 +664,21 @@ export namespace TokensClaimedEvent {
 export namespace TokensPurchasedEvent {
   export type InputTuple = [
     buyer: AddressLike,
-    amount: BigNumberish,
+    amountUSD: BigNumberish,
     tokens: BigNumberish,
     phase: BigNumberish,
     paymentMethod: string
   ];
   export type OutputTuple = [
     buyer: string,
-    amount: bigint,
+    amountUSD: bigint,
     tokens: bigint,
     phase: bigint,
     paymentMethod: string
   ];
   export interface OutputObject {
     buyer: string;
-    amount: bigint;
+    amountUSD: bigint;
     tokens: bigint;
     phase: bigint;
     paymentMethod: string;
@@ -586,18 +694,6 @@ export namespace UnpausedEvent {
   export type OutputTuple = [account: string];
   export interface OutputObject {
     account: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace UserPurchaseLimitUpdatedEvent {
-  export type InputTuple = [newLimit: BigNumberish];
-  export type OutputTuple = [newLimit: bigint];
-  export interface OutputObject {
-    newLimit: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -661,22 +757,55 @@ export interface PronovaPresale extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  batchUpdateWhitelist: TypedContractMethod<
-    [users: AddressLike[], statuses: boolean[]],
-    [void],
-    "nonpayable"
-  >;
+  ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
+
+  COMMITMENT_DELAY: TypedContractMethod<[], [bigint], "view">;
+
+  DEFAULT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
+
+  MAX_PURCHASE_PER_USER: TypedContractMethod<[], [bigint], "view">;
+
+  MAX_REFERRAL_REWARDS: TypedContractMethod<[], [bigint], "view">;
+
+  OPERATOR_ROLE: TypedContractMethod<[], [string], "view">;
+
+  PRESALE_HARD_CAP: TypedContractMethod<[], [bigint], "view">;
+
+  PRICE_DEVIATION_THRESHOLD: TypedContractMethod<[], [bigint], "view">;
+
+  PRICE_ORACLE_ROLE: TypedContractMethod<[], [string], "view">;
+
+  REFERRAL_PERCENTAGE: TypedContractMethod<[], [bigint], "view">;
+
+  REQUIRED_CONFIRMATIONS: TypedContractMethod<[], [bigint], "view">;
+
+  REVEAL_WINDOW: TypedContractMethod<[], [bigint], "view">;
+
+  TOTAL_PHASES: TypedContractMethod<[], [bigint], "view">;
 
   bnbToUsdPrice: TypedContractMethod<[], [bigint], "view">;
 
   bnbUsdPriceFeed: TypedContractMethod<[], [string], "view">;
 
-  buyWithBNB: TypedContractMethod<[referrer: AddressLike], [void], "payable">;
+  buyWithBNB: TypedContractMethod<
+    [referrer: AddressLike, minTokensExpected: BigNumberish, nonce: BytesLike],
+    [void],
+    "payable"
+  >;
 
-  buyWithETH: TypedContractMethod<[referrer: AddressLike], [void], "payable">;
+  buyWithETH: TypedContractMethod<
+    [referrer: AddressLike, minTokensExpected: BigNumberish, nonce: BytesLike],
+    [void],
+    "payable"
+  >;
 
   buyWithUSDT: TypedContractMethod<
-    [amount: BigNumberish, referrer: AddressLike],
+    [
+      amount: BigNumberish,
+      referrer: AddressLike,
+      minTokensExpected: BigNumberish,
+      nonce: BytesLike
+    ],
     [void],
     "nonpayable"
   >;
@@ -685,26 +814,17 @@ export interface PronovaPresale extends BaseContract {
 
   claimTokens: TypedContractMethod<[], [void], "nonpayable">;
 
-  currentPhase: TypedContractMethod<[], [bigint], "view">;
+  commitPurchase: TypedContractMethod<
+    [_commitment: BytesLike],
+    [void],
+    "nonpayable"
+  >;
 
-  emergencyWithdraw: TypedContractMethod<[], [void], "nonpayable">;
+  currentPhase: TypedContractMethod<[], [bigint], "view">;
 
   ethToUsdPrice: TypedContractMethod<[], [bigint], "view">;
 
   ethUsdPriceFeed: TypedContractMethod<[], [string], "view">;
-
-  getCurrentPrices: TypedContractMethod<
-    [],
-    [
-      [bigint, bigint, boolean, boolean] & {
-        ethPrice: bigint;
-        bnbPrice: bigint;
-        ethChainlinkActive: boolean;
-        bnbChainlinkActive: boolean;
-      }
-    ],
-    "view"
-  >;
 
   getExpectedListingPrice: TypedContractMethod<
     [],
@@ -715,44 +835,18 @@ export interface PronovaPresale extends BaseContract {
   getPhaseInfo: TypedContractMethod<
     [phaseId: BigNumberish],
     [
-      [bigint, bigint, bigint, bigint, boolean, bigint, bigint] & {
+      [bigint, bigint, bigint, bigint, boolean] & {
         pricePerToken: bigint;
         tokensAllocated: bigint;
         tokensSold: bigint;
         tokensRemaining: bigint;
         isActive: boolean;
-        startTime: bigint;
-        endTime: bigint;
       }
     ],
     "view"
   >;
 
-  getPresaleProgress: TypedContractMethod<
-    [],
-    [
-      [bigint, bigint, bigint, bigint] & {
-        totalRaised: bigint;
-        hardCap: bigint;
-        progressPercentage: bigint;
-        currentPhaseId: bigint;
-      }
-    ],
-    "view"
-  >;
-
-  getReferralInfo: TypedContractMethod<
-    [referrer: AddressLike],
-    [
-      [bigint, bigint, bigint, string[]] & {
-        totalReferred: bigint;
-        totalRewards: bigint;
-        referredCount: bigint;
-        referredUsers: string[];
-      }
-    ],
-    "view"
-  >;
+  getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
 
   getUserPurchaseInfo: TypedContractMethod<
     [user: AddressLike],
@@ -767,17 +861,31 @@ export interface PronovaPresale extends BaseContract {
     "view"
   >;
 
-  getUserRemainingLimit: TypedContractMethod<
-    [user: AddressLike],
+  grantRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  hasRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
+
+  operationConfirmationCount: TypedContractMethod<
+    [arg0: BytesLike],
     [bigint],
     "view"
   >;
 
-  lastPurchaseBlock: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+  operationConfirmations: TypedContractMethod<
+    [arg0: BytesLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-  maxPurchasePerUser: TypedContractMethod<[], [bigint], "view">;
-
-  owner: TypedContractMethod<[], [string], "view">;
+  operationExecuted: TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
 
   pause: TypedContractMethod<[], [void], "nonpayable">;
 
@@ -800,24 +908,43 @@ export interface PronovaPresale extends BaseContract {
     "view"
   >;
 
-  presaleHardCap: TypedContractMethod<[], [bigint], "view">;
-
   pronovaToken: TypedContractMethod<[], [string], "view">;
 
-  referralData: TypedContractMethod<
+  purchaseCommitments: TypedContractMethod<
     [arg0: AddressLike],
-    [[bigint, bigint] & { totalReferred: bigint; totalRewards: bigint }],
+    [
+      [string, bigint, bigint, boolean] & {
+        commitment: string;
+        amount: bigint;
+        blockNumber: bigint;
+        revealed: boolean;
+      }
+    ],
     "view"
   >;
 
-  referralPercentage: TypedContractMethod<[], [bigint], "view">;
+  referralData: TypedContractMethod<
+    [arg0: AddressLike],
+    [
+      [bigint, bigint, bigint] & {
+        totalReferred: bigint;
+        totalRewards: bigint;
+        rewardsClaimed: bigint;
+      }
+    ],
+    "view"
+  >;
 
   referralRewards: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
 
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+  renounceRole: TypedContractMethod<
+    [role: BytesLike, callerConfirmation: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-  setChainlinkPriceFeed: TypedContractMethod<
-    [currency: string, priceFeed: AddressLike],
+  revokeRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
     [void],
     "nonpayable"
   >;
@@ -828,31 +955,17 @@ export interface PronovaPresale extends BaseContract {
     "nonpayable"
   >;
 
-  setWhitelistEnabled: TypedContractMethod<
-    [_enabled: boolean],
-    [void],
-    "nonpayable"
+  supportsInterface: TypedContractMethod<
+    [interfaceId: BytesLike],
+    [boolean],
+    "view"
   >;
-
-  totalPhases: TypedContractMethod<[], [bigint], "view">;
 
   totalRaisedUSD: TypedContractMethod<[], [bigint], "view">;
-
-  transferOwnership: TypedContractMethod<
-    [newOwner: AddressLike],
-    [void],
-    "nonpayable"
-  >;
 
   treasuryWallet: TypedContractMethod<[], [string], "view">;
 
   unpause: TypedContractMethod<[], [void], "nonpayable">;
-
-  updateHardCap: TypedContractMethod<
-    [_newHardCap: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
 
   updatePhase: TypedContractMethod<
     [phaseId: BigNumberish, _isActive: boolean],
@@ -862,12 +975,6 @@ export interface PronovaPresale extends BaseContract {
 
   updatePrices: TypedContractMethod<
     [_ethPrice: BigNumberish, _bnbPrice: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-
-  updateUserPurchaseLimit: TypedContractMethod<
-    [_newLimit: BigNumberish],
     [void],
     "nonpayable"
   >;
@@ -883,10 +990,11 @@ export interface PronovaPresale extends BaseContract {
   userPurchases: TypedContractMethod<
     [arg0: AddressLike],
     [
-      [bigint, bigint, bigint, boolean] & {
+      [bigint, bigint, bigint, bigint, boolean] & {
         totalTokensPurchased: bigint;
         totalAmountPaid: bigint;
         lastPurchaseTime: bigint;
+        purchaseNonce: bigint;
         hasClaimedTokens: boolean;
       }
     ],
@@ -908,12 +1016,44 @@ export interface PronovaPresale extends BaseContract {
   ): T;
 
   getFunction(
-    nameOrSignature: "batchUpdateWhitelist"
-  ): TypedContractMethod<
-    [users: AddressLike[], statuses: boolean[]],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: "ADMIN_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "COMMITMENT_DELAY"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "DEFAULT_ADMIN_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "MAX_PURCHASE_PER_USER"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "MAX_REFERRAL_REWARDS"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "OPERATOR_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "PRESALE_HARD_CAP"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "PRICE_DEVIATION_THRESHOLD"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "PRICE_ORACLE_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "REFERRAL_PERCENTAGE"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "REQUIRED_CONFIRMATIONS"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "REVEAL_WINDOW"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "TOTAL_PHASES"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "bnbToUsdPrice"
   ): TypedContractMethod<[], [bigint], "view">;
@@ -922,14 +1062,27 @@ export interface PronovaPresale extends BaseContract {
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "buyWithBNB"
-  ): TypedContractMethod<[referrer: AddressLike], [void], "payable">;
+  ): TypedContractMethod<
+    [referrer: AddressLike, minTokensExpected: BigNumberish, nonce: BytesLike],
+    [void],
+    "payable"
+  >;
   getFunction(
     nameOrSignature: "buyWithETH"
-  ): TypedContractMethod<[referrer: AddressLike], [void], "payable">;
+  ): TypedContractMethod<
+    [referrer: AddressLike, minTokensExpected: BigNumberish, nonce: BytesLike],
+    [void],
+    "payable"
+  >;
   getFunction(
     nameOrSignature: "buyWithUSDT"
   ): TypedContractMethod<
-    [amount: BigNumberish, referrer: AddressLike],
+    [
+      amount: BigNumberish,
+      referrer: AddressLike,
+      minTokensExpected: BigNumberish,
+      nonce: BytesLike
+    ],
     [void],
     "nonpayable"
   >;
@@ -940,31 +1093,17 @@ export interface PronovaPresale extends BaseContract {
     nameOrSignature: "claimTokens"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "commitPurchase"
+  ): TypedContractMethod<[_commitment: BytesLike], [void], "nonpayable">;
+  getFunction(
     nameOrSignature: "currentPhase"
   ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "emergencyWithdraw"
-  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "ethToUsdPrice"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "ethUsdPriceFeed"
   ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "getCurrentPrices"
-  ): TypedContractMethod<
-    [],
-    [
-      [bigint, bigint, boolean, boolean] & {
-        ethPrice: bigint;
-        bnbPrice: bigint;
-        ethChainlinkActive: boolean;
-        bnbChainlinkActive: boolean;
-      }
-    ],
-    "view"
-  >;
   getFunction(
     nameOrSignature: "getExpectedListingPrice"
   ): TypedContractMethod<
@@ -977,46 +1116,19 @@ export interface PronovaPresale extends BaseContract {
   ): TypedContractMethod<
     [phaseId: BigNumberish],
     [
-      [bigint, bigint, bigint, bigint, boolean, bigint, bigint] & {
+      [bigint, bigint, bigint, bigint, boolean] & {
         pricePerToken: bigint;
         tokensAllocated: bigint;
         tokensSold: bigint;
         tokensRemaining: bigint;
         isActive: boolean;
-        startTime: bigint;
-        endTime: bigint;
       }
     ],
     "view"
   >;
   getFunction(
-    nameOrSignature: "getPresaleProgress"
-  ): TypedContractMethod<
-    [],
-    [
-      [bigint, bigint, bigint, bigint] & {
-        totalRaised: bigint;
-        hardCap: bigint;
-        progressPercentage: bigint;
-        currentPhaseId: bigint;
-      }
-    ],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "getReferralInfo"
-  ): TypedContractMethod<
-    [referrer: AddressLike],
-    [
-      [bigint, bigint, bigint, string[]] & {
-        totalReferred: bigint;
-        totalRewards: bigint;
-        referredCount: bigint;
-        referredUsers: string[];
-      }
-    ],
-    "view"
-  >;
+    nameOrSignature: "getRoleAdmin"
+  ): TypedContractMethod<[role: BytesLike], [string], "view">;
   getFunction(
     nameOrSignature: "getUserPurchaseInfo"
   ): TypedContractMethod<
@@ -1032,17 +1144,32 @@ export interface PronovaPresale extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "getUserRemainingLimit"
-  ): TypedContractMethod<[user: AddressLike], [bigint], "view">;
+    nameOrSignature: "grantRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
-    nameOrSignature: "lastPurchaseBlock"
-  ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+    nameOrSignature: "hasRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
   getFunction(
-    nameOrSignature: "maxPurchasePerUser"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: "operationConfirmationCount"
+  ): TypedContractMethod<[arg0: BytesLike], [bigint], "view">;
   getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: "operationConfirmations"
+  ): TypedContractMethod<
+    [arg0: BytesLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "operationExecuted"
+  ): TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
   getFunction(
     nameOrSignature: "pause"
   ): TypedContractMethod<[], [void], "nonpayable">;
@@ -1068,31 +1195,49 @@ export interface PronovaPresale extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "presaleHardCap"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
     nameOrSignature: "pronovaToken"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "purchaseCommitments"
+  ): TypedContractMethod<
+    [arg0: AddressLike],
+    [
+      [string, bigint, bigint, boolean] & {
+        commitment: string;
+        amount: bigint;
+        blockNumber: bigint;
+        revealed: boolean;
+      }
+    ],
+    "view"
+  >;
   getFunction(
     nameOrSignature: "referralData"
   ): TypedContractMethod<
     [arg0: AddressLike],
-    [[bigint, bigint] & { totalReferred: bigint; totalRewards: bigint }],
+    [
+      [bigint, bigint, bigint] & {
+        totalReferred: bigint;
+        totalRewards: bigint;
+        rewardsClaimed: bigint;
+      }
+    ],
     "view"
   >;
-  getFunction(
-    nameOrSignature: "referralPercentage"
-  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "referralRewards"
   ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
   getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setChainlinkPriceFeed"
+    nameOrSignature: "renounceRole"
   ): TypedContractMethod<
-    [currency: string, priceFeed: AddressLike],
+    [role: BytesLike, callerConfirmation: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "revokeRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
     [void],
     "nonpayable"
   >;
@@ -1100,26 +1245,17 @@ export interface PronovaPresale extends BaseContract {
     nameOrSignature: "setClaimEnabled"
   ): TypedContractMethod<[_enabled: boolean], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "setWhitelistEnabled"
-  ): TypedContractMethod<[_enabled: boolean], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "totalPhases"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: "supportsInterface"
+  ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
   getFunction(
     nameOrSignature: "totalRaisedUSD"
   ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "treasuryWallet"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "unpause"
   ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "updateHardCap"
-  ): TypedContractMethod<[_newHardCap: BigNumberish], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "updatePhase"
   ): TypedContractMethod<
@@ -1135,9 +1271,6 @@ export interface PronovaPresale extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "updateUserPurchaseLimit"
-  ): TypedContractMethod<[_newLimit: BigNumberish], [void], "nonpayable">;
-  getFunction(
     nameOrSignature: "updateWhitelist"
   ): TypedContractMethod<
     [users: AddressLike[], status: boolean],
@@ -1152,10 +1285,11 @@ export interface PronovaPresale extends BaseContract {
   ): TypedContractMethod<
     [arg0: AddressLike],
     [
-      [bigint, bigint, bigint, boolean] & {
+      [bigint, bigint, bigint, bigint, boolean] & {
         totalTokensPurchased: bigint;
         totalAmountPaid: bigint;
         lastPurchaseTime: bigint;
+        purchaseNonce: bigint;
         hasClaimedTokens: boolean;
       }
     ],
@@ -1172,25 +1306,18 @@ export interface PronovaPresale extends BaseContract {
   ): TypedContractMethod<[], [boolean], "view">;
 
   getEvent(
-    key: "ChainlinkPriceFeedUpdated"
+    key: "OperationConfirmed"
   ): TypedContractEvent<
-    ChainlinkPriceFeedUpdatedEvent.InputTuple,
-    ChainlinkPriceFeedUpdatedEvent.OutputTuple,
-    ChainlinkPriceFeedUpdatedEvent.OutputObject
+    OperationConfirmedEvent.InputTuple,
+    OperationConfirmedEvent.OutputTuple,
+    OperationConfirmedEvent.OutputObject
   >;
   getEvent(
-    key: "HardCapReached"
+    key: "OperationExecuted"
   ): TypedContractEvent<
-    HardCapReachedEvent.InputTuple,
-    HardCapReachedEvent.OutputTuple,
-    HardCapReachedEvent.OutputObject
-  >;
-  getEvent(
-    key: "OwnershipTransferred"
-  ): TypedContractEvent<
-    OwnershipTransferredEvent.InputTuple,
-    OwnershipTransferredEvent.OutputTuple,
-    OwnershipTransferredEvent.OutputObject
+    OperationExecutedEvent.InputTuple,
+    OperationExecutedEvent.OutputTuple,
+    OperationExecutedEvent.OutputObject
   >;
   getEvent(
     key: "Paused"
@@ -1214,11 +1341,39 @@ export interface PronovaPresale extends BaseContract {
     PriceUpdatedEvent.OutputObject
   >;
   getEvent(
+    key: "PurchaseCommitted"
+  ): TypedContractEvent<
+    PurchaseCommittedEvent.InputTuple,
+    PurchaseCommittedEvent.OutputTuple,
+    PurchaseCommittedEvent.OutputObject
+  >;
+  getEvent(
     key: "ReferralRewardEarned"
   ): TypedContractEvent<
     ReferralRewardEarnedEvent.InputTuple,
     ReferralRewardEarnedEvent.OutputTuple,
     ReferralRewardEarnedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleAdminChanged"
+  ): TypedContractEvent<
+    RoleAdminChangedEvent.InputTuple,
+    RoleAdminChangedEvent.OutputTuple,
+    RoleAdminChangedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleGranted"
+  ): TypedContractEvent<
+    RoleGrantedEvent.InputTuple,
+    RoleGrantedEvent.OutputTuple,
+    RoleGrantedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleRevoked"
+  ): TypedContractEvent<
+    RoleRevokedEvent.InputTuple,
+    RoleRevokedEvent.OutputTuple,
+    RoleRevokedEvent.OutputObject
   >;
   getEvent(
     key: "TokensClaimed"
@@ -1242,13 +1397,6 @@ export interface PronovaPresale extends BaseContract {
     UnpausedEvent.OutputObject
   >;
   getEvent(
-    key: "UserPurchaseLimitUpdated"
-  ): TypedContractEvent<
-    UserPurchaseLimitUpdatedEvent.InputTuple,
-    UserPurchaseLimitUpdatedEvent.OutputTuple,
-    UserPurchaseLimitUpdatedEvent.OutputObject
-  >;
-  getEvent(
     key: "WhitelistUpdated"
   ): TypedContractEvent<
     WhitelistUpdatedEvent.InputTuple,
@@ -1257,37 +1405,26 @@ export interface PronovaPresale extends BaseContract {
   >;
 
   filters: {
-    "ChainlinkPriceFeedUpdated(string,address)": TypedContractEvent<
-      ChainlinkPriceFeedUpdatedEvent.InputTuple,
-      ChainlinkPriceFeedUpdatedEvent.OutputTuple,
-      ChainlinkPriceFeedUpdatedEvent.OutputObject
+    "OperationConfirmed(bytes32,address)": TypedContractEvent<
+      OperationConfirmedEvent.InputTuple,
+      OperationConfirmedEvent.OutputTuple,
+      OperationConfirmedEvent.OutputObject
     >;
-    ChainlinkPriceFeedUpdated: TypedContractEvent<
-      ChainlinkPriceFeedUpdatedEvent.InputTuple,
-      ChainlinkPriceFeedUpdatedEvent.OutputTuple,
-      ChainlinkPriceFeedUpdatedEvent.OutputObject
-    >;
-
-    "HardCapReached(uint256)": TypedContractEvent<
-      HardCapReachedEvent.InputTuple,
-      HardCapReachedEvent.OutputTuple,
-      HardCapReachedEvent.OutputObject
-    >;
-    HardCapReached: TypedContractEvent<
-      HardCapReachedEvent.InputTuple,
-      HardCapReachedEvent.OutputTuple,
-      HardCapReachedEvent.OutputObject
+    OperationConfirmed: TypedContractEvent<
+      OperationConfirmedEvent.InputTuple,
+      OperationConfirmedEvent.OutputTuple,
+      OperationConfirmedEvent.OutputObject
     >;
 
-    "OwnershipTransferred(address,address)": TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
+    "OperationExecuted(bytes32)": TypedContractEvent<
+      OperationExecutedEvent.InputTuple,
+      OperationExecutedEvent.OutputTuple,
+      OperationExecutedEvent.OutputObject
     >;
-    OwnershipTransferred: TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
+    OperationExecuted: TypedContractEvent<
+      OperationExecutedEvent.InputTuple,
+      OperationExecutedEvent.OutputTuple,
+      OperationExecutedEvent.OutputObject
     >;
 
     "Paused(address)": TypedContractEvent<
@@ -1323,6 +1460,17 @@ export interface PronovaPresale extends BaseContract {
       PriceUpdatedEvent.OutputObject
     >;
 
+    "PurchaseCommitted(address,bytes32)": TypedContractEvent<
+      PurchaseCommittedEvent.InputTuple,
+      PurchaseCommittedEvent.OutputTuple,
+      PurchaseCommittedEvent.OutputObject
+    >;
+    PurchaseCommitted: TypedContractEvent<
+      PurchaseCommittedEvent.InputTuple,
+      PurchaseCommittedEvent.OutputTuple,
+      PurchaseCommittedEvent.OutputObject
+    >;
+
     "ReferralRewardEarned(address,address,uint256)": TypedContractEvent<
       ReferralRewardEarnedEvent.InputTuple,
       ReferralRewardEarnedEvent.OutputTuple,
@@ -1332,6 +1480,39 @@ export interface PronovaPresale extends BaseContract {
       ReferralRewardEarnedEvent.InputTuple,
       ReferralRewardEarnedEvent.OutputTuple,
       ReferralRewardEarnedEvent.OutputObject
+    >;
+
+    "RoleAdminChanged(bytes32,bytes32,bytes32)": TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
+    >;
+    RoleAdminChanged: TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
+    >;
+
+    "RoleGranted(bytes32,address,address)": TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
+    >;
+    RoleGranted: TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
+    >;
+
+    "RoleRevoked(bytes32,address,address)": TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
+    >;
+    RoleRevoked: TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
     >;
 
     "TokensClaimed(address,uint256)": TypedContractEvent<
@@ -1365,17 +1546,6 @@ export interface PronovaPresale extends BaseContract {
       UnpausedEvent.InputTuple,
       UnpausedEvent.OutputTuple,
       UnpausedEvent.OutputObject
-    >;
-
-    "UserPurchaseLimitUpdated(uint256)": TypedContractEvent<
-      UserPurchaseLimitUpdatedEvent.InputTuple,
-      UserPurchaseLimitUpdatedEvent.OutputTuple,
-      UserPurchaseLimitUpdatedEvent.OutputObject
-    >;
-    UserPurchaseLimitUpdated: TypedContractEvent<
-      UserPurchaseLimitUpdatedEvent.InputTuple,
-      UserPurchaseLimitUpdatedEvent.OutputTuple,
-      UserPurchaseLimitUpdatedEvent.OutputObject
     >;
 
     "WhitelistUpdated(address,bool)": TypedContractEvent<

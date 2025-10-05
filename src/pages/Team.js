@@ -21,6 +21,9 @@ import capiMaxDevelopmentLogo from '../assets/images/logos for partner/CAPI Max 
 import capiMaxTradingLogo from '../assets/images/logos for partner/CAPI Max for general Trading  USA.png';
 import capiMaxMetalsLogo from '../assets/images/logos for partner/CAPI Max for Investment in precious metals and minerals  UK.png';
 import elitGatePropertiesLogo from '../assets/images/logos for partner/elitgate properties.png';
+import capiMaxVirtualAssetLogo from '../assets/images/logos for partner/capi max  Virtual Asset uk dark .png';
+import capiMaxFintechBlockchainLogo from '../assets/images/logos for partner/capi max  Fintech and Blockchain uk dark  copy.png';
+import novaDigitalFinanceLogo from '../assets/images/logos for partner/nova property logo.png';
 
 // Enhanced Animation Hook
 const FadeInWhenVisible = ({ children, delay = 0, direction = null }) => {
@@ -384,6 +387,13 @@ const Team = () => {
           description: "Financial technology and virtual asset management",
           website: "https://cimfinancialgroup.com/",
           delay: 0.5
+        },
+        {
+          name: "Capimax Fintech and Blockchain",
+          logo: capiMaxFintechBlockchainLogo,
+          description: "Blockchain technology and fintech solutions",
+          website: "https://www.capimaxfintech.com",
+          delay: 0.55
         }
       ]
     },
@@ -419,6 +429,13 @@ const Team = () => {
           description: "Premium real estate and property management services",
           website: "https://elitegateproperties.com/",
           delay: 0.7
+        },
+        {
+          name: "Nova Digital Finance",
+          logo: novaDigitalFinanceLogo,
+          description: "Digital finance and property investment services",
+          website: "https://novadigitalfinance.com/",
+          delay: 0.75
         }
       ]
     },
@@ -440,6 +457,13 @@ const Team = () => {
           description: "Investment in gold, silver, and precious minerals",
           website: "https://www.capimaxmetals.com",
           delay: 0.8
+        },
+        {
+          name: "Capimax Virtual Asset",
+          logo: capiMaxVirtualAssetLogo,
+          description: "Virtual asset management and digital currency services",
+          website: "https://www.capimaxvirtualasset.com",
+          delay: 0.85
         }
       ]
     },
@@ -463,7 +487,7 @@ const Team = () => {
     <>
       <Helmet>
         <title>Team & Partners - Pronova</title>
-        <meta name="description" content="Meet the powerhouse team and strategic partners behind Pronova - 18 global companies providing real-world utility and investment opportunities." />
+        <meta name="description" content="Meet the powerhouse team and strategic partners behind Pronova - 21 global companies providing real-world utility and investment opportunities." />
       </Helmet>
 
       {/* Add custom CSS for enhanced animations */}
@@ -586,7 +610,7 @@ const Team = () => {
                 <div className="w-2 h-2 bg-primary-500 rounded-full mr-3 animate-pulse"></div>
                 <span className={`text-sm font-medium ${
                   darkMode ? 'text-primary-400' : 'text-primary-700'
-                }`}>18 Global Partners</span>
+                }`}>21 Global Partners</span>
               </div>
               
               {/* Main Heading */}
@@ -789,7 +813,7 @@ const Team = () => {
               }`}>
                 Pronova is backed by a powerful network of <span className={`font-semibold ${
                   darkMode ? 'text-primary-400' : 'text-primary-600'
-                }`}>18 global companies</span> providing real-world utility and investment opportunities
+                }`}>21 global companies</span> providing real-world utility and investment opportunities
               </p>
             </div>
           </FadeInWhenVisible>

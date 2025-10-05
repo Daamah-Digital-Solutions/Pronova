@@ -1,176 +1,331 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
+const { time } = require("@nomicfoundation/hardhat-network-helpers");
 
-describe("PronovaToken Contract", function () {
-  let Token;
-  let token;
-  let owner;
-  let addr1;
-  let addr2;
+describe("PronovaToken - Updated with Whitepaper Specifications", function () {
+    let pronovaToken;
+    let owner, admin1, admin2, user1, user2;
+    let presaleContract, vestingContract, liquidityWallet, marketingWallet;
+    let communityWallet, strategicReservesWallet, stakingContract;
+    let foundersWallet, teamWallet, partnershipsWallet;
 
-  beforeEach(async function () {
-    Token = await ethers.getContractFactory("PronovaToken");
-    [owner, addr1, addr2] = await ethers.getSigners();
-    token = await Token.deploy();
-    await token.waitForDeployment();
-  });
+    const TOTAL_SUPPLY = ethers.parseEther("1000000000"); // 1 billion tokens
+    const PRESALE_ALLOCATION = ethers.parseEther("250000000"); // 25% (250M)
+    const FOUNDERS_ALLOCATION = ethers.parseEther("75000000"); // 7.5% (75M)
+    const LIQUIDITY_ALLOCATION = ethers.parseEther("120000000"); // 12% (120M)
+    const PARTNERSHIPS_ALLOCATION = ethers.parseEther("150000000"); // 15% (150M)
+    const TEAM_ALLOCATION = ethers.parseEther("25000000"); // 2.5% (25M)
+    const COMMUNITY_ALLOCATION = ethers.parseEther("50000000"); // 5% (50M)
+    const STRATEGIC_RESERVES_ALLOCATION = ethers.parseEther("60000000"); // 6% (60M)
+    const MARKETING_ALLOCATION = ethers.parseEther("120000000"); // 12% (120M)
+    const STAKING_REWARDS_ALLOCATION = ethers.parseEther("150000000"); // 15% (150M)
 
-  describe("Deployment", function () {
-    it("Should set the right owner", async function () {
-      expect(await token.owner()).to.equal(owner.address);
-    });
-
-    it("Should have correct name and symbol", async function () {
-      expect(await token.name()).to.equal("Pronova");
-      expect(await token.symbol()).to.equal("PRN");
-    });
-
-    it("Should have correct total supply", async function () {
-      const totalSupply = await token.totalSupply();
-      expect(totalSupply).to.equal(ethers.parseEther("1000000000"));
-    });
-
-    it("Should assign the total supply to the contract initially", async function () {
-      const contractBalance = await token.balanceOf(await token.getAddress());
-      expect(await token.totalSupply()).to.equal(contractBalance);
-    });
-  });
-
-  describe("Allocations", function () {
-    it("Should have correct presale allocation", async function () {
-      const presaleAllocation = await token.PRESALE_ALLOCATION();
-      expect(presaleAllocation).to.equal(ethers.parseEther("400000000"));
-    });
-
-    it("Should have correct team allocation", async function () {
-      const teamAllocation = await token.TEAM_ALLOCATION();
-      expect(teamAllocation).to.equal(ethers.parseEther("150000000"));
-    });
-
-    it("Should have correct liquidity allocation", async function () {
-      const liquidityAllocation = await token.LIQUIDITY_ALLOCATION();
-      expect(liquidityAllocation).to.equal(ethers.parseEther("200000000"));
-    });
-  });
-
-  describe("Transactions", function () {
     beforeEach(async function () {
-      // Transfer some tokens from contract to owner for testing
-      await token.emergencyWithdraw();
+        [owner, admin1, admin2, user1, user2, presaleContract, vestingContract,
+         liquidityWallet, marketingWallet, communityWallet, strategicReservesWallet,
+         stakingContract, foundersWallet, teamWallet, partnershipsWallet] = await ethers.getSigners();
+
+        const PronovaToken = await ethers.getContractFactory("PronovaToken");
+        pronovaToken = await PronovaToken.deploy();
+        await pronovaToken.waitForDeployment();
+
+        // Grant admin roles for multi-sig testing
+        const ADMIN_ROLE = await pronovaToken.ADMIN_ROLE();
+        await pronovaToken.grantRole(ADMIN_ROLE, admin1.address);
+        await pronovaToken.grantRole(ADMIN_ROLE, admin2.address);
     });
 
-    it("Should transfer tokens between accounts", async function () {
-      // Transfer 50 tokens from owner to addr1
-      await token.transfer(addr1.address, 50);
-      const addr1Balance = await token.balanceOf(addr1.address);
-      expect(addr1Balance).to.equal(50);
+    describe("Token Specifications", function () {
+        it("Should have correct name and symbol", async function () {
+            expect(await pronovaToken.name()).to.equal("Pronova");
+            expect(await pronovaToken.symbol()).to.equal("PRN");
+        });
 
-      // Transfer 50 tokens from addr1 to addr2
-      await token.connect(addr1).transfer(addr2.address, 50);
-      const addr2Balance = await token.balanceOf(addr2.address);
-      expect(addr2Balance).to.equal(50);
+        it("Should have correct total supply of 1 billion tokens", async function () {
+            expect(await pronovaToken.totalSupply()).to.equal(TOTAL_SUPPLY);
+        });
+
+        it("Should have 18 decimals", async function () {
+            expect(await pronovaToken.decimals()).to.equal(18);
+        });
     });
 
-    it("Should fail if sender doesn't have enough tokens", async function () {
-      const initialOwnerBalance = await token.balanceOf(owner.address);
-      
-      // Try to send 1 token from addr1 (0 balance) to owner
-      await expect(
-        token.connect(addr1).transfer(owner.address, 1)
-      ).to.be.revertedWithCustomError(token, "ERC20InsufficientBalance");
+    describe("Allocation Percentages (Whitepaper Compliance)", function () {
+        it("Should have correct allocation amounts as per whitepaper", async function () {
+            const allocations = await pronovaToken.getAllocationInfo();
 
-      // Owner balance shouldn't have changed
-      expect(await token.balanceOf(owner.address)).to.equal(
-        initialOwnerBalance
-      );
+            expect(allocations.presale).to.equal(PRESALE_ALLOCATION);
+            expect(allocations.founders).to.equal(FOUNDERS_ALLOCATION);
+            expect(allocations.liquidity).to.equal(LIQUIDITY_ALLOCATION);
+            expect(allocations.partnerships).to.equal(PARTNERSHIPS_ALLOCATION);
+            expect(allocations.team).to.equal(TEAM_ALLOCATION);
+            expect(allocations.community).to.equal(COMMUNITY_ALLOCATION);
+            expect(allocations.strategic).to.equal(STRATEGIC_RESERVES_ALLOCATION);
+            expect(allocations.marketing).to.equal(MARKETING_ALLOCATION);
+            expect(allocations.staking).to.equal(STAKING_REWARDS_ALLOCATION);
+
+            // Verify total equals 100%
+            const total = PRESALE_ALLOCATION + FOUNDERS_ALLOCATION + LIQUIDITY_ALLOCATION +
+                         PARTNERSHIPS_ALLOCATION + TEAM_ALLOCATION + COMMUNITY_ALLOCATION +
+                         STRATEGIC_RESERVES_ALLOCATION + MARKETING_ALLOCATION + STAKING_REWARDS_ALLOCATION;
+            expect(total).to.equal(TOTAL_SUPPLY);
+        });
     });
 
-    it("Should update balances after transfers", async function () {
-      const initialOwnerBalance = await token.balanceOf(owner.address);
+    describe("Multi-Signature Functionality", function () {
+        it("Should require 2 confirmations for setting allocation wallets", async function () {
+            // First admin confirmation
+            await pronovaToken.connect(admin1).setAllocationWallets(
+                presaleContract.address,
+                foundersWallet.address,
+                liquidityWallet.address,
+                partnershipsWallet.address,
+                teamWallet.address,
+                communityWallet.address,
+                strategicReservesWallet.address,
+                marketingWallet.address,
+                stakingContract.address,
+                vestingContract.address
+            );
 
-      // Transfer 100 tokens from owner to addr1
-      await token.transfer(addr1.address, 100);
+            // Wallets should not be set yet
+            expect(await pronovaToken.presaleContract()).to.equal(ethers.ZeroAddress);
 
-      // Transfer another 50 tokens from owner to addr2
-      await token.transfer(addr2.address, 50);
+            // Second admin confirmation
+            await pronovaToken.connect(admin2).setAllocationWallets(
+                presaleContract.address,
+                foundersWallet.address,
+                liquidityWallet.address,
+                partnershipsWallet.address,
+                teamWallet.address,
+                communityWallet.address,
+                strategicReservesWallet.address,
+                marketingWallet.address,
+                stakingContract.address,
+                vestingContract.address
+            );
 
-      // Check balances
-      const finalOwnerBalance = await token.balanceOf(owner.address);
-      expect(finalOwnerBalance).to.equal(initialOwnerBalance - 150n);
+            // Now wallets should be set
+            expect(await pronovaToken.presaleContract()).to.equal(presaleContract.address);
+            expect(await pronovaToken.vestingContract()).to.equal(vestingContract.address);
+        });
 
-      const addr1Balance = await token.balanceOf(addr1.address);
-      expect(addr1Balance).to.equal(100);
+        it("Should require 2 confirmations for distributing allocations", async function () {
+            // Set wallets first (requires multi-sig)
+            await pronovaToken.connect(admin1).setAllocationWallets(
+                presaleContract.address,
+                foundersWallet.address,
+                liquidityWallet.address,
+                partnershipsWallet.address,
+                teamWallet.address,
+                communityWallet.address,
+                strategicReservesWallet.address,
+                marketingWallet.address,
+                stakingContract.address,
+                vestingContract.address
+            );
 
-      const addr2Balance = await token.balanceOf(addr2.address);
-      expect(addr2Balance).to.equal(50);
+            await pronovaToken.connect(admin2).setAllocationWallets(
+                presaleContract.address,
+                foundersWallet.address,
+                liquidityWallet.address,
+                partnershipsWallet.address,
+                teamWallet.address,
+                communityWallet.address,
+                strategicReservesWallet.address,
+                marketingWallet.address,
+                stakingContract.address,
+                vestingContract.address
+            );
+
+            // First admin distributes
+            await pronovaToken.connect(admin1).distributeAllocations();
+
+            // Check allocations not distributed yet
+            expect(await pronovaToken.allocationsDistributed()).to.equal(false);
+
+            // Second admin distributes
+            await pronovaToken.connect(admin2).distributeAllocations();
+
+            // Now should be distributed
+            expect(await pronovaToken.allocationsDistributed()).to.equal(true);
+
+            // Verify correct distribution
+            expect(await pronovaToken.balanceOf(presaleContract.address)).to.equal(PRESALE_ALLOCATION);
+            expect(await pronovaToken.balanceOf(liquidityWallet.address)).to.equal(LIQUIDITY_ALLOCATION);
+            expect(await pronovaToken.balanceOf(marketingWallet.address)).to.equal(MARKETING_ALLOCATION);
+            expect(await pronovaToken.balanceOf(communityWallet.address)).to.equal(COMMUNITY_ALLOCATION);
+            expect(await pronovaToken.balanceOf(strategicReservesWallet.address)).to.equal(STRATEGIC_RESERVES_ALLOCATION);
+            expect(await pronovaToken.balanceOf(stakingContract.address)).to.equal(STAKING_REWARDS_ALLOCATION);
+
+            // Vested amounts go to vesting contract
+            const vestedAmount = FOUNDERS_ALLOCATION + TEAM_ALLOCATION + PARTNERSHIPS_ALLOCATION;
+            expect(await pronovaToken.balanceOf(vestingContract.address)).to.equal(vestedAmount);
+        });
     });
-  });
 
-  describe("Pausable", function () {
-    beforeEach(async function () {
-      // Transfer some tokens from contract to owner for testing
-      await token.emergencyWithdraw();
+    describe("Vesting Parameters (9-Year Period)", function () {
+        it("Should have correct vesting duration of 9 years", async function () {
+            const vestingInfo = await pronovaToken.getVestingInfo();
+            const nineyears = 9n * 365n * 24n * 60n * 60n; // 9 years in seconds
+            expect(vestingInfo.vestingDuration).to.equal(nineyears);
+        });
+
+        it("Should have correct unlock interval of 6 months", async function () {
+            const vestingInfo = await pronovaToken.getVestingInfo();
+            const sixMonths = 180n * 24n * 60n * 60n; // 180 days in seconds
+            expect(vestingInfo.unlockInterval).to.equal(sixMonths);
+        });
+
+        it("Should have correct unlock percentage of 2.5% per interval", async function () {
+            const vestingInfo = await pronovaToken.getVestingInfo();
+            expect(vestingInfo.unlockPercentage).to.equal(250); // 2.5% in basis points
+        });
+
+        it("Should lock 45% of tokens as specified", async function () {
+            const vestingInfo = await pronovaToken.getVestingInfo();
+            expect(vestingInfo.lockedPercentage).to.equal(45);
+        });
     });
 
-    it("Should pause and unpause transfers", async function () {
-      // Transfer some tokens first
-      await token.transfer(addr1.address, 100);
-      
-      // Pause the contract
-      await token.pause();
-      
-      // Should fail to transfer when paused
-      await expect(
-        token.transfer(addr1.address, 100)
-      ).to.be.revertedWithCustomError(token, "EnforcedPause");
-      
-      // Unpause the contract
-      await token.unpause();
-      
-      // Should work after unpause
-      await token.transfer(addr1.address, 100);
-      expect(await token.balanceOf(addr1.address)).to.equal(200);
+    describe("Automatic Burn Mechanism", function () {
+        beforeEach(async function () {
+            // Setup allocations for testing
+            await pronovaToken.connect(admin1).setAllocationWallets(
+                presaleContract.address,
+                foundersWallet.address,
+                liquidityWallet.address,
+                partnershipsWallet.address,
+                teamWallet.address,
+                communityWallet.address,
+                strategicReservesWallet.address,
+                marketingWallet.address,
+                stakingContract.address,
+                vestingContract.address
+            );
+
+            await pronovaToken.connect(admin2).setAllocationWallets(
+                presaleContract.address,
+                foundersWallet.address,
+                liquidityWallet.address,
+                partnershipsWallet.address,
+                teamWallet.address,
+                communityWallet.address,
+                strategicReservesWallet.address,
+                marketingWallet.address,
+                stakingContract.address,
+                vestingContract.address
+            );
+
+            await pronovaToken.connect(admin1).distributeAllocations();
+            await pronovaToken.connect(admin2).distributeAllocations();
+        });
+
+        it("Should burn 0.1% of tokens on transfer when auto-burn is enabled", async function () {
+            // Enable auto-burn
+            await pronovaToken.setAutoBurn(true);
+
+            const transferAmount = ethers.parseEther("1000");
+            const burnAmount = transferAmount * 10n / 10000n; // 0.1%
+            const receiveAmount = transferAmount - burnAmount;
+
+            // Transfer from marketing wallet to user1
+            await pronovaToken.connect(marketingWallet).transfer(user1.address, transferAmount);
+
+            expect(await pronovaToken.balanceOf(user1.address)).to.equal(receiveAmount);
+            expect(await pronovaToken.totalBurned()).to.equal(burnAmount);
+        });
+
+        it("Should not burn when auto-burn is disabled", async function () {
+            // Auto-burn is disabled by default
+            const transferAmount = ethers.parseEther("1000");
+
+            await pronovaToken.connect(marketingWallet).transfer(user1.address, transferAmount);
+
+            expect(await pronovaToken.balanceOf(user1.address)).to.equal(transferAmount);
+            expect(await pronovaToken.totalBurned()).to.equal(0);
+        });
     });
 
-    it("Should only allow owner to pause", async function () {
-      await expect(
-        token.connect(addr1).pause()
-      ).to.be.revertedWithCustomError(token, "OwnableUnauthorizedAccount");
-    });
-  });
+    describe("Pause Functionality", function () {
+        it("Should allow pauser to pause and unpause transfers", async function () {
+            const PAUSER_ROLE = await pronovaToken.PAUSER_ROLE();
+            await pronovaToken.grantRole(PAUSER_ROLE, admin1.address);
 
-  describe("Burnable", function () {
-    beforeEach(async function () {
-      // Transfer some tokens from contract to owner for testing
-      await token.emergencyWithdraw();
-    });
+            // Pause the contract
+            await pronovaToken.connect(admin1).pause();
 
-    it("Should burn tokens and reduce total supply", async function () {
-      const initialSupply = await token.totalSupply();
-      const burnAmount = ethers.parseEther("1000");
-      
-      await token.burn(burnAmount);
-      
-      const newSupply = await token.totalSupply();
-      expect(newSupply).to.equal(initialSupply - burnAmount);
-    });
+            // Setup for transfer test
+            await pronovaToken.transfer(user1.address, ethers.parseEther("100"));
 
-    it("Should track burned tokens", async function () {
-      const burnAmount = ethers.parseEther("1000");
-      await token.burn(burnAmount);
-      
-      const totalBurned = await token.totalBurned();
-      expect(totalBurned).to.equal(burnAmount);
+            // Transfer should fail when paused
+            await expect(
+                pronovaToken.connect(user1).transfer(user2.address, ethers.parseEther("50"))
+            ).to.be.revertedWithCustomError(pronovaToken, "EnforcedPause");
+
+            // Unpause
+            await pronovaToken.connect(admin1).unpause();
+
+            // Transfer should work now
+            await pronovaToken.connect(user1).transfer(user2.address, ethers.parseEther("50"));
+            expect(await pronovaToken.balanceOf(user2.address)).to.equal(ethers.parseEther("50"));
+        });
     });
 
-    it("Should burn from caller's balance", async function () {
-      const initialBalance = await token.balanceOf(owner.address);
-      const burnAmount = ethers.parseEther("1000");
-      
-      await token.burn(burnAmount);
-      
-      const newBalance = await token.balanceOf(owner.address);
-      expect(newBalance).to.equal(initialBalance - burnAmount);
+    describe("Access Control", function () {
+        it("Should not allow non-admin to set allocation wallets", async function () {
+            await expect(
+                pronovaToken.connect(user1).setAllocationWallets(
+                    presaleContract.address,
+                    foundersWallet.address,
+                    liquidityWallet.address,
+                    partnershipsWallet.address,
+                    teamWallet.address,
+                    communityWallet.address,
+                    strategicReservesWallet.address,
+                    marketingWallet.address,
+                    stakingContract.address,
+                    vestingContract.address
+                )
+            ).to.be.reverted;
+        });
+
+        it("Should not allow non-admin to distribute allocations", async function () {
+            await expect(
+                pronovaToken.connect(user1).distributeAllocations()
+            ).to.be.reverted;
+        });
+
+        it("Should allow DEFAULT_ADMIN to add and remove admins", async function () {
+            const ADMIN_ROLE = await pronovaToken.ADMIN_ROLE();
+
+            await pronovaToken.addAdmin(user1.address);
+            expect(await pronovaToken.hasRole(ADMIN_ROLE, user1.address)).to.equal(true);
+
+            await pronovaToken.removeAdmin(user1.address);
+            expect(await pronovaToken.hasRole(ADMIN_ROLE, user1.address)).to.equal(false);
+        });
     });
-  });
+
+    describe("Emergency Withdrawal", function () {
+        it("Should require multi-sig for emergency withdrawal", async function () {
+            // Send some tokens to contract
+            await pronovaToken.transfer(pronovaToken.target, ethers.parseEther("1000"));
+
+            const initialBalance = await pronovaToken.balanceOf(admin1.address);
+
+            // First admin attempts withdrawal
+            await pronovaToken.connect(admin1).emergencyWithdraw();
+
+            // Balance shouldn't change yet
+            expect(await pronovaToken.balanceOf(admin1.address)).to.equal(initialBalance);
+
+            // Second admin confirms
+            await pronovaToken.connect(admin2).emergencyWithdraw();
+
+            // Now admin2 should receive the tokens
+            expect(await pronovaToken.balanceOf(admin2.address)).to.be.gt(0);
+        });
+    });
+
 });

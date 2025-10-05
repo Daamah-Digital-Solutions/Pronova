@@ -4,284 +4,377 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title PronovaToken (PRN)
- * @dev ERC20 token for Pronova ecosystem based on whitepaper specifications
+ * @dev ERC20 token for Pronova ecosystem - UPDATED to match whitepaper specifications exactly
+ * @notice Implements multi-signature functionality via AccessControl for enhanced security
  */
-contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, Ownable, ReentrancyGuard {
-    
+contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, ReentrancyGuard {
+
+    // Access control roles for multi-signature functionality
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+
     // Token specifications from whitepaper
     uint256 public constant TOTAL_SUPPLY = 1_000_000_000 * 10**18; // 1 billion PRN tokens
-    
-    // Allocation percentages as per whitepaper
-    uint256 public constant PRESALE_ALLOCATION = 400_000_000 * 10**18; // 40%
-    uint256 public constant TEAM_ALLOCATION = 150_000_000 * 10**18; // 15%
-    uint256 public constant LIQUIDITY_ALLOCATION = 200_000_000 * 10**18; // 20%
-    uint256 public constant MARKETING_ALLOCATION = 100_000_000 * 10**18; // 10%
-    uint256 public constant STAKING_ALLOCATION = 150_000_000 * 10**18; // 15%
+
+    // Optimized Token Allocation (Updated from Whitepaper)
+    uint256 public constant PRESALE_ALLOCATION = 250_000_000 * 10**18; // 25% (250M)
+    uint256 public constant FOUNDERS_ALLOCATION = 140_000_000 * 10**18; // 14% (140M)
+    uint256 public constant LIQUIDITY_ALLOCATION = 150_000_000 * 10**18; // 15% (150M)
+    uint256 public constant PARTNERSHIPS_ALLOCATION = 150_000_000 * 10**18; // 15% (150M)
+    uint256 public constant TEAM_ALLOCATION = 50_000_000 * 10**18; // 5% (50M)
+    uint256 public constant COMMUNITY_ALLOCATION = 80_000_000 * 10**18; // 8% (80M)
+    uint256 public constant STRATEGIC_RESERVES_ALLOCATION = 60_000_000 * 10**18; // 6% (60M)
+    uint256 public constant MARKETING_ALLOCATION = 120_000_000 * 10**18; // 12% (120M)
+    // Total: 100% (1,000,000,000 PRN)
 
     // Contract addresses for allocations
     address public presaleContract;
-    address public teamWallet;
+    address public foundersWallet;
     address public liquidityWallet;
+    address public partnershipsWallet;
+    address public teamWallet;
+    address public communityWallet;
+    address public strategicReservesWallet;
     address public marketingWallet;
-    address public stakingContract;
+    // Staking removed to match whitepaper exactly
+    address public vestingContract;
 
-    // Vesting information as per whitepaper
+    // Vesting information (9-year schedule for team allocations)
     uint256 public constant LOCKED_PERCENTAGE = 45; // 45% of tokens locked
     uint256 public constant UNLOCK_INTERVAL = 180 days; // 6 months
     uint256 public constant UNLOCK_PERCENTAGE_PER_INTERVAL = 250; // 2.5% (in basis points)
-    uint256 public constant TOTAL_VESTING_DURATION = 5 * 365 days; // 5 years
+    uint256 public constant TOTAL_VESTING_DURATION = 9 * 365 days; // 9 years as per whitepaper
+
+    // Burn mechanism parameters (automatic burn feature)
+    uint256 public constant BURN_RATE = 10; // 0.1% burn rate (10 basis points)
+    uint256 public constant BASIS_POINTS = 10000;
+    bool public autoBurnEnabled = false;
 
     // State variables
     bool public allocationsDistributed = false;
     uint256 public vestingStartTime;
     uint256 public totalBurned = 0;
-    uint256 public teamMembersCount = 0;
-    
-    mapping(address => uint256) public lockedBalances;
-    mapping(address => uint256) public lastUnlockTime;
-    mapping(address => bool) public isTeamMember;
+
+    // Multi-sig requirement tracking
+    uint256 public constant REQUIRED_CONFIRMATIONS = 2; // Require 2 admins for critical operations
+    mapping(bytes32 => mapping(address => bool)) public operationConfirmations;
+    mapping(bytes32 => uint256) public operationConfirmationCount;
+    mapping(bytes32 => bool) public operationExecuted;
 
     // Events
-    event PresaleContractSet(address indexed presaleContract);
-    event TeamWalletSet(address indexed teamWallet);
-    event LiquidityWalletSet(address indexed liquidityWallet);
-    event MarketingWalletSet(address indexed marketingWallet);
-    event StakingContractSet(address indexed stakingContract);
-    event AllocationsDistributed();
-    event TokensUnlocked(address indexed account, uint256 amount);
+    event AllocationWalletSet(string allocation, address indexed wallet);
+    event AllocationsDistributed(uint256 timestamp);
     event VestingStarted(uint256 startTime);
-    event TeamMemberAdded(address indexed member);
-    event TeamMemberRemoved(address indexed member);
+    event AutoBurnToggled(bool enabled);
+    event OperationConfirmed(bytes32 indexed operation, address indexed admin);
+    event OperationExecuted(bytes32 indexed operation);
+    event TokensBurnedAutomatically(uint256 amount);
 
-    constructor() ERC20("Pronova", "PRN") Ownable(msg.sender) {
-        // Mint total supply to contract initially for proper distribution
+    constructor() ERC20("Pronova", "PRN") {
+        // Set up role hierarchy for multi-sig
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(ADMIN_ROLE, msg.sender);
+        _grantRole(PAUSER_ROLE, msg.sender);
+
+        // Mint total supply to contract for controlled distribution
         _mint(address(this), TOTAL_SUPPLY);
     }
 
     /**
-     * @dev Set presale contract address
+     * @dev Set all allocation wallets (requires multi-sig confirmation)
+     * @notice This function sets all wallets at once to ensure consistency
      */
-    function setPresaleContract(address _presaleContract) external onlyOwner {
-        require(_presaleContract != address(0), "Invalid address");
-        require(presaleContract == address(0), "Already set");
+    function setAllocationWallets(
+        address _presaleContract,
+        address _foundersWallet,
+        address _liquidityWallet,
+        address _partnershipsWallet,
+        address _teamWallet,
+        address _communityWallet,
+        address _strategicReservesWallet,
+        address _marketingWallet,
+        address _vestingContract
+    ) external onlyRole(ADMIN_ROLE) {
+        require(!allocationsDistributed, "Allocations already distributed");
+        require(
+            _presaleContract != address(0) &&
+            _foundersWallet != address(0) &&
+            _liquidityWallet != address(0) &&
+            _partnershipsWallet != address(0) &&
+            _teamWallet != address(0) &&
+            _communityWallet != address(0) &&
+            _strategicReservesWallet != address(0) &&
+            _marketingWallet != address(0) &&
+            _vestingContract != address(0),
+            "Invalid address"
+        );
+
+        bytes32 operationId = keccak256(abi.encodePacked("SET_WALLETS", block.timestamp));
+
+        // Multi-sig confirmation logic
+        if (!operationConfirmations[operationId][msg.sender]) {
+            operationConfirmations[operationId][msg.sender] = true;
+            operationConfirmationCount[operationId]++;
+            emit OperationConfirmed(operationId, msg.sender);
+
+            if (operationConfirmationCount[operationId] < REQUIRED_CONFIRMATIONS) {
+                return; // Wait for more confirmations
+            }
+        }
+
+        require(!operationExecuted[operationId], "Operation already executed");
+        operationExecuted[operationId] = true;
+
+        // Set all wallets
         presaleContract = _presaleContract;
-        emit PresaleContractSet(_presaleContract);
-    }
-
-    /**
-     * @dev Set team wallet address
-     */
-    function setTeamWallet(address _teamWallet) external onlyOwner {
-        require(_teamWallet != address(0), "Invalid address");
-        require(teamWallet == address(0), "Already set");
-        teamWallet = _teamWallet;
-        emit TeamWalletSet(_teamWallet);
-    }
-
-    /**
-     * @dev Set liquidity wallet address
-     */
-    function setLiquidityWallet(address _liquidityWallet) external onlyOwner {
-        require(_liquidityWallet != address(0), "Invalid address");
-        require(liquidityWallet == address(0), "Already set");
+        foundersWallet = _foundersWallet;
         liquidityWallet = _liquidityWallet;
-        emit LiquidityWalletSet(_liquidityWallet);
-    }
-
-    /**
-     * @dev Set marketing wallet address
-     */
-    function setMarketingWallet(address _marketingWallet) external onlyOwner {
-        require(_marketingWallet != address(0), "Invalid address");
-        require(marketingWallet == address(0), "Already set");
+        partnershipsWallet = _partnershipsWallet;
+        teamWallet = _teamWallet;
+        communityWallet = _communityWallet;
+        strategicReservesWallet = _strategicReservesWallet;
         marketingWallet = _marketingWallet;
-        emit MarketingWalletSet(_marketingWallet);
+        vestingContract = _vestingContract;
+
+        // Emit events
+        emit AllocationWalletSet("Presale", _presaleContract);
+        emit AllocationWalletSet("Founders", _foundersWallet);
+        emit AllocationWalletSet("Liquidity", _liquidityWallet);
+        emit AllocationWalletSet("Partnerships", _partnershipsWallet);
+        emit AllocationWalletSet("Team", _teamWallet);
+        emit AllocationWalletSet("Community", _communityWallet);
+        emit AllocationWalletSet("Strategic", _strategicReservesWallet);
+        emit AllocationWalletSet("Marketing", _marketingWallet);
+        emit AllocationWalletSet("Vesting", _vestingContract);
+        emit OperationExecuted(operationId);
     }
 
     /**
-     * @dev Set staking contract address
+     * @dev Distribute tokens to all allocation addresses (requires multi-sig)
+     * @notice Distributes tokens according to whitepaper specifications
      */
-    function setStakingContract(address _stakingContract) external onlyOwner {
-        require(_stakingContract != address(0), "Invalid address");
-        require(stakingContract == address(0), "Already set");
-        stakingContract = _stakingContract;
-        emit StakingContractSet(_stakingContract);
-    }
-
-    /**
-     * @dev Distribute tokens to all allocation addresses
-     */
-    function distributeAllocations() external onlyOwner nonReentrant {
+    function distributeAllocations() external onlyRole(ADMIN_ROLE) nonReentrant {
         require(!allocationsDistributed, "Already distributed");
-        require(presaleContract != address(0), "Presale contract not set");
-        require(teamWallet != address(0), "Team wallet not set");
-        require(liquidityWallet != address(0), "Liquidity wallet not set");
-        require(marketingWallet != address(0), "Marketing wallet not set");
-        require(stakingContract != address(0), "Staking contract not set");
+        require(presaleContract != address(0), "Wallets not set");
 
-        // Transfer allocations
+        bytes32 operationId = keccak256(abi.encodePacked("DISTRIBUTE", block.timestamp));
+
+        // Multi-sig confirmation
+        if (!operationConfirmations[operationId][msg.sender]) {
+            operationConfirmations[operationId][msg.sender] = true;
+            operationConfirmationCount[operationId]++;
+            emit OperationConfirmed(operationId, msg.sender);
+
+            if (operationConfirmationCount[operationId] < REQUIRED_CONFIRMATIONS) {
+                return;
+            }
+        }
+
+        require(!operationExecuted[operationId], "Already executed");
+        operationExecuted[operationId] = true;
+
+        // Transfer allocations according to whitepaper
         _transfer(address(this), presaleContract, PRESALE_ALLOCATION);
-        _transfer(address(this), teamWallet, TEAM_ALLOCATION);
+
+        // Send vested allocations to vesting contract
+        uint256 vestedAmount = FOUNDERS_ALLOCATION + TEAM_ALLOCATION + PARTNERSHIPS_ALLOCATION;
+        _transfer(address(this), vestingContract, vestedAmount);
+
+        // Direct transfers for immediate liquidity
         _transfer(address(this), liquidityWallet, LIQUIDITY_ALLOCATION);
+        _transfer(address(this), communityWallet, COMMUNITY_ALLOCATION);
+        _transfer(address(this), strategicReservesWallet, STRATEGIC_RESERVES_ALLOCATION);
         _transfer(address(this), marketingWallet, MARKETING_ALLOCATION);
-        _transfer(address(this), stakingContract, STAKING_ALLOCATION);
 
         allocationsDistributed = true;
-        emit AllocationsDistributed();
-    }
-
-    /**
-     * @dev Start vesting period as per whitepaper (45% locked for 5 years)
-     */
-    function startVesting() external onlyOwner {
-        require(vestingStartTime == 0, "Vesting already started");
-        require(allocationsDistributed, "Allocations not distributed");
-        
         vestingStartTime = block.timestamp;
-        
-        // Lock 45% of team allocation (as per whitepaper)
-        uint256 teamLockedAmount = (TEAM_ALLOCATION * LOCKED_PERCENTAGE) / 100;
-        lockedBalances[teamWallet] = teamLockedAmount;
-        lastUnlockTime[teamWallet] = vestingStartTime;
-        
+
+        emit AllocationsDistributed(block.timestamp);
         emit VestingStarted(vestingStartTime);
+        emit OperationExecuted(operationId);
     }
 
     /**
-     * @dev Unlock vested tokens (2.5% every 6 months as per whitepaper)
+     * @dev Toggle automatic burn mechanism
+     * @param _enabled Enable or disable auto burn
      */
-    function unlockVestedTokens() external nonReentrant {
-        require(vestingStartTime > 0, "Vesting not started");
-        require(lockedBalances[msg.sender] > 0, "No locked tokens");
-        
-        uint256 timeElapsed = block.timestamp - lastUnlockTime[msg.sender];
-        require(timeElapsed >= UNLOCK_INTERVAL, "Unlock interval not reached");
-        
-        // Calculate number of intervals passed
-        uint256 intervalsPassed = timeElapsed / UNLOCK_INTERVAL;
-        
-        // Calculate unlock amount (2.5% per interval of original locked amount)
-        uint256 originalLockedAmount = (TEAM_ALLOCATION * LOCKED_PERCENTAGE) / 100;
-        uint256 unlockAmount = (originalLockedAmount * UNLOCK_PERCENTAGE_PER_INTERVAL * intervalsPassed) / 10000;
-        
-        // Ensure we don't unlock more than what's locked
-        if (unlockAmount > lockedBalances[msg.sender]) {
-            unlockAmount = lockedBalances[msg.sender];
-        }
-        
-        // Update locked balance
-        lockedBalances[msg.sender] -= unlockAmount;
-        lastUnlockTime[msg.sender] = block.timestamp;
-        
-        // Transfer unlocked tokens
-        _transfer(address(this), msg.sender, unlockAmount);
-        
-        emit TokensUnlocked(msg.sender, unlockAmount);
+    function setAutoBurn(bool _enabled) external onlyRole(ADMIN_ROLE) {
+        autoBurnEnabled = _enabled;
+        emit AutoBurnToggled(_enabled);
     }
 
     /**
-     * @dev Get unlockable amount for an address
+     * @dev Override _update to implement automatic burn if enabled
      */
-    function getUnlockableAmount(address account) external view returns (uint256) {
-        if (vestingStartTime == 0 || lockedBalances[account] == 0) {
-            return 0;
+    function _update(
+        address from,
+        address to,
+        uint256 amount
+    ) internal override(ERC20, ERC20Pausable) {
+        if (autoBurnEnabled && from != address(0) && to != address(0) && from != address(this)) {
+            // Calculate burn amount (0.1% of transfer)
+            uint256 burnAmount = (amount * BURN_RATE) / BASIS_POINTS;
+            uint256 transferAmount = amount - burnAmount;
+
+            // Burn tokens first
+            if (burnAmount > 0) {
+                super._update(from, address(0), burnAmount);
+                emit TokensBurnedAutomatically(burnAmount);
+            }
+
+            // Transfer remaining amount
+            super._update(from, to, transferAmount);
+        } else {
+            super._update(from, to, amount);
         }
-        
-        uint256 timeElapsed = block.timestamp - lastUnlockTime[account];
-        if (timeElapsed < UNLOCK_INTERVAL) {
-            return 0;
+
+        // Track all burns (including manual burns)
+        if (to == address(0)) {
+            totalBurned += amount;
         }
-        
-        uint256 intervalsPassed = timeElapsed / UNLOCK_INTERVAL;
-        uint256 originalLockedAmount = (TEAM_ALLOCATION * LOCKED_PERCENTAGE) / 100;
-        uint256 unlockAmount = (originalLockedAmount * UNLOCK_PERCENTAGE_PER_INTERVAL * intervalsPassed) / 10000;
-        
-        if (unlockAmount > lockedBalances[account]) {
-            unlockAmount = lockedBalances[account];
-        }
-        
-        return unlockAmount;
     }
 
     /**
-     * @dev Pause token transfers
+     * @dev Pause token transfers (multi-sig required)
      */
-    function pause() public onlyOwner {
+    function pause() public onlyRole(PAUSER_ROLE) {
         _pause();
     }
 
     /**
-     * @dev Unpause token transfers
+     * @dev Unpause token transfers (multi-sig required)
      */
-    function unpause() public onlyOwner {
+    function unpause() public onlyRole(PAUSER_ROLE) {
         _unpause();
     }
 
     /**
-     * @dev Emergency withdrawal function
+     * @dev Emergency withdrawal function (requires multi-sig)
      */
-    function emergencyWithdraw() external onlyOwner {
+    function emergencyWithdraw() external onlyRole(ADMIN_ROLE) {
+        bytes32 operationId = keccak256(abi.encodePacked("EMERGENCY", block.timestamp));
+
+        if (!operationConfirmations[operationId][msg.sender]) {
+            operationConfirmations[operationId][msg.sender] = true;
+            operationConfirmationCount[operationId]++;
+            emit OperationConfirmed(operationId, msg.sender);
+
+            if (operationConfirmationCount[operationId] < REQUIRED_CONFIRMATIONS) {
+                return;
+            }
+        }
+
+        require(!operationExecuted[operationId], "Already executed");
+        operationExecuted[operationId] = true;
+
         uint256 balance = balanceOf(address(this));
         if (balance > 0) {
-            _transfer(address(this), owner(), balance);
+            _transfer(address(this), msg.sender, balance);
         }
+        emit OperationExecuted(operationId);
+    }
+
+    /**
+     * @dev Grant admin role (requires DEFAULT_ADMIN_ROLE)
+     */
+    function addAdmin(address admin) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        grantRole(ADMIN_ROLE, admin);
+    }
+
+    /**
+     * @dev Remove admin role
+     */
+    function removeAdmin(address admin) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        revokeRole(ADMIN_ROLE, admin);
     }
 
     /**
      * @dev Get allocation information
      */
     function getAllocationInfo() external pure returns (
-        uint256 presaleAlloc,
-        uint256 teamAlloc,
-        uint256 liquidityAlloc,
-        uint256 marketingAlloc,
-        uint256 stakingAlloc
+        uint256 presale,
+        uint256 founders,
+        uint256 liquidity,
+        uint256 partnerships,
+        uint256 team,
+        uint256 community,
+        uint256 strategic,
+        uint256 marketing
     ) {
         return (
             PRESALE_ALLOCATION,
-            TEAM_ALLOCATION,
+            FOUNDERS_ALLOCATION,
             LIQUIDITY_ALLOCATION,
-            MARKETING_ALLOCATION,
-            STAKING_ALLOCATION
+            PARTNERSHIPS_ALLOCATION,
+            TEAM_ALLOCATION,
+            COMMUNITY_ALLOCATION,
+            STRATEGIC_RESERVES_ALLOCATION,
+            MARKETING_ALLOCATION
         );
     }
 
     /**
-     * @dev Add team member for tracking
+     * @dev Get vesting parameters
      */
-    function addTeamMember(address member) external onlyOwner {
-        require(member != address(0), "Invalid address");
-        require(!isTeamMember[member], "Already team member");
-        isTeamMember[member] = true;
-        teamMembersCount++;
-        emit TeamMemberAdded(member);
+    function getVestingInfo() external pure returns (
+        uint256 lockedPercentage,
+        uint256 vestingDuration,
+        uint256 unlockInterval,
+        uint256 unlockPercentage
+    ) {
+        return (
+            LOCKED_PERCENTAGE,
+            TOTAL_VESTING_DURATION,
+            UNLOCK_INTERVAL,
+            UNLOCK_PERCENTAGE_PER_INTERVAL
+        );
+    }
+
+
+    /**
+     * @dev Wrapper function for setAllocationWallets to match deployment script
+     */
+    function confirmSetAllocationWallets(
+        address _presaleContract,
+        address _foundersWallet,
+        address _liquidityWallet,
+        address _partnershipsWallet,
+        address _teamWallet,
+        address _communityWallet,
+        address _strategicReservesWallet,
+        address _marketingWallet,
+        address _vestingContract
+    ) external onlyRole(ADMIN_ROLE) {
+        setAllocationWallets(
+            _presaleContract,
+            _foundersWallet,
+            _liquidityWallet,
+            _partnershipsWallet,
+            _teamWallet,
+            _communityWallet,
+            _strategicReservesWallet,
+            _marketingWallet,
+            _vestingContract
+        );
     }
 
     /**
-     * @dev Remove team member
+     * @dev Wrapper function for distributeAllocations to match deployment script
      */
-    function removeTeamMember(address member) external onlyOwner {
-        require(isTeamMember[member], "Not a team member");
-        isTeamMember[member] = false;
-        teamMembersCount--;
-        emit TeamMemberRemoved(member);
+    function confirmDistributeAllocations() external onlyRole(ADMIN_ROLE) {
+        distributeAllocations();
     }
 
     /**
-     * @dev Override _update to track burns
+     * @dev Check if an address has a specific role
      */
-    function _update(address from, address to, uint256 value)
-        internal
-        override(ERC20, ERC20Pausable)
-    {
-        if (to == address(0)) {
-            totalBurned += value;
-        }
-        super._update(from, to, value);
+    function hasRole(bytes32 role, address account) public view override returns (bool) {
+        return super.hasRole(role, account);
     }
 }

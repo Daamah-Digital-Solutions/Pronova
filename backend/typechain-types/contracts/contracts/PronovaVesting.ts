@@ -26,48 +26,82 @@ import type {
 export interface PronovaVestingInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "ADMIN_ROLE"
       | "BASIS_POINTS"
+      | "DEFAULT_ADMIN_ROLE"
       | "LOCKED_PERCENTAGE"
+      | "REQUIRED_CONFIRMATIONS"
+      | "TOTAL_UNLOCK_PERIODS"
       | "UNLOCK_INTERVAL"
       | "UNLOCK_PERCENTAGE_PER_INTERVAL"
       | "VESTING_DURATION"
-      | "createVestingSchedule"
-      | "createWhitepaperVestingSchedule"
-      | "getAllSchedules"
+      | "VESTING_MANAGER_ROLE"
+      | "allocationAmounts"
+      | "allocationBeneficiaries"
+      | "createCustomVesting"
       | "getBeneficiaryInfo"
+      | "getContractStats"
       | "getNextUnlockTime"
-      | "getReleasableAmount"
-      | "getScheduleDetails"
+      | "getRoleAdmin"
       | "getTotalReleasableAmount"
       | "getVestingProgress"
       | "getVestingSchedule"
-      | "getVestingScheduleCount"
-      | "owner"
+      | "grantRole"
+      | "hasRole"
+      | "operationConfirmationCount"
+      | "operationConfirmations"
+      | "operationExecuted"
       | "pronovaToken"
       | "release"
       | "releaseAll"
-      | "renounceOwnership"
+      | "renounceRole"
       | "revoke"
+      | "revokeRole"
+      | "setupWhitepaperAllocations"
+      | "supportsInterface"
+      | "totalLockedAmount"
       | "totalReleasedAmount"
+      | "totalTokensManaged"
+      | "totalTokensReleased"
       | "totalVestedAmount"
-      | "transferOwnership"
       | "vestingSchedules"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "OwnershipTransferred"
+      | "AllocationSet"
+      | "OperationConfirmed"
+      | "OperationExecuted"
+      | "RoleAdminChanged"
+      | "RoleGranted"
+      | "RoleRevoked"
       | "TokensReleased"
       | "VestingRevoked"
       | "VestingScheduleCreated"
   ): EventFragment;
 
   encodeFunctionData(
+    functionFragment: "ADMIN_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "BASIS_POINTS",
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "LOCKED_PERCENTAGE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "REQUIRED_CONFIRMATIONS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "TOTAL_UNLOCK_PERIODS",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -83,7 +117,19 @@ export interface PronovaVestingInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "createVestingSchedule",
+    functionFragment: "VESTING_MANAGER_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "allocationAmounts",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "allocationBeneficiaries",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createCustomVesting",
     values: [
       AddressLike,
       BigNumberish,
@@ -94,28 +140,20 @@ export interface PronovaVestingInterface extends Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "createWhitepaperVestingSchedule",
-    values: [AddressLike, BigNumberish, BigNumberish, boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getAllSchedules",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getBeneficiaryInfo",
     values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getContractStats",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getNextUnlockTime",
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getReleasableAmount",
-    values: [AddressLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getScheduleDetails",
-    values: [AddressLike, BigNumberish]
+    functionFragment: "getRoleAdmin",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "getTotalReleasableAmount",
@@ -130,10 +168,25 @@ export interface PronovaVestingInterface extends Interface {
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getVestingScheduleCount",
-    values: [AddressLike]
+    functionFragment: "grantRole",
+    values: [BytesLike, AddressLike]
   ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "hasRole",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "operationConfirmationCount",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "operationConfirmations",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "operationExecuted",
+    values: [BytesLike]
+  ): string;
   encodeFunctionData(
     functionFragment: "pronovaToken",
     values?: undefined
@@ -147,23 +200,43 @@ export interface PronovaVestingInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
+    functionFragment: "renounceRole",
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "revoke",
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "revokeRole",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setupWhitepaperAllocations",
+    values: [AddressLike, AddressLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalLockedAmount",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "totalReleasedAmount",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "totalVestedAmount",
-    values: [AddressLike]
+    functionFragment: "totalTokensManaged",
+    values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
+    functionFragment: "totalTokensReleased",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalVestedAmount",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
@@ -171,12 +244,25 @@ export interface PronovaVestingInterface extends Interface {
     values: [AddressLike, BigNumberish]
   ): string;
 
+  decodeFunctionResult(functionFragment: "ADMIN_ROLE", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "BASIS_POINTS",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "LOCKED_PERCENTAGE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "REQUIRED_CONFIRMATIONS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "TOTAL_UNLOCK_PERIODS",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -192,15 +278,19 @@ export interface PronovaVestingInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createVestingSchedule",
+    functionFragment: "VESTING_MANAGER_ROLE",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "createWhitepaperVestingSchedule",
+    functionFragment: "allocationAmounts",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getAllSchedules",
+    functionFragment: "allocationBeneficiaries",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "createCustomVesting",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -208,15 +298,15 @@ export interface PronovaVestingInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getContractStats",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getNextUnlockTime",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getReleasableAmount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getScheduleDetails",
+    functionFragment: "getRoleAdmin",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -231,11 +321,20 @@ export interface PronovaVestingInterface extends Interface {
     functionFragment: "getVestingSchedule",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getVestingScheduleCount",
+    functionFragment: "operationConfirmationCount",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "operationConfirmations",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "operationExecuted",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "pronovaToken",
     data: BytesLike
@@ -243,20 +342,37 @@ export interface PronovaVestingInterface extends Interface {
   decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "releaseAll", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
+    functionFragment: "renounceRole",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "revoke", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setupWhitepaperAllocations",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "totalLockedAmount",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "totalReleasedAmount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "totalVestedAmount",
+    functionFragment: "totalTokensManaged",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
+    functionFragment: "totalTokensReleased",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "totalVestedAmount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -265,12 +381,104 @@ export interface PronovaVestingInterface extends Interface {
   ): Result;
 }
 
-export namespace OwnershipTransferredEvent {
-  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
-  export type OutputTuple = [previousOwner: string, newOwner: string];
+export namespace AllocationSetEvent {
+  export type InputTuple = [
+    allocation: string,
+    beneficiary: AddressLike,
+    amount: BigNumberish
+  ];
+  export type OutputTuple = [
+    allocation: string,
+    beneficiary: string,
+    amount: bigint
+  ];
   export interface OutputObject {
-    previousOwner: string;
-    newOwner: string;
+    allocation: string;
+    beneficiary: string;
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace OperationConfirmedEvent {
+  export type InputTuple = [operation: BytesLike, admin: AddressLike];
+  export type OutputTuple = [operation: string, admin: string];
+  export interface OutputObject {
+    operation: string;
+    admin: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace OperationExecutedEvent {
+  export type InputTuple = [operation: BytesLike];
+  export type OutputTuple = [operation: string];
+  export interface OutputObject {
+    operation: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleAdminChangedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    previousAdminRole: BytesLike,
+    newAdminRole: BytesLike
+  ];
+  export type OutputTuple = [
+    role: string,
+    previousAdminRole: string,
+    newAdminRole: string
+  ];
+  export interface OutputObject {
+    role: string;
+    previousAdminRole: string;
+    newAdminRole: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleGrantedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleRevokedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -312,25 +520,25 @@ export namespace VestingScheduleCreatedEvent {
     beneficiary: AddressLike,
     amount: BigNumberish,
     startTime: BigNumberish,
-    cliffDuration: BigNumberish,
     vestingDuration: BigNumberish,
-    vestingType: BigNumberish
+    vestingType: BigNumberish,
+    allocation: string
   ];
   export type OutputTuple = [
     beneficiary: string,
     amount: bigint,
     startTime: bigint,
-    cliffDuration: bigint,
     vestingDuration: bigint,
-    vestingType: bigint
+    vestingType: bigint,
+    allocation: string
   ];
   export interface OutputObject {
     beneficiary: string;
     amount: bigint;
     startTime: bigint;
-    cliffDuration: bigint;
     vestingDuration: bigint;
     vestingType: bigint;
+    allocation: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -381,9 +589,17 @@ export interface PronovaVesting extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
+
   BASIS_POINTS: TypedContractMethod<[], [bigint], "view">;
 
+  DEFAULT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
+
   LOCKED_PERCENTAGE: TypedContractMethod<[], [bigint], "view">;
+
+  REQUIRED_CONFIRMATIONS: TypedContractMethod<[], [bigint], "view">;
+
+  TOTAL_UNLOCK_PERIODS: TypedContractMethod<[], [bigint], "view">;
 
   UNLOCK_INTERVAL: TypedContractMethod<[], [bigint], "view">;
 
@@ -391,7 +607,17 @@ export interface PronovaVesting extends BaseContract {
 
   VESTING_DURATION: TypedContractMethod<[], [bigint], "view">;
 
-  createVestingSchedule: TypedContractMethod<
+  VESTING_MANAGER_ROLE: TypedContractMethod<[], [string], "view">;
+
+  allocationAmounts: TypedContractMethod<[arg0: string], [bigint], "view">;
+
+  allocationBeneficiaries: TypedContractMethod<
+    [arg0: string],
+    [string],
+    "view"
+  >;
+
+  createCustomVesting: TypedContractMethod<
     [
       beneficiary: AddressLike,
       amount: BigNumberish,
@@ -404,39 +630,30 @@ export interface PronovaVesting extends BaseContract {
     "nonpayable"
   >;
 
-  createWhitepaperVestingSchedule: TypedContractMethod<
-    [
-      beneficiary: AddressLike,
-      amount: BigNumberish,
-      startTime: BigNumberish,
-      revocable: boolean
-    ],
-    [void],
-    "nonpayable"
-  >;
-
-  getAllSchedules: TypedContractMethod<
+  getBeneficiaryInfo: TypedContractMethod<
     [beneficiary: AddressLike],
     [
-      [bigint[], bigint[], bigint[], bigint[], boolean[]] & {
-        totalAmounts: bigint[];
-        releasedAmounts: bigint[];
-        releasableAmounts: bigint[];
-        vestingTypes: bigint[];
-        revokedStatuses: boolean[];
+      [bigint, bigint, bigint, bigint, bigint] & {
+        totalVested: bigint;
+        totalReleased: bigint;
+        totalLocked: bigint;
+        totalReleasable: bigint;
+        scheduleCount: bigint;
       }
     ],
     "view"
   >;
 
-  getBeneficiaryInfo: TypedContractMethod<
-    [beneficiary: AddressLike],
+  getContractStats: TypedContractMethod<
+    [],
     [
-      [bigint, bigint, bigint, bigint] & {
-        totalVested: bigint;
-        totalReleased: bigint;
-        totalReleasable: bigint;
-        scheduleCount: bigint;
+      [bigint, bigint, bigint, bigint, bigint, bigint] & {
+        managed: bigint;
+        released: bigint;
+        remaining: bigint;
+        vestingDurationYears: bigint;
+        unlockPercentagePerPeriod: bigint;
+        totalPeriods: bigint;
       }
     ],
     "view"
@@ -448,26 +665,7 @@ export interface PronovaVesting extends BaseContract {
     "view"
   >;
 
-  getReleasableAmount: TypedContractMethod<
-    [beneficiary: AddressLike, scheduleIndex: BigNumberish],
-    [bigint],
-    "view"
-  >;
-
-  getScheduleDetails: TypedContractMethod<
-    [beneficiary: AddressLike, scheduleIndex: BigNumberish],
-    [
-      [bigint, bigint, bigint, bigint, bigint, string] & {
-        totalAmount: bigint;
-        releasedAmount: bigint;
-        releasableAmount: bigint;
-        nextUnlockTime: bigint;
-        progressPercentage: bigint;
-        vestingTypeName: string;
-      }
-    ],
-    "view"
-  >;
+  getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
 
   getTotalReleasableAmount: TypedContractMethod<
     [beneficiary: AddressLike],
@@ -484,13 +682,12 @@ export interface PronovaVesting extends BaseContract {
   getVestingSchedule: TypedContractMethod<
     [beneficiary: AddressLike, index: BigNumberish],
     [
-      [bigint, bigint, bigint, bigint, bigint, boolean, boolean, bigint] & {
+      [bigint, bigint, bigint, bigint, bigint, boolean, bigint] & {
         totalAmount: bigint;
         startTime: bigint;
-        cliffDuration: bigint;
         vestingDuration: bigint;
         releasedAmount: bigint;
-        revocable: boolean;
+        releasableAmount: bigint;
         revoked: boolean;
         vestingType: bigint;
       }
@@ -498,13 +695,31 @@ export interface PronovaVesting extends BaseContract {
     "view"
   >;
 
-  getVestingScheduleCount: TypedContractMethod<
-    [beneficiary: AddressLike],
+  grantRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  hasRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
+
+  operationConfirmationCount: TypedContractMethod<
+    [arg0: BytesLike],
     [bigint],
     "view"
   >;
 
-  owner: TypedContractMethod<[], [string], "view">;
+  operationConfirmations: TypedContractMethod<
+    [arg0: BytesLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
+
+  operationExecuted: TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
 
   pronovaToken: TypedContractMethod<[], [string], "view">;
 
@@ -516,7 +731,11 @@ export interface PronovaVesting extends BaseContract {
 
   releaseAll: TypedContractMethod<[], [void], "nonpayable">;
 
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+  renounceRole: TypedContractMethod<
+    [role: BytesLike, callerConfirmation: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
   revoke: TypedContractMethod<
     [beneficiary: AddressLike, scheduleIndex: BigNumberish],
@@ -524,32 +743,67 @@ export interface PronovaVesting extends BaseContract {
     "nonpayable"
   >;
 
+  revokeRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  setupWhitepaperAllocations: TypedContractMethod<
+    [
+      _foundersWallet: AddressLike,
+      _teamWallet: AddressLike,
+      _partnershipsWallet: AddressLike
+    ],
+    [void],
+    "nonpayable"
+  >;
+
+  supportsInterface: TypedContractMethod<
+    [interfaceId: BytesLike],
+    [boolean],
+    "view"
+  >;
+
+  totalLockedAmount: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+
   totalReleasedAmount: TypedContractMethod<
     [arg0: AddressLike],
     [bigint],
     "view"
   >;
 
-  totalVestedAmount: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+  totalTokensManaged: TypedContractMethod<[], [bigint], "view">;
 
-  transferOwnership: TypedContractMethod<
-    [newOwner: AddressLike],
-    [void],
-    "nonpayable"
-  >;
+  totalTokensReleased: TypedContractMethod<[], [bigint], "view">;
+
+  totalVestedAmount: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
 
   vestingSchedules: TypedContractMethod<
     [arg0: AddressLike, arg1: BigNumberish],
     [
-      [bigint, bigint, bigint, bigint, bigint, boolean, boolean, bigint] & {
+      [
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        boolean,
+        boolean,
+        bigint,
+        string
+      ] & {
         totalAmount: bigint;
         startTime: bigint;
         cliffDuration: bigint;
         vestingDuration: bigint;
         releasedAmount: bigint;
+        lastReleaseTime: bigint;
         revocable: boolean;
         revoked: boolean;
         vestingType: bigint;
+        beneficiary: string;
       }
     ],
     "view"
@@ -560,10 +814,22 @@ export interface PronovaVesting extends BaseContract {
   ): T;
 
   getFunction(
+    nameOrSignature: "ADMIN_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "BASIS_POINTS"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
+    nameOrSignature: "DEFAULT_ADMIN_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "LOCKED_PERCENTAGE"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "REQUIRED_CONFIRMATIONS"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "TOTAL_UNLOCK_PERIODS"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "UNLOCK_INTERVAL"
@@ -575,7 +841,16 @@ export interface PronovaVesting extends BaseContract {
     nameOrSignature: "VESTING_DURATION"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "createVestingSchedule"
+    nameOrSignature: "VESTING_MANAGER_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "allocationAmounts"
+  ): TypedContractMethod<[arg0: string], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "allocationBeneficiaries"
+  ): TypedContractMethod<[arg0: string], [string], "view">;
+  getFunction(
+    nameOrSignature: "createCustomVesting"
   ): TypedContractMethod<
     [
       beneficiary: AddressLike,
@@ -589,42 +864,32 @@ export interface PronovaVesting extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "createWhitepaperVestingSchedule"
-  ): TypedContractMethod<
-    [
-      beneficiary: AddressLike,
-      amount: BigNumberish,
-      startTime: BigNumberish,
-      revocable: boolean
-    ],
-    [void],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "getAllSchedules"
+    nameOrSignature: "getBeneficiaryInfo"
   ): TypedContractMethod<
     [beneficiary: AddressLike],
     [
-      [bigint[], bigint[], bigint[], bigint[], boolean[]] & {
-        totalAmounts: bigint[];
-        releasedAmounts: bigint[];
-        releasableAmounts: bigint[];
-        vestingTypes: bigint[];
-        revokedStatuses: boolean[];
+      [bigint, bigint, bigint, bigint, bigint] & {
+        totalVested: bigint;
+        totalReleased: bigint;
+        totalLocked: bigint;
+        totalReleasable: bigint;
+        scheduleCount: bigint;
       }
     ],
     "view"
   >;
   getFunction(
-    nameOrSignature: "getBeneficiaryInfo"
+    nameOrSignature: "getContractStats"
   ): TypedContractMethod<
-    [beneficiary: AddressLike],
+    [],
     [
-      [bigint, bigint, bigint, bigint] & {
-        totalVested: bigint;
-        totalReleased: bigint;
-        totalReleasable: bigint;
-        scheduleCount: bigint;
+      [bigint, bigint, bigint, bigint, bigint, bigint] & {
+        managed: bigint;
+        released: bigint;
+        remaining: bigint;
+        vestingDurationYears: bigint;
+        unlockPercentagePerPeriod: bigint;
+        totalPeriods: bigint;
       }
     ],
     "view"
@@ -637,28 +902,8 @@ export interface PronovaVesting extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "getReleasableAmount"
-  ): TypedContractMethod<
-    [beneficiary: AddressLike, scheduleIndex: BigNumberish],
-    [bigint],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "getScheduleDetails"
-  ): TypedContractMethod<
-    [beneficiary: AddressLike, scheduleIndex: BigNumberish],
-    [
-      [bigint, bigint, bigint, bigint, bigint, string] & {
-        totalAmount: bigint;
-        releasedAmount: bigint;
-        releasableAmount: bigint;
-        nextUnlockTime: bigint;
-        progressPercentage: bigint;
-        vestingTypeName: string;
-      }
-    ],
-    "view"
-  >;
+    nameOrSignature: "getRoleAdmin"
+  ): TypedContractMethod<[role: BytesLike], [string], "view">;
   getFunction(
     nameOrSignature: "getTotalReleasableAmount"
   ): TypedContractMethod<[beneficiary: AddressLike], [bigint], "view">;
@@ -674,13 +919,12 @@ export interface PronovaVesting extends BaseContract {
   ): TypedContractMethod<
     [beneficiary: AddressLike, index: BigNumberish],
     [
-      [bigint, bigint, bigint, bigint, bigint, boolean, boolean, bigint] & {
+      [bigint, bigint, bigint, bigint, bigint, boolean, bigint] & {
         totalAmount: bigint;
         startTime: bigint;
-        cliffDuration: bigint;
         vestingDuration: bigint;
         releasedAmount: bigint;
-        revocable: boolean;
+        releasableAmount: bigint;
         revoked: boolean;
         vestingType: bigint;
       }
@@ -688,11 +932,32 @@ export interface PronovaVesting extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "getVestingScheduleCount"
-  ): TypedContractMethod<[beneficiary: AddressLike], [bigint], "view">;
+    nameOrSignature: "grantRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: "hasRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "operationConfirmationCount"
+  ): TypedContractMethod<[arg0: BytesLike], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "operationConfirmations"
+  ): TypedContractMethod<
+    [arg0: BytesLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "operationExecuted"
+  ): TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
   getFunction(
     nameOrSignature: "pronovaToken"
   ): TypedContractMethod<[], [string], "view">;
@@ -703,8 +968,12 @@ export interface PronovaVesting extends BaseContract {
     nameOrSignature: "releaseAll"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: "renounceRole"
+  ): TypedContractMethod<
+    [role: BytesLike, callerConfirmation: AddressLike],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "revoke"
   ): TypedContractMethod<
@@ -713,39 +982,114 @@ export interface PronovaVesting extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "revokeRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "setupWhitepaperAllocations"
+  ): TypedContractMethod<
+    [
+      _foundersWallet: AddressLike,
+      _teamWallet: AddressLike,
+      _partnershipsWallet: AddressLike
+    ],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "supportsInterface"
+  ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "totalLockedAmount"
+  ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+  getFunction(
     nameOrSignature: "totalReleasedAmount"
   ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
   getFunction(
+    nameOrSignature: "totalTokensManaged"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "totalTokensReleased"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "totalVestedAmount"
   ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "vestingSchedules"
   ): TypedContractMethod<
     [arg0: AddressLike, arg1: BigNumberish],
     [
-      [bigint, bigint, bigint, bigint, bigint, boolean, boolean, bigint] & {
+      [
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        boolean,
+        boolean,
+        bigint,
+        string
+      ] & {
         totalAmount: bigint;
         startTime: bigint;
         cliffDuration: bigint;
         vestingDuration: bigint;
         releasedAmount: bigint;
+        lastReleaseTime: bigint;
         revocable: boolean;
         revoked: boolean;
         vestingType: bigint;
+        beneficiary: string;
       }
     ],
     "view"
   >;
 
   getEvent(
-    key: "OwnershipTransferred"
+    key: "AllocationSet"
   ): TypedContractEvent<
-    OwnershipTransferredEvent.InputTuple,
-    OwnershipTransferredEvent.OutputTuple,
-    OwnershipTransferredEvent.OutputObject
+    AllocationSetEvent.InputTuple,
+    AllocationSetEvent.OutputTuple,
+    AllocationSetEvent.OutputObject
+  >;
+  getEvent(
+    key: "OperationConfirmed"
+  ): TypedContractEvent<
+    OperationConfirmedEvent.InputTuple,
+    OperationConfirmedEvent.OutputTuple,
+    OperationConfirmedEvent.OutputObject
+  >;
+  getEvent(
+    key: "OperationExecuted"
+  ): TypedContractEvent<
+    OperationExecutedEvent.InputTuple,
+    OperationExecutedEvent.OutputTuple,
+    OperationExecutedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleAdminChanged"
+  ): TypedContractEvent<
+    RoleAdminChangedEvent.InputTuple,
+    RoleAdminChangedEvent.OutputTuple,
+    RoleAdminChangedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleGranted"
+  ): TypedContractEvent<
+    RoleGrantedEvent.InputTuple,
+    RoleGrantedEvent.OutputTuple,
+    RoleGrantedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleRevoked"
+  ): TypedContractEvent<
+    RoleRevokedEvent.InputTuple,
+    RoleRevokedEvent.OutputTuple,
+    RoleRevokedEvent.OutputObject
   >;
   getEvent(
     key: "TokensReleased"
@@ -770,15 +1114,70 @@ export interface PronovaVesting extends BaseContract {
   >;
 
   filters: {
-    "OwnershipTransferred(address,address)": TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
+    "AllocationSet(string,address,uint256)": TypedContractEvent<
+      AllocationSetEvent.InputTuple,
+      AllocationSetEvent.OutputTuple,
+      AllocationSetEvent.OutputObject
     >;
-    OwnershipTransferred: TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
+    AllocationSet: TypedContractEvent<
+      AllocationSetEvent.InputTuple,
+      AllocationSetEvent.OutputTuple,
+      AllocationSetEvent.OutputObject
+    >;
+
+    "OperationConfirmed(bytes32,address)": TypedContractEvent<
+      OperationConfirmedEvent.InputTuple,
+      OperationConfirmedEvent.OutputTuple,
+      OperationConfirmedEvent.OutputObject
+    >;
+    OperationConfirmed: TypedContractEvent<
+      OperationConfirmedEvent.InputTuple,
+      OperationConfirmedEvent.OutputTuple,
+      OperationConfirmedEvent.OutputObject
+    >;
+
+    "OperationExecuted(bytes32)": TypedContractEvent<
+      OperationExecutedEvent.InputTuple,
+      OperationExecutedEvent.OutputTuple,
+      OperationExecutedEvent.OutputObject
+    >;
+    OperationExecuted: TypedContractEvent<
+      OperationExecutedEvent.InputTuple,
+      OperationExecutedEvent.OutputTuple,
+      OperationExecutedEvent.OutputObject
+    >;
+
+    "RoleAdminChanged(bytes32,bytes32,bytes32)": TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
+    >;
+    RoleAdminChanged: TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
+    >;
+
+    "RoleGranted(bytes32,address,address)": TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
+    >;
+    RoleGranted: TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
+    >;
+
+    "RoleRevoked(bytes32,address,address)": TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
+    >;
+    RoleRevoked: TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
     >;
 
     "TokensReleased(address,uint256)": TypedContractEvent<
@@ -803,7 +1202,7 @@ export interface PronovaVesting extends BaseContract {
       VestingRevokedEvent.OutputObject
     >;
 
-    "VestingScheduleCreated(address,uint256,uint256,uint256,uint256,uint8)": TypedContractEvent<
+    "VestingScheduleCreated(address,uint256,uint256,uint256,uint8,string)": TypedContractEvent<
       VestingScheduleCreatedEvent.InputTuple,
       VestingScheduleCreatedEvent.OutputTuple,
       VestingScheduleCreatedEvent.OutputObject

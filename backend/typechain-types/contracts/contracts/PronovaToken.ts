@@ -26,79 +26,113 @@ import type {
 export interface PronovaTokenInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "ADMIN_ROLE"
+      | "BASIS_POINTS"
+      | "BURN_RATE"
+      | "COMMUNITY_ALLOCATION"
+      | "DEFAULT_ADMIN_ROLE"
+      | "FOUNDERS_ALLOCATION"
       | "LIQUIDITY_ALLOCATION"
       | "LOCKED_PERCENTAGE"
       | "MARKETING_ALLOCATION"
+      | "MINTER_ROLE"
+      | "PARTNERSHIPS_ALLOCATION"
+      | "PAUSER_ROLE"
       | "PRESALE_ALLOCATION"
-      | "STAKING_ALLOCATION"
+      | "REQUIRED_CONFIRMATIONS"
+      | "STAKING_REWARDS_ALLOCATION"
+      | "STRATEGIC_RESERVES_ALLOCATION"
       | "TEAM_ALLOCATION"
       | "TOTAL_SUPPLY"
       | "TOTAL_VESTING_DURATION"
       | "UNLOCK_INTERVAL"
       | "UNLOCK_PERCENTAGE_PER_INTERVAL"
-      | "addTeamMember"
+      | "addAdmin"
       | "allocationsDistributed"
       | "allowance"
       | "approve"
+      | "autoBurnEnabled"
       | "balanceOf"
       | "burn"
       | "burnFrom"
+      | "communityWallet"
       | "decimals"
       | "distributeAllocations"
       | "emergencyWithdraw"
+      | "foundersWallet"
       | "getAllocationInfo"
-      | "getUnlockableAmount"
-      | "isTeamMember"
-      | "lastUnlockTime"
+      | "getRoleAdmin"
+      | "getVestingInfo"
+      | "grantRole"
+      | "hasRole"
       | "liquidityWallet"
-      | "lockedBalances"
       | "marketingWallet"
       | "name"
-      | "owner"
+      | "operationConfirmationCount"
+      | "operationConfirmations"
+      | "operationExecuted"
+      | "partnershipsWallet"
       | "pause"
       | "paused"
       | "presaleContract"
-      | "removeTeamMember"
-      | "renounceOwnership"
-      | "setLiquidityWallet"
-      | "setMarketingWallet"
-      | "setPresaleContract"
-      | "setStakingContract"
-      | "setTeamWallet"
+      | "removeAdmin"
+      | "renounceRole"
+      | "revokeRole"
+      | "setAllocationWallets"
+      | "setAutoBurn"
       | "stakingContract"
-      | "startVesting"
+      | "strategicReservesWallet"
+      | "supportsInterface"
       | "symbol"
-      | "teamMembersCount"
       | "teamWallet"
       | "totalBurned"
       | "totalSupply"
       | "transfer"
       | "transferFrom"
-      | "transferOwnership"
-      | "unlockVestedTokens"
       | "unpause"
+      | "vestingContract"
       | "vestingStartTime"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
+      | "AllocationWalletSet"
       | "AllocationsDistributed"
       | "Approval"
-      | "LiquidityWalletSet"
-      | "MarketingWalletSet"
-      | "OwnershipTransferred"
+      | "AutoBurnToggled"
+      | "OperationConfirmed"
+      | "OperationExecuted"
       | "Paused"
-      | "PresaleContractSet"
-      | "StakingContractSet"
-      | "TeamMemberAdded"
-      | "TeamMemberRemoved"
-      | "TeamWalletSet"
-      | "TokensUnlocked"
+      | "RoleAdminChanged"
+      | "RoleGranted"
+      | "RoleRevoked"
+      | "TokensBurnedAutomatically"
       | "Transfer"
       | "Unpaused"
       | "VestingStarted"
   ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "ADMIN_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "BASIS_POINTS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "BURN_RATE", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "COMMUNITY_ALLOCATION",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "FOUNDERS_ALLOCATION",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "LIQUIDITY_ALLOCATION",
     values?: undefined
@@ -112,11 +146,31 @@ export interface PronovaTokenInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "MINTER_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "PARTNERSHIPS_ALLOCATION",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "PAUSER_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "PRESALE_ALLOCATION",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "STAKING_ALLOCATION",
+    functionFragment: "REQUIRED_CONFIRMATIONS",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "STAKING_REWARDS_ALLOCATION",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "STRATEGIC_RESERVES_ALLOCATION",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -140,7 +194,7 @@ export interface PronovaTokenInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "addTeamMember",
+    functionFragment: "addAdmin",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
@@ -156,6 +210,10 @@ export interface PronovaTokenInterface extends Interface {
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "autoBurnEnabled",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "balanceOf",
     values: [AddressLike]
   ): string;
@@ -163,6 +221,10 @@ export interface PronovaTokenInterface extends Interface {
   encodeFunctionData(
     functionFragment: "burnFrom",
     values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "communityWallet",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
@@ -174,35 +236,54 @@ export interface PronovaTokenInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "foundersWallet",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getAllocationInfo",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getUnlockableAmount",
-    values: [AddressLike]
+    functionFragment: "getRoleAdmin",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "isTeamMember",
-    values: [AddressLike]
+    functionFragment: "getVestingInfo",
+    values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "lastUnlockTime",
-    values: [AddressLike]
+    functionFragment: "grantRole",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "hasRole",
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "liquidityWallet",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "lockedBalances",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
     functionFragment: "marketingWallet",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "operationConfirmationCount",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "operationConfirmations",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "operationExecuted",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "partnershipsWallet",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
@@ -210,46 +291,49 @@ export interface PronovaTokenInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "removeTeamMember",
+    functionFragment: "removeAdmin",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
+    functionFragment: "renounceRole",
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "setLiquidityWallet",
-    values: [AddressLike]
+    functionFragment: "revokeRole",
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "setMarketingWallet",
-    values: [AddressLike]
+    functionFragment: "setAllocationWallets",
+    values: [
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike,
+      AddressLike
+    ]
   ): string;
   encodeFunctionData(
-    functionFragment: "setPresaleContract",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setStakingContract",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setTeamWallet",
-    values: [AddressLike]
+    functionFragment: "setAutoBurn",
+    values: [boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "stakingContract",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "startVesting",
+    functionFragment: "strategicReservesWallet",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "teamMembersCount",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "teamWallet",
     values?: undefined
@@ -270,20 +354,34 @@ export interface PronovaTokenInterface extends Interface {
     functionFragment: "transferFrom",
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "unlockVestedTokens",
+    functionFragment: "vestingContract",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "vestingStartTime",
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "ADMIN_ROLE", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "BASIS_POINTS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "BURN_RATE", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "COMMUNITY_ALLOCATION",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "FOUNDERS_ALLOCATION",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "LIQUIDITY_ALLOCATION",
     data: BytesLike
@@ -297,11 +395,31 @@ export interface PronovaTokenInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "MINTER_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "PARTNERSHIPS_ALLOCATION",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "PAUSER_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "PRESALE_ALLOCATION",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "STAKING_ALLOCATION",
+    functionFragment: "REQUIRED_CONFIRMATIONS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "STAKING_REWARDS_ALLOCATION",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "STRATEGIC_RESERVES_ALLOCATION",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -324,19 +442,24 @@ export interface PronovaTokenInterface extends Interface {
     functionFragment: "UNLOCK_PERCENTAGE_PER_INTERVAL",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "addTeamMember",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "addAdmin", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "allocationsDistributed",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "autoBurnEnabled",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burnFrom", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "communityWallet",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "distributeAllocations",
@@ -347,27 +470,25 @@ export interface PronovaTokenInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "foundersWallet",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getAllocationInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getUnlockableAmount",
+    functionFragment: "getRoleAdmin",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "isTeamMember",
+    functionFragment: "getVestingInfo",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "lastUnlockTime",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "liquidityWallet",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "lockedBalances",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -375,7 +496,22 @@ export interface PronovaTokenInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "operationConfirmationCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "operationConfirmations",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "operationExecuted",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "partnershipsWallet",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
@@ -383,31 +519,20 @@ export interface PronovaTokenInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "removeTeamMember",
+    functionFragment: "removeAdmin",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "renounceOwnership",
+    functionFragment: "renounceRole",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setAllocationWallets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setLiquidityWallet",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setMarketingWallet",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setPresaleContract",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setStakingContract",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setTeamWallet",
+    functionFragment: "setAutoBurn",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -415,14 +540,14 @@ export interface PronovaTokenInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "startVesting",
+    functionFragment: "strategicReservesWallet",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "teamMembersCount",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "teamWallet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalBurned",
@@ -437,25 +562,36 @@ export interface PronovaTokenInterface extends Interface {
     functionFragment: "transferFrom",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "unlockVestedTokens",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "vestingContract",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "vestingStartTime",
     data: BytesLike
   ): Result;
 }
 
+export namespace AllocationWalletSetEvent {
+  export type InputTuple = [allocation: string, wallet: AddressLike];
+  export type OutputTuple = [allocation: string, wallet: string];
+  export interface OutputObject {
+    allocation: string;
+    wallet: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export namespace AllocationsDistributedEvent {
-  export type InputTuple = [];
-  export type OutputTuple = [];
-  export interface OutputObject {}
+  export type InputTuple = [timestamp: BigNumberish];
+  export type OutputTuple = [timestamp: bigint];
+  export interface OutputObject {
+    timestamp: bigint;
+  }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
   export type Log = TypedEventLog<Event>;
@@ -480,11 +616,11 @@ export namespace ApprovalEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace LiquidityWalletSetEvent {
-  export type InputTuple = [liquidityWallet: AddressLike];
-  export type OutputTuple = [liquidityWallet: string];
+export namespace AutoBurnToggledEvent {
+  export type InputTuple = [enabled: boolean];
+  export type OutputTuple = [enabled: boolean];
   export interface OutputObject {
-    liquidityWallet: string;
+    enabled: boolean;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -492,11 +628,12 @@ export namespace LiquidityWalletSetEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace MarketingWalletSetEvent {
-  export type InputTuple = [marketingWallet: AddressLike];
-  export type OutputTuple = [marketingWallet: string];
+export namespace OperationConfirmedEvent {
+  export type InputTuple = [operation: BytesLike, admin: AddressLike];
+  export type OutputTuple = [operation: string, admin: string];
   export interface OutputObject {
-    marketingWallet: string;
+    operation: string;
+    admin: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -504,12 +641,11 @@ export namespace MarketingWalletSetEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace OwnershipTransferredEvent {
-  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
-  export type OutputTuple = [previousOwner: string, newOwner: string];
+export namespace OperationExecutedEvent {
+  export type InputTuple = [operation: BytesLike];
+  export type OutputTuple = [operation: string];
   export interface OutputObject {
-    previousOwner: string;
-    newOwner: string;
+    operation: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -529,11 +665,21 @@ export namespace PausedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace PresaleContractSetEvent {
-  export type InputTuple = [presaleContract: AddressLike];
-  export type OutputTuple = [presaleContract: string];
+export namespace RoleAdminChangedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    previousAdminRole: BytesLike,
+    newAdminRole: BytesLike
+  ];
+  export type OutputTuple = [
+    role: string,
+    previousAdminRole: string,
+    newAdminRole: string
+  ];
   export interface OutputObject {
-    presaleContract: string;
+    role: string;
+    previousAdminRole: string;
+    newAdminRole: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -541,59 +687,46 @@ export namespace PresaleContractSetEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace StakingContractSetEvent {
-  export type InputTuple = [stakingContract: AddressLike];
-  export type OutputTuple = [stakingContract: string];
+export namespace RoleGrantedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
   export interface OutputObject {
-    stakingContract: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace TeamMemberAddedEvent {
-  export type InputTuple = [member: AddressLike];
-  export type OutputTuple = [member: string];
-  export interface OutputObject {
-    member: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace TeamMemberRemovedEvent {
-  export type InputTuple = [member: AddressLike];
-  export type OutputTuple = [member: string];
-  export interface OutputObject {
-    member: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace TeamWalletSetEvent {
-  export type InputTuple = [teamWallet: AddressLike];
-  export type OutputTuple = [teamWallet: string];
-  export interface OutputObject {
-    teamWallet: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace TokensUnlockedEvent {
-  export type InputTuple = [account: AddressLike, amount: BigNumberish];
-  export type OutputTuple = [account: string, amount: bigint];
-  export interface OutputObject {
+    role: string;
     account: string;
+    sender: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleRevokedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace TokensBurnedAutomaticallyEvent {
+  export type InputTuple = [amount: BigNumberish];
+  export type OutputTuple = [amount: bigint];
+  export interface OutputObject {
     amount: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
@@ -687,15 +820,37 @@ export interface PronovaToken extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
+
+  BASIS_POINTS: TypedContractMethod<[], [bigint], "view">;
+
+  BURN_RATE: TypedContractMethod<[], [bigint], "view">;
+
+  COMMUNITY_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
+
+  DEFAULT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
+
+  FOUNDERS_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
+
   LIQUIDITY_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
 
   LOCKED_PERCENTAGE: TypedContractMethod<[], [bigint], "view">;
 
   MARKETING_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
 
+  MINTER_ROLE: TypedContractMethod<[], [string], "view">;
+
+  PARTNERSHIPS_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
+
+  PAUSER_ROLE: TypedContractMethod<[], [string], "view">;
+
   PRESALE_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
 
-  STAKING_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
+  REQUIRED_CONFIRMATIONS: TypedContractMethod<[], [bigint], "view">;
+
+  STAKING_REWARDS_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
+
+  STRATEGIC_RESERVES_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
 
   TEAM_ALLOCATION: TypedContractMethod<[], [bigint], "view">;
 
@@ -707,11 +862,7 @@ export interface PronovaToken extends BaseContract {
 
   UNLOCK_PERCENTAGE_PER_INTERVAL: TypedContractMethod<[], [bigint], "view">;
 
-  addTeamMember: TypedContractMethod<
-    [member: AddressLike],
-    [void],
-    "nonpayable"
-  >;
+  addAdmin: TypedContractMethod<[admin: AddressLike], [void], "nonpayable">;
 
   allocationsDistributed: TypedContractMethod<[], [boolean], "view">;
 
@@ -727,6 +878,8 @@ export interface PronovaToken extends BaseContract {
     "nonpayable"
   >;
 
+  autoBurnEnabled: TypedContractMethod<[], [boolean], "view">;
+
   balanceOf: TypedContractMethod<[account: AddressLike], [bigint], "view">;
 
   burn: TypedContractMethod<[value: BigNumberish], [void], "nonpayable">;
@@ -737,45 +890,92 @@ export interface PronovaToken extends BaseContract {
     "nonpayable"
   >;
 
+  communityWallet: TypedContractMethod<[], [string], "view">;
+
   decimals: TypedContractMethod<[], [bigint], "view">;
 
   distributeAllocations: TypedContractMethod<[], [void], "nonpayable">;
 
   emergencyWithdraw: TypedContractMethod<[], [void], "nonpayable">;
 
+  foundersWallet: TypedContractMethod<[], [string], "view">;
+
   getAllocationInfo: TypedContractMethod<
     [],
     [
-      [bigint, bigint, bigint, bigint, bigint] & {
-        presaleAlloc: bigint;
-        teamAlloc: bigint;
-        liquidityAlloc: bigint;
-        marketingAlloc: bigint;
-        stakingAlloc: bigint;
+      [
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint
+      ] & {
+        presale: bigint;
+        founders: bigint;
+        liquidity: bigint;
+        partnerships: bigint;
+        team: bigint;
+        community: bigint;
+        strategic: bigint;
+        marketing: bigint;
+        staking: bigint;
       }
     ],
     "view"
   >;
 
-  getUnlockableAmount: TypedContractMethod<
-    [account: AddressLike],
-    [bigint],
+  getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
+
+  getVestingInfo: TypedContractMethod<
+    [],
+    [
+      [bigint, bigint, bigint, bigint] & {
+        lockedPercentage: bigint;
+        vestingDuration: bigint;
+        unlockInterval: bigint;
+        unlockPercentage: bigint;
+      }
+    ],
     "view"
   >;
 
-  isTeamMember: TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
+  grantRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-  lastUnlockTime: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+  hasRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
 
   liquidityWallet: TypedContractMethod<[], [string], "view">;
-
-  lockedBalances: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
 
   marketingWallet: TypedContractMethod<[], [string], "view">;
 
   name: TypedContractMethod<[], [string], "view">;
 
-  owner: TypedContractMethod<[], [string], "view">;
+  operationConfirmationCount: TypedContractMethod<
+    [arg0: BytesLike],
+    [bigint],
+    "view"
+  >;
+
+  operationConfirmations: TypedContractMethod<
+    [arg0: BytesLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
+
+  operationExecuted: TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
+
+  partnershipsWallet: TypedContractMethod<[], [string], "view">;
 
   pause: TypedContractMethod<[], [void], "nonpayable">;
 
@@ -783,51 +983,50 @@ export interface PronovaToken extends BaseContract {
 
   presaleContract: TypedContractMethod<[], [string], "view">;
 
-  removeTeamMember: TypedContractMethod<
-    [member: AddressLike],
+  removeAdmin: TypedContractMethod<[admin: AddressLike], [void], "nonpayable">;
+
+  renounceRole: TypedContractMethod<
+    [role: BytesLike, callerConfirmation: AddressLike],
     [void],
     "nonpayable"
   >;
 
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
-
-  setLiquidityWallet: TypedContractMethod<
-    [_liquidityWallet: AddressLike],
+  revokeRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
     [void],
     "nonpayable"
   >;
 
-  setMarketingWallet: TypedContractMethod<
-    [_marketingWallet: AddressLike],
+  setAllocationWallets: TypedContractMethod<
+    [
+      _presaleContract: AddressLike,
+      _foundersWallet: AddressLike,
+      _liquidityWallet: AddressLike,
+      _partnershipsWallet: AddressLike,
+      _teamWallet: AddressLike,
+      _communityWallet: AddressLike,
+      _strategicReservesWallet: AddressLike,
+      _marketingWallet: AddressLike,
+      _stakingContract: AddressLike,
+      _vestingContract: AddressLike
+    ],
     [void],
     "nonpayable"
   >;
 
-  setPresaleContract: TypedContractMethod<
-    [_presaleContract: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
-  setStakingContract: TypedContractMethod<
-    [_stakingContract: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
-  setTeamWallet: TypedContractMethod<
-    [_teamWallet: AddressLike],
-    [void],
-    "nonpayable"
-  >;
+  setAutoBurn: TypedContractMethod<[_enabled: boolean], [void], "nonpayable">;
 
   stakingContract: TypedContractMethod<[], [string], "view">;
 
-  startVesting: TypedContractMethod<[], [void], "nonpayable">;
+  strategicReservesWallet: TypedContractMethod<[], [string], "view">;
+
+  supportsInterface: TypedContractMethod<
+    [interfaceId: BytesLike],
+    [boolean],
+    "view"
+  >;
 
   symbol: TypedContractMethod<[], [string], "view">;
-
-  teamMembersCount: TypedContractMethod<[], [bigint], "view">;
 
   teamWallet: TypedContractMethod<[], [string], "view">;
 
@@ -847,15 +1046,9 @@ export interface PronovaToken extends BaseContract {
     "nonpayable"
   >;
 
-  transferOwnership: TypedContractMethod<
-    [newOwner: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
-  unlockVestedTokens: TypedContractMethod<[], [void], "nonpayable">;
-
   unpause: TypedContractMethod<[], [void], "nonpayable">;
+
+  vestingContract: TypedContractMethod<[], [string], "view">;
 
   vestingStartTime: TypedContractMethod<[], [bigint], "view">;
 
@@ -863,6 +1056,24 @@ export interface PronovaToken extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "ADMIN_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "BASIS_POINTS"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "BURN_RATE"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "COMMUNITY_ALLOCATION"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "DEFAULT_ADMIN_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "FOUNDERS_ALLOCATION"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "LIQUIDITY_ALLOCATION"
   ): TypedContractMethod<[], [bigint], "view">;
@@ -873,10 +1084,25 @@ export interface PronovaToken extends BaseContract {
     nameOrSignature: "MARKETING_ALLOCATION"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
+    nameOrSignature: "MINTER_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "PARTNERSHIPS_ALLOCATION"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "PAUSER_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "PRESALE_ALLOCATION"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "STAKING_ALLOCATION"
+    nameOrSignature: "REQUIRED_CONFIRMATIONS"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "STAKING_REWARDS_ALLOCATION"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "STRATEGIC_RESERVES_ALLOCATION"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "TEAM_ALLOCATION"
@@ -894,8 +1120,8 @@ export interface PronovaToken extends BaseContract {
     nameOrSignature: "UNLOCK_PERCENTAGE_PER_INTERVAL"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "addTeamMember"
-  ): TypedContractMethod<[member: AddressLike], [void], "nonpayable">;
+    nameOrSignature: "addAdmin"
+  ): TypedContractMethod<[admin: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "allocationsDistributed"
   ): TypedContractMethod<[], [boolean], "view">;
@@ -914,6 +1140,9 @@ export interface PronovaToken extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "autoBurnEnabled"
+  ): TypedContractMethod<[], [boolean], "view">;
+  getFunction(
     nameOrSignature: "balanceOf"
   ): TypedContractMethod<[account: AddressLike], [bigint], "view">;
   getFunction(
@@ -927,6 +1156,9 @@ export interface PronovaToken extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "communityWallet"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "decimals"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
@@ -936,35 +1168,71 @@ export interface PronovaToken extends BaseContract {
     nameOrSignature: "emergencyWithdraw"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "foundersWallet"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "getAllocationInfo"
   ): TypedContractMethod<
     [],
     [
-      [bigint, bigint, bigint, bigint, bigint] & {
-        presaleAlloc: bigint;
-        teamAlloc: bigint;
-        liquidityAlloc: bigint;
-        marketingAlloc: bigint;
-        stakingAlloc: bigint;
+      [
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint
+      ] & {
+        presale: bigint;
+        founders: bigint;
+        liquidity: bigint;
+        partnerships: bigint;
+        team: bigint;
+        community: bigint;
+        strategic: bigint;
+        marketing: bigint;
+        staking: bigint;
       }
     ],
     "view"
   >;
   getFunction(
-    nameOrSignature: "getUnlockableAmount"
-  ): TypedContractMethod<[account: AddressLike], [bigint], "view">;
+    nameOrSignature: "getRoleAdmin"
+  ): TypedContractMethod<[role: BytesLike], [string], "view">;
   getFunction(
-    nameOrSignature: "isTeamMember"
-  ): TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
+    nameOrSignature: "getVestingInfo"
+  ): TypedContractMethod<
+    [],
+    [
+      [bigint, bigint, bigint, bigint] & {
+        lockedPercentage: bigint;
+        vestingDuration: bigint;
+        unlockInterval: bigint;
+        unlockPercentage: bigint;
+      }
+    ],
+    "view"
+  >;
   getFunction(
-    nameOrSignature: "lastUnlockTime"
-  ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+    nameOrSignature: "grantRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "hasRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
   getFunction(
     nameOrSignature: "liquidityWallet"
   ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "lockedBalances"
-  ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
   getFunction(
     nameOrSignature: "marketingWallet"
   ): TypedContractMethod<[], [string], "view">;
@@ -972,7 +1240,20 @@ export interface PronovaToken extends BaseContract {
     nameOrSignature: "name"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "owner"
+    nameOrSignature: "operationConfirmationCount"
+  ): TypedContractMethod<[arg0: BytesLike], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "operationConfirmations"
+  ): TypedContractMethod<
+    [arg0: BytesLike, arg1: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "operationExecuted"
+  ): TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "partnershipsWallet"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "pause"
@@ -984,38 +1265,55 @@ export interface PronovaToken extends BaseContract {
     nameOrSignature: "presaleContract"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "removeTeamMember"
-  ): TypedContractMethod<[member: AddressLike], [void], "nonpayable">;
+    nameOrSignature: "removeAdmin"
+  ): TypedContractMethod<[admin: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: "renounceRole"
+  ): TypedContractMethod<
+    [role: BytesLike, callerConfirmation: AddressLike],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
-    nameOrSignature: "setLiquidityWallet"
-  ): TypedContractMethod<[_liquidityWallet: AddressLike], [void], "nonpayable">;
+    nameOrSignature: "revokeRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
-    nameOrSignature: "setMarketingWallet"
-  ): TypedContractMethod<[_marketingWallet: AddressLike], [void], "nonpayable">;
+    nameOrSignature: "setAllocationWallets"
+  ): TypedContractMethod<
+    [
+      _presaleContract: AddressLike,
+      _foundersWallet: AddressLike,
+      _liquidityWallet: AddressLike,
+      _partnershipsWallet: AddressLike,
+      _teamWallet: AddressLike,
+      _communityWallet: AddressLike,
+      _strategicReservesWallet: AddressLike,
+      _marketingWallet: AddressLike,
+      _stakingContract: AddressLike,
+      _vestingContract: AddressLike
+    ],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
-    nameOrSignature: "setPresaleContract"
-  ): TypedContractMethod<[_presaleContract: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setStakingContract"
-  ): TypedContractMethod<[_stakingContract: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setTeamWallet"
-  ): TypedContractMethod<[_teamWallet: AddressLike], [void], "nonpayable">;
+    nameOrSignature: "setAutoBurn"
+  ): TypedContractMethod<[_enabled: boolean], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "stakingContract"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "startVesting"
-  ): TypedContractMethod<[], [void], "nonpayable">;
+    nameOrSignature: "strategicReservesWallet"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "supportsInterface"
+  ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
   getFunction(
     nameOrSignature: "symbol"
   ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "teamMembersCount"
-  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "teamWallet"
   ): TypedContractMethod<[], [string], "view">;
@@ -1040,18 +1338,22 @@ export interface PronovaToken extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "unlockVestedTokens"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
     nameOrSignature: "unpause"
   ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "vestingContract"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "vestingStartTime"
   ): TypedContractMethod<[], [bigint], "view">;
 
+  getEvent(
+    key: "AllocationWalletSet"
+  ): TypedContractEvent<
+    AllocationWalletSetEvent.InputTuple,
+    AllocationWalletSetEvent.OutputTuple,
+    AllocationWalletSetEvent.OutputObject
+  >;
   getEvent(
     key: "AllocationsDistributed"
   ): TypedContractEvent<
@@ -1067,25 +1369,25 @@ export interface PronovaToken extends BaseContract {
     ApprovalEvent.OutputObject
   >;
   getEvent(
-    key: "LiquidityWalletSet"
+    key: "AutoBurnToggled"
   ): TypedContractEvent<
-    LiquidityWalletSetEvent.InputTuple,
-    LiquidityWalletSetEvent.OutputTuple,
-    LiquidityWalletSetEvent.OutputObject
+    AutoBurnToggledEvent.InputTuple,
+    AutoBurnToggledEvent.OutputTuple,
+    AutoBurnToggledEvent.OutputObject
   >;
   getEvent(
-    key: "MarketingWalletSet"
+    key: "OperationConfirmed"
   ): TypedContractEvent<
-    MarketingWalletSetEvent.InputTuple,
-    MarketingWalletSetEvent.OutputTuple,
-    MarketingWalletSetEvent.OutputObject
+    OperationConfirmedEvent.InputTuple,
+    OperationConfirmedEvent.OutputTuple,
+    OperationConfirmedEvent.OutputObject
   >;
   getEvent(
-    key: "OwnershipTransferred"
+    key: "OperationExecuted"
   ): TypedContractEvent<
-    OwnershipTransferredEvent.InputTuple,
-    OwnershipTransferredEvent.OutputTuple,
-    OwnershipTransferredEvent.OutputObject
+    OperationExecutedEvent.InputTuple,
+    OperationExecutedEvent.OutputTuple,
+    OperationExecutedEvent.OutputObject
   >;
   getEvent(
     key: "Paused"
@@ -1095,46 +1397,32 @@ export interface PronovaToken extends BaseContract {
     PausedEvent.OutputObject
   >;
   getEvent(
-    key: "PresaleContractSet"
+    key: "RoleAdminChanged"
   ): TypedContractEvent<
-    PresaleContractSetEvent.InputTuple,
-    PresaleContractSetEvent.OutputTuple,
-    PresaleContractSetEvent.OutputObject
+    RoleAdminChangedEvent.InputTuple,
+    RoleAdminChangedEvent.OutputTuple,
+    RoleAdminChangedEvent.OutputObject
   >;
   getEvent(
-    key: "StakingContractSet"
+    key: "RoleGranted"
   ): TypedContractEvent<
-    StakingContractSetEvent.InputTuple,
-    StakingContractSetEvent.OutputTuple,
-    StakingContractSetEvent.OutputObject
+    RoleGrantedEvent.InputTuple,
+    RoleGrantedEvent.OutputTuple,
+    RoleGrantedEvent.OutputObject
   >;
   getEvent(
-    key: "TeamMemberAdded"
+    key: "RoleRevoked"
   ): TypedContractEvent<
-    TeamMemberAddedEvent.InputTuple,
-    TeamMemberAddedEvent.OutputTuple,
-    TeamMemberAddedEvent.OutputObject
+    RoleRevokedEvent.InputTuple,
+    RoleRevokedEvent.OutputTuple,
+    RoleRevokedEvent.OutputObject
   >;
   getEvent(
-    key: "TeamMemberRemoved"
+    key: "TokensBurnedAutomatically"
   ): TypedContractEvent<
-    TeamMemberRemovedEvent.InputTuple,
-    TeamMemberRemovedEvent.OutputTuple,
-    TeamMemberRemovedEvent.OutputObject
-  >;
-  getEvent(
-    key: "TeamWalletSet"
-  ): TypedContractEvent<
-    TeamWalletSetEvent.InputTuple,
-    TeamWalletSetEvent.OutputTuple,
-    TeamWalletSetEvent.OutputObject
-  >;
-  getEvent(
-    key: "TokensUnlocked"
-  ): TypedContractEvent<
-    TokensUnlockedEvent.InputTuple,
-    TokensUnlockedEvent.OutputTuple,
-    TokensUnlockedEvent.OutputObject
+    TokensBurnedAutomaticallyEvent.InputTuple,
+    TokensBurnedAutomaticallyEvent.OutputTuple,
+    TokensBurnedAutomaticallyEvent.OutputObject
   >;
   getEvent(
     key: "Transfer"
@@ -1159,7 +1447,18 @@ export interface PronovaToken extends BaseContract {
   >;
 
   filters: {
-    "AllocationsDistributed()": TypedContractEvent<
+    "AllocationWalletSet(string,address)": TypedContractEvent<
+      AllocationWalletSetEvent.InputTuple,
+      AllocationWalletSetEvent.OutputTuple,
+      AllocationWalletSetEvent.OutputObject
+    >;
+    AllocationWalletSet: TypedContractEvent<
+      AllocationWalletSetEvent.InputTuple,
+      AllocationWalletSetEvent.OutputTuple,
+      AllocationWalletSetEvent.OutputObject
+    >;
+
+    "AllocationsDistributed(uint256)": TypedContractEvent<
       AllocationsDistributedEvent.InputTuple,
       AllocationsDistributedEvent.OutputTuple,
       AllocationsDistributedEvent.OutputObject
@@ -1181,37 +1480,37 @@ export interface PronovaToken extends BaseContract {
       ApprovalEvent.OutputObject
     >;
 
-    "LiquidityWalletSet(address)": TypedContractEvent<
-      LiquidityWalletSetEvent.InputTuple,
-      LiquidityWalletSetEvent.OutputTuple,
-      LiquidityWalletSetEvent.OutputObject
+    "AutoBurnToggled(bool)": TypedContractEvent<
+      AutoBurnToggledEvent.InputTuple,
+      AutoBurnToggledEvent.OutputTuple,
+      AutoBurnToggledEvent.OutputObject
     >;
-    LiquidityWalletSet: TypedContractEvent<
-      LiquidityWalletSetEvent.InputTuple,
-      LiquidityWalletSetEvent.OutputTuple,
-      LiquidityWalletSetEvent.OutputObject
-    >;
-
-    "MarketingWalletSet(address)": TypedContractEvent<
-      MarketingWalletSetEvent.InputTuple,
-      MarketingWalletSetEvent.OutputTuple,
-      MarketingWalletSetEvent.OutputObject
-    >;
-    MarketingWalletSet: TypedContractEvent<
-      MarketingWalletSetEvent.InputTuple,
-      MarketingWalletSetEvent.OutputTuple,
-      MarketingWalletSetEvent.OutputObject
+    AutoBurnToggled: TypedContractEvent<
+      AutoBurnToggledEvent.InputTuple,
+      AutoBurnToggledEvent.OutputTuple,
+      AutoBurnToggledEvent.OutputObject
     >;
 
-    "OwnershipTransferred(address,address)": TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
+    "OperationConfirmed(bytes32,address)": TypedContractEvent<
+      OperationConfirmedEvent.InputTuple,
+      OperationConfirmedEvent.OutputTuple,
+      OperationConfirmedEvent.OutputObject
     >;
-    OwnershipTransferred: TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
+    OperationConfirmed: TypedContractEvent<
+      OperationConfirmedEvent.InputTuple,
+      OperationConfirmedEvent.OutputTuple,
+      OperationConfirmedEvent.OutputObject
+    >;
+
+    "OperationExecuted(bytes32)": TypedContractEvent<
+      OperationExecutedEvent.InputTuple,
+      OperationExecutedEvent.OutputTuple,
+      OperationExecutedEvent.OutputObject
+    >;
+    OperationExecuted: TypedContractEvent<
+      OperationExecutedEvent.InputTuple,
+      OperationExecutedEvent.OutputTuple,
+      OperationExecutedEvent.OutputObject
     >;
 
     "Paused(address)": TypedContractEvent<
@@ -1225,70 +1524,48 @@ export interface PronovaToken extends BaseContract {
       PausedEvent.OutputObject
     >;
 
-    "PresaleContractSet(address)": TypedContractEvent<
-      PresaleContractSetEvent.InputTuple,
-      PresaleContractSetEvent.OutputTuple,
-      PresaleContractSetEvent.OutputObject
+    "RoleAdminChanged(bytes32,bytes32,bytes32)": TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
     >;
-    PresaleContractSet: TypedContractEvent<
-      PresaleContractSetEvent.InputTuple,
-      PresaleContractSetEvent.OutputTuple,
-      PresaleContractSetEvent.OutputObject
-    >;
-
-    "StakingContractSet(address)": TypedContractEvent<
-      StakingContractSetEvent.InputTuple,
-      StakingContractSetEvent.OutputTuple,
-      StakingContractSetEvent.OutputObject
-    >;
-    StakingContractSet: TypedContractEvent<
-      StakingContractSetEvent.InputTuple,
-      StakingContractSetEvent.OutputTuple,
-      StakingContractSetEvent.OutputObject
+    RoleAdminChanged: TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
     >;
 
-    "TeamMemberAdded(address)": TypedContractEvent<
-      TeamMemberAddedEvent.InputTuple,
-      TeamMemberAddedEvent.OutputTuple,
-      TeamMemberAddedEvent.OutputObject
+    "RoleGranted(bytes32,address,address)": TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
     >;
-    TeamMemberAdded: TypedContractEvent<
-      TeamMemberAddedEvent.InputTuple,
-      TeamMemberAddedEvent.OutputTuple,
-      TeamMemberAddedEvent.OutputObject
-    >;
-
-    "TeamMemberRemoved(address)": TypedContractEvent<
-      TeamMemberRemovedEvent.InputTuple,
-      TeamMemberRemovedEvent.OutputTuple,
-      TeamMemberRemovedEvent.OutputObject
-    >;
-    TeamMemberRemoved: TypedContractEvent<
-      TeamMemberRemovedEvent.InputTuple,
-      TeamMemberRemovedEvent.OutputTuple,
-      TeamMemberRemovedEvent.OutputObject
+    RoleGranted: TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
     >;
 
-    "TeamWalletSet(address)": TypedContractEvent<
-      TeamWalletSetEvent.InputTuple,
-      TeamWalletSetEvent.OutputTuple,
-      TeamWalletSetEvent.OutputObject
+    "RoleRevoked(bytes32,address,address)": TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
     >;
-    TeamWalletSet: TypedContractEvent<
-      TeamWalletSetEvent.InputTuple,
-      TeamWalletSetEvent.OutputTuple,
-      TeamWalletSetEvent.OutputObject
+    RoleRevoked: TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
     >;
 
-    "TokensUnlocked(address,uint256)": TypedContractEvent<
-      TokensUnlockedEvent.InputTuple,
-      TokensUnlockedEvent.OutputTuple,
-      TokensUnlockedEvent.OutputObject
+    "TokensBurnedAutomatically(uint256)": TypedContractEvent<
+      TokensBurnedAutomaticallyEvent.InputTuple,
+      TokensBurnedAutomaticallyEvent.OutputTuple,
+      TokensBurnedAutomaticallyEvent.OutputObject
     >;
-    TokensUnlocked: TypedContractEvent<
-      TokensUnlockedEvent.InputTuple,
-      TokensUnlockedEvent.OutputTuple,
-      TokensUnlockedEvent.OutputObject
+    TokensBurnedAutomatically: TypedContractEvent<
+      TokensBurnedAutomaticallyEvent.InputTuple,
+      TokensBurnedAutomaticallyEvent.OutputTuple,
+      TokensBurnedAutomaticallyEvent.OutputObject
     >;
 
     "Transfer(address,address,uint256)": TypedContractEvent<

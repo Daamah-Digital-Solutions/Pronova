@@ -28,7 +28,9 @@
       "WebFetch(domain:bestwallettoken.com)",
       "Bash(wmic process where processid=14972 delete:*)",
       "Bash(wmic process where processid=10328 delete:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "Bash(findstr:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

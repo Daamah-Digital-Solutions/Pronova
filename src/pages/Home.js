@@ -1,9 +1,10 @@
 import React from 'react';
 import EnhancedCountdownTimer from '../components/ui/EnhancedCountdownTimer';
 import { Helmet } from 'react-helmet';
-import { 
+import {
   EnhancedHeroSection,
   EnhancedFeaturesSection,
+  EnhancedLatestNewsSection,
   EnhancedTokenomicsSection,
   EnhancedPartnersSection,
   EnhancedRoadmapSection,
@@ -130,6 +131,7 @@ const Home = () => {
 
       {/* Enhanced Home Page Sections */}
       <EnhancedHeroSection />
+      <EnhancedLatestNewsSection />
       <EnhancedFeaturesSection />
       <EnhancedTokenomicsSection />
       <EnhancedPartnersSection />

@@ -12,26 +12,26 @@ import pronovaLogo from '../../assets/images/logos for partner/pronova coin.png'
 const translations = {
   en: {
     home: 'Home',
+    invest: 'Invest',
     whitepaper: 'Whitepaper',
     roadmap: 'Roadmap',
     team: 'Team & Partners',
     faq: 'FAQ',
     contact: 'Contact Us',
     presale: 'Presale',
-    dashboard: 'Dashboard',
     connectWallet: 'Connect Wallet',
     login: 'Login',
     joinPresale: 'Join Presale',
   },
   ar: {
     home: 'الرئيسية',
+    invest: 'استثمر',
     whitepaper: 'الورقة البيضاء',
     roadmap: 'خارطة الطريق',
     team: 'الفريق والشركاء',
     faq: 'الأسئلة الشائعة',
     contact: 'تواصل معنا',
     presale: 'البيع التمهيدي',
-    dashboard: 'لوحة التحكم',
     connectWallet: 'ربط المحفظة',
     login: 'تسجيل الدخول',
     joinPresale: 'انضم للبيع التمهيدي',
@@ -96,6 +96,9 @@ const Navbar = () => {
               <Link to="/" className={`nav-link ${location.pathname === '/' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                 {t.home}
               </Link>
+              <Link to="/invest" className={`nav-link ${location.pathname === '/invest' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
+                {t.invest}
+              </Link>
               <div className="relative">
                 <Link to="/presale" className={`nav-link ${location.pathname === '/presale' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                   {t.presale}
@@ -118,9 +121,6 @@ const Navbar = () => {
               </Link>
               <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                 {t.contact}
-              </Link>
-              <Link to="/dashboard" className={`nav-link ${location.pathname === '/dashboard' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
-                {t.dashboard}
               </Link>
             </div>
 
@@ -185,6 +185,9 @@ const Navbar = () => {
               <Link to="/" className={`nav-link ${location.pathname === '/' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                 {t.home}
               </Link>
+              <Link to="/invest" className={`nav-link ${location.pathname === '/invest' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
+                {t.invest}
+              </Link>
               <div className="flex items-center gap-2">
                 <Link to="/presale" className={`nav-link ${location.pathname === '/presale' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                   {t.presale}
@@ -207,9 +210,6 @@ const Navbar = () => {
               </Link>
               <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                 {t.contact}
-              </Link>
-              <Link to="/dashboard" className={`nav-link ${location.pathname === '/dashboard' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
-                {t.dashboard}
               </Link>
               <div className="flex space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button 
