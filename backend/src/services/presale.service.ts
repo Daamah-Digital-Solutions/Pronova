@@ -220,7 +220,8 @@ export class PresaleService {
             paymentMethod,
           });
         } catch (error) {
-          console.log('WebSocket service not available:', error.message);
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          console.log('WebSocket service not available:', errorMessage);
         }
       }
     }

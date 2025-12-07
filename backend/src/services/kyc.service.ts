@@ -136,7 +136,8 @@ export class KycService {
         const wsService = getWebSocketService();
         wsService.notifyKycStatusChange(userId, KycStatus.APPROVED);
       } catch (error) {
-        console.log('WebSocket service not available:', error.message);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.log('WebSocket service not available:', errorMessage);
       }
     }
   }
@@ -184,7 +185,8 @@ export class KycService {
         const wsService = getWebSocketService();
         wsService.notifyKycStatusChange(userId, KycStatus.REJECTED, reason);
       } catch (error) {
-        console.log('WebSocket service not available:', error.message);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.log('WebSocket service not available:', errorMessage);
       }
     }
   }
@@ -291,7 +293,7 @@ export class KycService {
         where: { id: userId },
         data: {
           kycStatus: KycStatus.PENDING,
-          kycData: null,
+          kycData: undefined, // Use undefined instead of null for Prisma
         },
       });
     });

@@ -268,7 +268,7 @@ export class EmailService {
           <p>Thank you for your purchase! Your transaction has been confirmed.</p>
           <div style="background-color: #F0FDF4; border: 1px solid #10B981; padding: 20px; margin: 20px 0; border-radius: 6px;">
             <h3 style="color: #10B981; margin-top: 0;">Transaction Details</h3>
-            <p><strong>Amount Paid:</strong> ${{amount}}</p>
+            <p><strong>Amount Paid:</strong> \${{amount}}</p>
             <p><strong>PRON Tokens:</strong> {{tokens}}</p>
             <p><strong>Payment Method:</strong> {{paymentMethod}}</p>
             <p><strong>Transaction ID:</strong> {{transactionId}}</p>
@@ -289,7 +289,7 @@ export class EmailService {
         Thank you for your purchase! Your transaction has been confirmed.
         
         Transaction Details:
-        - Amount Paid: ${{amount}}
+        - Amount Paid: \${{amount}}
         - PRON Tokens: {{tokens}}
         - Payment Method: {{paymentMethod}}
         - Transaction ID: {{transactionId}}

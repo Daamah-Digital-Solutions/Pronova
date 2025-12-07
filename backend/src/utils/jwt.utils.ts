@@ -19,12 +19,19 @@ export const generateTokens = (user: Partial<User>) => {
     role: user.role!,
   };
 
-  const accessToken = jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: process.env.JWT_EXPIRE || '1d',
+  const jwtSecret = process.env.JWT_SECRET;
+  const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET;
+
+  if (!jwtSecret || !jwtRefreshSecret) {
+    throw new Error('JWT secrets are not configured');
+  }
+
+  const accessToken = jwt.sign(payload, jwtSecret, {
+    expiresIn: (process.env.JWT_EXPIRE || '1d') as any,
   });
 
-  const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET!, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRE || '7d',
+  const refreshToken = jwt.sign(payload, jwtRefreshSecret, {
+    expiresIn: (process.env.JWT_REFRESH_EXPIRE || '7d') as any,
   });
 
   return {

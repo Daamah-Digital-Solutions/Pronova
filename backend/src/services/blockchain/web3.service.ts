@@ -115,10 +115,18 @@ export class Web3Service {
     expectedValue?: bigint,
     expectedTo?: string
   ): Promise<boolean> {
+    const provider = this.getProvider(network);
+    if (!provider) return false;
+
     const receipt = await this.getTransactionReceipt(network, txHash);
     if (!receipt || receipt.status !== 1) return false;
 
-    if (expectedValue && receipt.value !== expectedValue) return false;
+    // Get transaction details for value check (ethers v6)
+    if (expectedValue) {
+      const tx = await provider.getTransaction(txHash);
+      if (!tx || tx.value !== expectedValue) return false;
+    }
+
     if (expectedTo && receipt.to?.toLowerCase() !== expectedTo.toLowerCase()) return false;
 
     return true;
