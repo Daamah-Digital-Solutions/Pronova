@@ -24,6 +24,7 @@ backend/dist/
 backend/.env
 backend/.env.local
 backend/.env.production
+backend/contracts/.env
 
 # Logs
 logs/
