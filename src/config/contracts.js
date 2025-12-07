@@ -61,10 +61,10 @@ export const CONTRACTS = {
       USDT: '0x55d398326f99059fF775485246999027B3197955'
     },
     BSC_TESTNET: {
-      PRONOVA_TOKEN: '0x...',
-      PRONOVA_PRESALE: '0x...',
-      PRONOVA_VESTING: '0x...',
-      USDT: '0x...', // Testnet USDT address
+      PRONOVA_TOKEN: '0xa3896C07c4e7D9771e9E3417b7352fBD14704253',
+      PRONOVA_PRESALE: '0x29Ffc342bE650C1ce3e4e102AfB2285FD29f7cF5',
+      PRONOVA_VESTING: '0xd8Cce8EE40B8BdE0f220DCa8084Cd7CeF423bD2a',
+      USDT: '0xbcA887cE632E642DA28aF66433A70B62925F4a08', // MockUSDT on BSC testnet
     }
   },
 
@@ -108,7 +108,7 @@ export const getNetworkInfo = (chainId) => {
 };
 
 // Default network (for development)
-export const DEFAULT_NETWORK = CONTRACTS.NETWORKS.LOCALHOST;
+export const DEFAULT_NETWORK = CONTRACTS.NETWORKS.BSC_TESTNET;
 
 // Test accounts for localhost
 export const TEST_ACCOUNTS = [

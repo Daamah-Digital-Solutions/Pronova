@@ -32,6 +32,7 @@ import PresaleStats from '../components/ui/PresaleStats';
 import { useWeb3 } from '../context/Web3Context';
 import { useSimpleWallet } from '../context/SimpleWalletContext';
 import { useNavigate } from 'react-router-dom';
+import web3Service from '../services/web3Service';
 
 const Presale = () => {
   const navigate = useNavigate();
@@ -40,15 +41,16 @@ const Presale = () => {
     connectWallet: simpleConnectWallet,
     formatAddress: simpleFormatAddress
   } = useSimpleWallet();
-  const { 
-    account, 
-    chainId, 
-    isConnected, 
-    isCorrectNetwork, 
-    balances, 
+  const {
+    account,
+    chainId,
+    isConnected,
+    isCorrectNetwork,
+    balances,
     presaleInfo,
     formatAddress,
-    formatBalance
+    formatBalance,
+    loadPresaleInfo
   } = useWeb3();
 
   // Countdown timer state (example: ends in 30 days)
@@ -91,47 +93,25 @@ const Presale = () => {
   const activeAccount = simpleAccount || mockAccount;
   const isActuallyConnected = !!activeAccount;
 
-  // Load real presale data from contracts (disabled for simplified wallet)
+  // Load real presale data from contracts
   useEffect(() => {
-    if (account && chainId) {
-      // TODO: Re-enable when full Web3 integration is ready
-      // web3Service.initialize(provider, signer, chainId);
-      // loadPresaleData();
+    if (account && chainId && isCorrectNetwork) {
+      // Web3Service is automatically initialized by Web3Context
+      // Load presale data from smart contracts
+      loadPresaleInfo();
     }
-  }, [account, chainId]);
+  }, [account, chainId, isCorrectNetwork, loadPresaleInfo]);
 
-  // Load presale data from smart contracts
-  const loadPresaleData = async () => {
-    setIsLoading(true);
-    try {
-      // TODO: Replace with actual Web3 calls when ready
-      const progressData = { totalRaised: '500000', hardCap: '1000000', progress: 50 };
-      const phaseData = { phase: 1, price: '0.10', bonusPercentage: 25 };
-      const userPurchaseData = account ? { totalPurchased: '1000', tokensOwned: '10000' } : null;
-
-      if (progressData) {
-        setPresaleData(progressData);
-        // Update presale stats with real data
-        setPresaleStats(prev => ({
-          ...prev,
-          totalRaised: parseFloat(progressData.totalRaised) * 1000000, // Convert to wei format for display
-          currentPhase: progressData.currentPhase
-        }));
-      }
-
-      if (phaseData) {
-        setPhaseInfo(phaseData);
-      }
-
-      if (userPurchaseData) {
-        setUserInfo(userPurchaseData);
-      }
-    } catch (error) {
-      console.error('Error loading presale data:', error);
-    } finally {
-      setIsLoading(false);
+  // Update presale stats when presaleInfo changes (from Web3Context)
+  useEffect(() => {
+    if (presaleInfo && presaleInfo.totalRaised) {
+      setPresaleStats(prev => ({
+        ...prev,
+        totalRaised: parseFloat(presaleInfo.totalRaised) || prev.totalRaised,
+        currentPhase: presaleInfo.currentPhase || prev.currentPhase
+      }));
     }
-  };
+  }, [presaleInfo]);
 
   // Update countdown timer
   useEffect(() => {

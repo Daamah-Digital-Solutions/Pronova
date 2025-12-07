@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { ethers } from 'ethers';
 import { getContractAddress, METAMASK_NETWORK_CONFIG } from '../config/contracts';
+import { web3Service } from '../services/web3Service';
 
 const Web3Context = createContext();
 
@@ -40,66 +42,55 @@ export const Web3Provider = ({ children }) => {
 
   // Load presale information
   const loadPresaleInfo = useCallback(async () => {
-    if (!contracts.presale) return;
-
     try {
-      // Mock presale info for now
+      // Get current phase info
+      const phaseInfo = await web3Service.getCurrentPhaseInfo();
+      const progress = await web3Service.getPresaleProgress();
+
+      let userInfo = null;
+      let isWhitelisted = false;
+
+      if (account) {
+        userInfo = await web3Service.getUserPurchaseInfo(account);
+        isWhitelisted = await web3Service.isWhitelisted(account);
+      }
+
       setPresaleInfo({
-        currentPhase: 1,
-        tokenPrice: '0.05',
-        totalRaised: '0',
-        hardCap: '31000000',
-        userPurchased: '0',
-        isWhitelisted: true // Mock as whitelisted
+        currentPhase: phaseInfo?.phaseNumber || 0,
+        tokenPrice: phaseInfo?.pricePerToken || '0',
+        totalRaised: progress?.totalRaised || '0',
+        hardCap: progress?.hardCap || '31000000',
+        userPurchased: userInfo?.totalTokens || '0',
+        isWhitelisted
       });
     } catch (error) {
       console.error('Error loading presale info:', error);
+      // Set default values on error
+      setPresaleInfo({
+        currentPhase: 0,
+        tokenPrice: '0',
+        totalRaised: '0',
+        hardCap: '0',
+        userPurchased: '0',
+        isWhitelisted: false
+      });
     }
-  }, [contracts.presale]);
+  }, [account]);
 
   // Initialize Web3 and contracts
   const initializeWeb3 = useCallback(async () => {
     if (!window.ethereum || !account || !chainId) return;
 
     try {
-      // Create Web3 instance using window.ethereum
-      const web3Instance = {
-        ethereum: window.ethereum,
-        getBalance: async (address) => {
-          const balance = await window.ethereum.request({
-            method: 'eth_getBalance',
-            params: [address, 'latest']
-          });
-          return parseInt(balance, 16);
-        },
-        call: async (to, data) => {
-          return await window.ethereum.request({
-            method: 'eth_call',
-            params: [{ to, data }, 'latest']
-          });
-        },
-        sendTransaction: async (transaction) => {
-          return await window.ethereum.request({
-            method: 'eth_sendTransaction',
-            params: [transaction]
-          });
-        }
-      };
+      // Create ethers provider and signer
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
 
-      setWeb3(web3Instance);
+      // Initialize web3Service with provider, signer, and chainId
+      web3Service.initialize(provider, signer, chainId);
 
-      // Initialize contract instances
-      const tokenAddress = getContractAddress(chainId, 'PRONOVA_TOKEN');
-      const presaleAddress = getContractAddress(chainId, 'PRONOVA_PRESALE');
-      const usdtAddress = getContractAddress(chainId, 'USDT');
-
-      const contractInstances = {
-        token: tokenAddress ? createContract(tokenAddress, 'PronovaToken') : null,
-        presale: presaleAddress ? createContract(presaleAddress, 'PronovaPresale') : null,
-        usdt: usdtAddress ? createContract(usdtAddress, 'MockUSDT') : null
-      };
-
-      setContracts(contractInstances);
+      setWeb3(provider);
+      setContracts(web3Service.contracts);
 
       // Load initial data
       await loadBalances();
@@ -111,79 +102,36 @@ export const Web3Provider = ({ children }) => {
     }
   }, [account, chainId, loadBalances, loadPresaleInfo]);
 
-  // Create contract instance helper
-  const createContract = (address, contractType) => {
-    const abis = {
-      PronovaToken: [
-        "function name() view returns (string)",
-        "function symbol() view returns (string)",
-        "function totalSupply() view returns (uint256)",
-        "function balanceOf(address) view returns (uint256)",
-        "function transfer(address to, uint256 amount) returns (bool)",
-        "function allowance(address owner, address spender) view returns (uint256)",
-        "function approve(address spender, uint256 amount) returns (bool)"
-      ],
-      PronovaPresale: [
-        "function currentPhase() view returns (uint256)",
-        "function buyWithETH(address referrer) payable",
-        "function buyWithUSDT(uint256 amount, address referrer)",
-        "function getPhaseInfo(uint256 phaseId) view returns (uint256 pricePerToken, uint256 tokensAllocated, uint256 tokensSold, uint256 tokensRemaining, bool isActive, uint256 startTime, uint256 endTime)",
-        "function getUserPurchaseInfo(address user) view returns (uint256 totalTokens, uint256 totalPaid, uint256 referralTokens, bool claimed)",
-        "function getPresaleProgress() view returns (uint256 totalRaised, uint256 hardCap, uint256 progressPercentage, uint256 currentPhaseId)",
-        "function whitelist(address) view returns (bool)",
-        "function ethToUsdPrice() view returns (uint256)"
-      ],
-      MockUSDT: [
-        "function balanceOf(address) view returns (uint256)",
-        "function transfer(address to, uint256 amount) returns (bool)",
-        "function approve(address spender, uint256 amount) returns (bool)",
-        "function allowance(address owner, address spender) view returns (uint256)",
-        "function decimals() view returns (uint8)"
-      ]
-    };
-
-    return {
-      address,
-      abi: abis[contractType] || [],
-      call: async (method, ...args) => {
-        // Simplified contract call implementation
-        // In a full implementation, you'd encode the function call properly
-        console.log(`Calling ${method} on ${address} with args:`, args);
-        // For now, return mock data
-        return null;
-      }
-    };
-  };
-
-
   // Connect to MetaMask
   const connectWallet = async () => {
     if (!isMetaMaskAvailable()) {
       setError("MetaMask not found. Please install MetaMask.");
       return;
     }
-    
+
     setIsConnecting(true);
     setError(null);
-    
+
     try {
       // Request account access
-      const accounts = await window.ethereum.request({ 
-        method: 'eth_requestAccounts' 
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts'
       });
-      
+
       if (accounts.length > 0) {
         setAccount(accounts[0]);
-        
-        // Get chain ID
-        const chainId = await window.ethereum.request({ 
-          method: 'eth_chainId' 
-        });
-        setChainId(parseInt(chainId, 16));
 
-        // Check if we need to switch to localhost network
-        if (parseInt(chainId, 16) !== 31337) {
-          await switchToLocalhostNetwork();
+        // Get chain ID
+        const chainId = await window.ethereum.request({
+          method: 'eth_chainId'
+        });
+        const chainIdNum = parseInt(chainId, 16);
+        setChainId(chainIdNum);
+
+        // Supported networks: Localhost (31337), BSC Testnet (97), BSC Mainnet (56)
+        const supportedChains = [31337, 97, 56];
+        if (!supportedChains.includes(chainIdNum)) {
+          setError("Please connect to Hardhat Localhost, BSC Testnet, or BSC Mainnet");
         }
       }
     } catch (error) {
@@ -222,20 +170,19 @@ export const Web3Provider = ({ children }) => {
 
   // Buy tokens with ETH
   const buyWithETH = async (ethAmount, referrer = '0x0000000000000000000000000000000000000000') => {
-    if (!contracts.presale || !account) {
-      throw new Error('Wallet not connected or contract not available');
+    if (!account) {
+      throw new Error('Wallet not connected');
     }
 
     try {
-      const transaction = {
-        from: account,
-        to: contracts.presale.address,
-        value: '0x' + ethAmount.toString(16),
-        data: '0x' // Would encode buyWithETH function call
-      };
+      const result = await web3Service.buyWithETH(ethAmount, referrer);
+      const receipt = await result.wait();
 
-      const txHash = await web3.sendTransaction(transaction);
-      return txHash;
+      // Reload balances and presale info after purchase
+      await loadBalances();
+      await loadPresaleInfo();
+
+      return receipt;
     } catch (error) {
       console.error('Error buying with ETH:', error);
       throw error;
@@ -350,7 +297,7 @@ export const Web3Provider = ({ children }) => {
     formatBalance,
     getNetworkName: () => getNetworkName(chainId),
     isConnected: !!account,
-    isCorrectNetwork: chainId === 31337
+    isCorrectNetwork: [31337, 97, 56].includes(chainId) // Support localhost, BSC testnet, and BSC mainnet
   };
 
   return (

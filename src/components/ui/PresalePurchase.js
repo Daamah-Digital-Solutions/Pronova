@@ -1,17 +1,32 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSimpleWallet } from '../../context/SimpleWalletContext';
+import { useWeb3 } from '../../context/Web3Context';
+import web3Service from '../../services/web3Service';
 import { FaEthereum, FaSpinner, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
 import { SiBinance } from 'react-icons/si';
 
 const PresalePurchase = ({ className = '' }) => {
   const navigate = useNavigate();
-  const { 
-    account, 
-    chainId,
+  const {
+    account: simpleAccount,
+    chainId: simpleChainId,
     connectWallet,
     error: walletError
   } = useSimpleWallet();
+
+  const {
+    account: web3Account,
+    chainId: web3ChainId,
+    isConnected: web3IsConnected,
+    isCorrectNetwork: web3IsCorrectNetwork,
+    presaleInfo,
+    loadPresaleInfo
+  } = useWeb3();
+
+  // Use Web3Context if available, otherwise fall back to SimpleWallet
+  const account = web3Account || simpleAccount;
+  const chainId = web3ChainId || simpleChainId;
 
   // State management
   const [paymentMethod, setPaymentMethod] = useState('ETH');
@@ -26,16 +41,38 @@ const PresalePurchase = ({ className = '' }) => {
   const [balances, setBalances] = useState({ eth: '0', bnb: '0', usdt: '0' });
   const [userPurchases, setUserPurchases] = useState({ totalTokens: '0', totalPaid: '0', referralRewards: '0' });
   const [mockAccount, setMockAccount] = useState(null);
-  
-  // Mock presale info for testing
-  const currentPhase = 1;
-  const tokenPrice = '0.05';
-  const isWhitelisted = true;
-  
+  const [prices, setPrices] = useState({ eth: '3000', bnb: '300' }); // Fallback prices
+
+  // Get presale info from Web3Context or use defaults
+  const currentPhase = presaleInfo?.currentPhase || 1;
+  const tokenPrice = presaleInfo?.tokenPrice || '0.05';
+  const isWhitelisted = presaleInfo?.isWhitelisted || false;
+
   // Use either real account or mock account for testing
   const activeAccount = account || mockAccount;
-  const isConnected = !!activeAccount;
-  const isCorrectNetwork = chainId === 31337; // Hardhat localhost
+  const isConnected = web3IsConnected || !!activeAccount;
+  const isCorrectNetwork = web3IsCorrectNetwork || [31337, 97, 56].includes(chainId); // Support localhost, BSC testnet, BSC mainnet
+
+  // Load real crypto prices from blockchain
+  useEffect(() => {
+    const loadPrices = async () => {
+      try {
+        const currentPrices = await web3Service.getCurrentPrices();
+        setPrices({
+          eth: currentPrices.eth,
+          bnb: currentPrices.bnb
+        });
+      } catch (error) {
+        console.error('Error loading prices:', error);
+        // Keep fallback prices
+      }
+    };
+
+    loadPrices();
+    // Reload prices every 60 seconds
+    const interval = setInterval(loadPrices, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Load mock account from localStorage on component mount
   useEffect(() => {
@@ -77,13 +114,13 @@ const PresalePurchase = ({ className = '' }) => {
       const usd = parseFloat(usdAmount);
       if (isNaN(usd) || usd <= 0) return;
 
-      // Calculate crypto amount
+      // Calculate crypto amount using real prices
       let cryptoAmt = '0';
       if (paymentMethod === 'ETH') {
-        const ethPrice = 3000; // Hardcoded for localhost testing
+        const ethPrice = parseFloat(prices.eth);
         cryptoAmt = (usd / ethPrice).toFixed(6);
       } else if (paymentMethod === 'BNB') {
-        const bnbPrice = 300; // Hardcoded for localhost testing
+        const bnbPrice = parseFloat(prices.bnb);
         cryptoAmt = (usd / bnbPrice).toFixed(6);
       } else if (paymentMethod === 'USDT') {
         cryptoAmt = usd.toFixed(2);
@@ -97,7 +134,7 @@ const PresalePurchase = ({ className = '' }) => {
     } catch (error) {
       console.error('Error calculating amounts:', error);
     }
-  }, [usdAmount, paymentMethod, tokenPrice]);
+  }, [usdAmount, paymentMethod, tokenPrice, prices]);
 
   useEffect(() => {
     if (usdAmount && tokenPrice) {
@@ -145,12 +182,48 @@ const PresalePurchase = ({ className = '' }) => {
     setTransaction(null);
 
     try {
-      if (paymentMethod === 'ETH') {
-        // Calculate ETH amount needed
-        const ethPrice = 3000; // Mock price for testing
+      let txHash;
+      let receipt;
+
+      // Use real Web3 transactions if connected to MetaMask
+      if (web3IsConnected && web3Account) {
+        try {
+          if (paymentMethod === 'ETH' || paymentMethod === 'BNB') {
+            // For BSC Testnet, we use BNB
+            const cryptoAmt = parseFloat(cryptoAmount);
+            const referrerAddress = referralCode || '0x0000000000000000000000000000000000000000';
+
+            if (paymentMethod === 'BNB' || chainId === 97 || chainId === 56) {
+              const result = await web3Service.buyWithBNB(cryptoAmt, referrerAddress);
+              receipt = await result.wait();
+              txHash = receipt.transactionHash;
+            } else {
+              const result = await web3Service.buyWithETH(cryptoAmt, referrerAddress);
+              receipt = await result.wait();
+              txHash = receipt.transactionHash;
+            }
+          } else if (paymentMethod === 'USDT') {
+            const usdtAmt = parseFloat(cryptoAmount);
+            const referrerAddress = referralCode || '0x0000000000000000000000000000000000000000';
+            const result = await web3Service.buyWithUSDT(usdtAmt, referrerAddress);
+            receipt = await result.wait();
+            txHash = receipt.transactionHash;
+          }
+
+          // Reload presale info after successful purchase
+          if (loadPresaleInfo) {
+            await loadPresaleInfo();
+          }
+        } catch (web3Error) {
+          console.error('Web3 transaction error:', web3Error);
+          throw web3Error;
+        }
+      } else {
+        // Fall back to mock simulation for testing without wallet
+        const ethPrice = parseFloat(prices.eth);
         const ethAmount = parseFloat(usdAmount) / ethPrice;
 
-        // Check if user has enough ETH
+        // Check if user has enough ETH (for mock mode)
         if (parseFloat(balances.eth) < ethAmount) {
           setError('Insufficient ETH balance');
           setIsLoading(false);
@@ -158,59 +231,56 @@ const PresalePurchase = ({ className = '' }) => {
         }
 
         // Simulate transaction
-        const txHash = await simulateTransaction();
-        
-        // Update user purchases
-        const newTokens = parseFloat(tokenAmount);
-        const newTotalTokens = parseFloat(userPurchases.totalTokens) + newTokens;
-        const newTotalPaid = parseFloat(userPurchases.totalPaid) + parseFloat(usdAmount);
-        const referralBonus = referralCode ? newTokens * 0.05 : 0; // 5% bonus
-        const newReferralRewards = parseFloat(userPurchases.referralRewards) + referralBonus;
-
-        const updatedPurchases = {
-          totalTokens: newTotalTokens.toString(),
-          totalPaid: newTotalPaid.toString(),
-          referralRewards: newReferralRewards.toString()
-        };
-
-        setUserPurchases(updatedPurchases);
-        
-        // Save to localStorage
-        localStorage.setItem(`purchases_${activeAccount}`, JSON.stringify(updatedPurchases));
-        
-        // Save transaction to history
-        const newTransaction = {
-          date: new Date().toISOString(),
-          type: 'Token Purchase',
-          amount: parseFloat(usdAmount),
-          currency: 'USD',
-          tokens: newTokens,
-          paymentMethod: paymentMethod,
-          cryptoAmount: parseFloat(cryptoAmount),
-          status: 'Completed',
-          hash: txHash,
-          referralCode: referralCode || null,
-          referralBonus: referralBonus
-        };
-
-        const existingTransactions = localStorage.getItem(`transactions_${activeAccount}`);
-        const transactions = existingTransactions ? JSON.parse(existingTransactions) : [];
-        transactions.unshift(newTransaction); // Add to beginning of array
-        localStorage.setItem(`transactions_${activeAccount}`, JSON.stringify(transactions));
-        
-        // Redirect to congratulations page with purchase data
-        navigate('/congratulations', {
-          state: {
-            purchaseData: {
-              ...newTransaction,
-              account: activeAccount
-            }
-          }
-        });
-        
-      } else {
-        setError('Only ETH purchases are supported in this demo');
+        txHash = await simulateTransaction();
       }
+
+      // Update user purchases
+      const newTokens = parseFloat(tokenAmount);
+      const newTotalTokens = parseFloat(userPurchases.totalTokens) + newTokens;
+      const newTotalPaid = parseFloat(userPurchases.totalPaid) + parseFloat(usdAmount);
+      const referralBonus = referralCode ? newTokens * 0.05 : 0; // 5% bonus
+      const newReferralRewards = parseFloat(userPurchases.referralRewards) + referralBonus;
+
+      const updatedPurchases = {
+        totalTokens: newTotalTokens.toString(),
+        totalPaid: newTotalPaid.toString(),
+        referralRewards: newReferralRewards.toString()
+      };
+
+      setUserPurchases(updatedPurchases);
+
+      // Save to localStorage
+      localStorage.setItem(`purchases_${activeAccount}`, JSON.stringify(updatedPurchases));
+
+      // Save transaction to history
+      const newTransaction = {
+        date: new Date().toISOString(),
+        type: 'Token Purchase',
+        amount: parseFloat(usdAmount),
+        currency: 'USD',
+        tokens: newTokens,
+        paymentMethod: paymentMethod,
+        cryptoAmount: parseFloat(cryptoAmount),
+        status: 'Completed',
+        hash: txHash,
+        referralCode: referralCode || null,
+        referralBonus: referralBonus
+      };
+
+      const existingTransactions = localStorage.getItem(`transactions_${activeAccount}`);
+      const transactions = existingTransactions ? JSON.parse(existingTransactions) : [];
+      transactions.unshift(newTransaction); // Add to beginning of array
+      localStorage.setItem(`transactions_${activeAccount}`, JSON.stringify(transactions));
+
+      // Redirect to congratulations page with purchase data
+      navigate('/congratulations', {
+        state: {
+          purchaseData: {
+            ...newTransaction,
+            account: activeAccount
+          }
+        }
+      });
     } catch (error) {
       console.error('Purchase error:', error);
       setError(error.message || 'Purchase failed');

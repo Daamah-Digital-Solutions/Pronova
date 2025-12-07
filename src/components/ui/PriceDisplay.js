@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useSimpleWallet } from '../../context/SimpleWalletContext';
+import { useWeb3 } from '../../context/Web3Context';
+import web3Service from '../../services/web3Service';
 import { FaEthereum, FaSpinner, FaSync } from 'react-icons/fa';
 import { SiBinance } from 'react-icons/si';
 
 const PriceDisplay = ({ className = '' }) => {
-  const { account, chainId } = useSimpleWallet();
+  const { account: simpleAccount, chainId: simpleChainId } = useSimpleWallet();
+  const {
+    account: web3Account,
+    chainId: web3ChainId,
+    isConnected: web3IsConnected
+  } = useWeb3();
+
+  // Use Web3 account if available
+  const account = web3Account || simpleAccount;
+  const chainId = web3ChainId || simpleChainId;
   
   const [prices, setPrices] = useState({
     eth: '0',
@@ -16,46 +27,38 @@ const PriceDisplay = ({ className = '' }) => {
   const [lastUpdate, setLastUpdate] = useState(null);
   const [error, setError] = useState('');
 
-  // Load prices on component mount (disabled for simplified wallet)
-  useEffect(() => {
-    if (account && chainId) {
-      // TODO: Re-enable when Web3 integration is ready
-      // loadPrices();
-      
-      // Use mock data for now
-      setPrices({
-        eth: '3000',
-        bnb: '300',
-        ethChainlinkActive: true,
-        bnbChainlinkActive: true
-      });
-      setLastUpdate(new Date());
-    }
-  }, [account, chainId]);
-
+  // Load prices from blockchain/API
   const loadPrices = async () => {
-    if (!account) return;
-    
     setIsLoading(true);
     setError('');
-    
+
     try {
-      // TODO: Replace with actual price calls when Web3 is ready
-      const priceData = {
-        eth: '3000',
-        bnb: '300',
-        ethChainlinkActive: true,
-        bnbChainlinkActive: true
-      };
+      const priceData = await web3Service.getCurrentPrices();
       setPrices(priceData);
       setLastUpdate(new Date());
     } catch (error) {
       console.error('Error loading prices:', error);
       setError('Failed to load prices');
+      // Set fallback prices on error
+      setPrices({
+        eth: '3000',
+        bnb: '300',
+        ethChainlinkActive: false,
+        bnbChainlinkActive: false
+      });
+      setLastUpdate(new Date());
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Load prices on component mount
+  useEffect(() => {
+    loadPrices();
+    // Reload prices every 60 seconds
+    const interval = setInterval(loadPrices, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const formatPrice = (price) => {
     const numPrice = parseFloat(price);

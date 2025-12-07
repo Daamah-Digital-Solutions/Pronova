@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useSimpleWallet } from '../../context/SimpleWalletContext';
+import { useWeb3 } from '../../context/Web3Context';
+import web3Service from '../../services/web3Service';
 import { FaFire, FaUsers, FaClock, FaChartLine, FaSpinner } from 'react-icons/fa';
 
 const PresaleStats = ({ className = '' }) => {
-  const { account, chainId } = useSimpleWallet();
+  const { account: simpleAccount, chainId: simpleChainId } = useSimpleWallet();
+  const {
+    account: web3Account,
+    chainId: web3ChainId,
+    presaleInfo,
+    isConnected: web3IsConnected
+  } = useWeb3();
+
+  // Use Web3 account if available, otherwise fall back to simple wallet
+  const account = web3Account || simpleAccount;
+  const chainId = web3ChainId || simpleChainId;
   
   const [stats, setStats] = useState({
     totalRaised: '0',
@@ -18,13 +30,18 @@ const PresaleStats = ({ className = '' }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Load stats on component mount (disabled for simplified wallet)
+  // Load stats from Web3Context when presaleInfo changes
   useEffect(() => {
-    if (account && chainId) {
-      // TODO: Re-enable when Web3 integration is ready
-      // loadStats();
-      
-      // Use mock data for now
+    if (presaleInfo && presaleInfo.totalRaised) {
+      setStats({
+        totalRaised: presaleInfo.totalRaised || '0',
+        hardCap: presaleInfo.hardCap || '31000000',
+        progress: 0,
+        currentPhase: presaleInfo.currentPhase || 1,
+        progressPercentage: ((parseFloat(presaleInfo.totalRaised) / parseFloat(presaleInfo.hardCap)) * 100).toFixed(2)
+      });
+    } else if (!web3IsConnected) {
+      // Use fallback mock data if not connected to Web3
       setStats({
         totalRaised: '500000',
         hardCap: '1000000',
@@ -33,26 +50,17 @@ const PresaleStats = ({ className = '' }) => {
         progressPercentage: '50'
       });
     }
-  }, [account, chainId]);
+  }, [presaleInfo, web3IsConnected]);
 
+  // Load phase info from blockchain
   const loadStats = async () => {
-    if (!account) return;
-    
+    if (!web3IsConnected) return;
+
     setIsLoading(true);
     setError('');
-    
-    try {
-      // TODO: Replace with actual Web3 calls when ready
-      const progressData = {
-        totalRaised: '500000',
-        hardCap: '1000000',
-        progress: 50,
-        currentPhase: 1,
-        progressPercentage: '50'
-      };
-      const phaseData = { phase: 1, price: '0.10', bonusPercentage: 25 };
 
-      setStats(progressData);
+    try {
+      const phaseData = await web3Service.getCurrentPhaseInfo();
       setPhaseInfo(phaseData);
     } catch (error) {
       console.error('Error loading presale stats:', error);
@@ -61,6 +69,13 @@ const PresaleStats = ({ className = '' }) => {
       setIsLoading(false);
     }
   };
+
+  // Load phase info when connected
+  useEffect(() => {
+    if (web3IsConnected && account && chainId) {
+      loadStats();
+    }
+  }, [web3IsConnected, account, chainId]);
 
   const formatCurrency = (amount) => {
     const num = parseFloat(amount);
