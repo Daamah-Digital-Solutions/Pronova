@@ -72,6 +72,7 @@ export interface PronovaTokenInterface extends Interface {
       | "operationConfirmationCount"
       | "operationConfirmations"
       | "operationExecuted"
+      | "operationNonce"
       | "partnershipsWallet"
       | "pause"
       | "paused"
@@ -89,6 +90,7 @@ export interface PronovaTokenInterface extends Interface {
       | "totalSupply"
       | "transfer"
       | "transferFrom"
+      | "treasuryWallet"
       | "unpause"
       | "vestingContract"
       | "vestingStartTime"
@@ -295,6 +297,10 @@ export interface PronovaTokenInterface extends Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "operationNonce",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "partnershipsWallet",
     values?: undefined
   ): string;
@@ -362,6 +368,10 @@ export interface PronovaTokenInterface extends Interface {
   encodeFunctionData(
     functionFragment: "transferFrom",
     values: [AddressLike, AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "treasuryWallet",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
@@ -522,6 +532,10 @@ export interface PronovaTokenInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "operationNonce",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "partnershipsWallet",
     data: BytesLike
   ): Result;
@@ -569,6 +583,10 @@ export interface PronovaTokenInterface extends Interface {
   decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "treasuryWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
@@ -989,6 +1007,8 @@ export interface PronovaToken extends BaseContract {
 
   operationExecuted: TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
 
+  operationNonce: TypedContractMethod<[], [bigint], "view">;
+
   partnershipsWallet: TypedContractMethod<[], [string], "view">;
 
   pause: TypedContractMethod<[], [void], "nonpayable">;
@@ -1056,6 +1076,8 @@ export interface PronovaToken extends BaseContract {
     [boolean],
     "nonpayable"
   >;
+
+  treasuryWallet: TypedContractMethod<[], [string], "view">;
 
   unpause: TypedContractMethod<[], [void], "nonpayable">;
 
@@ -1270,6 +1292,9 @@ export interface PronovaToken extends BaseContract {
     nameOrSignature: "operationExecuted"
   ): TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
   getFunction(
+    nameOrSignature: "operationNonce"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "partnershipsWallet"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
@@ -1350,6 +1375,9 @@ export interface PronovaToken extends BaseContract {
     [boolean],
     "nonpayable"
   >;
+  getFunction(
+    nameOrSignature: "treasuryWallet"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "unpause"
   ): TypedContractMethod<[], [void], "nonpayable">;

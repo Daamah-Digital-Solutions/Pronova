@@ -51,6 +51,7 @@ export interface PronovaVestingInterface extends Interface {
       | "operationConfirmationCount"
       | "operationConfirmations"
       | "operationExecuted"
+      | "operationNonce"
       | "pronovaToken"
       | "release"
       | "releaseAll"
@@ -64,6 +65,7 @@ export interface PronovaVestingInterface extends Interface {
       | "totalTokensManaged"
       | "totalTokensReleased"
       | "totalVestedAmount"
+      | "treasuryWallet"
       | "vestingSchedules"
   ): FunctionFragment;
 
@@ -188,6 +190,10 @@ export interface PronovaVestingInterface extends Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "operationNonce",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "pronovaToken",
     values?: undefined
   ): string;
@@ -238,6 +244,10 @@ export interface PronovaVestingInterface extends Interface {
   encodeFunctionData(
     functionFragment: "totalVestedAmount",
     values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "treasuryWallet",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "vestingSchedules",
@@ -336,6 +346,10 @@ export interface PronovaVestingInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "operationNonce",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "pronovaToken",
     data: BytesLike
   ): Result;
@@ -373,6 +387,10 @@ export interface PronovaVestingInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "totalVestedAmount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "treasuryWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -721,6 +739,8 @@ export interface PronovaVesting extends BaseContract {
 
   operationExecuted: TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
 
+  operationNonce: TypedContractMethod<[], [bigint], "view">;
+
   pronovaToken: TypedContractMethod<[], [string], "view">;
 
   release: TypedContractMethod<
@@ -778,6 +798,8 @@ export interface PronovaVesting extends BaseContract {
   totalTokensReleased: TypedContractMethod<[], [bigint], "view">;
 
   totalVestedAmount: TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+
+  treasuryWallet: TypedContractMethod<[], [string], "view">;
 
   vestingSchedules: TypedContractMethod<
     [arg0: AddressLike, arg1: BigNumberish],
@@ -959,6 +981,9 @@ export interface PronovaVesting extends BaseContract {
     nameOrSignature: "operationExecuted"
   ): TypedContractMethod<[arg0: BytesLike], [boolean], "view">;
   getFunction(
+    nameOrSignature: "operationNonce"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "pronovaToken"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
@@ -1017,6 +1042,9 @@ export interface PronovaVesting extends BaseContract {
   getFunction(
     nameOrSignature: "totalVestedAmount"
   ): TypedContractMethod<[arg0: AddressLike], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "treasuryWallet"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "vestingSchedules"
   ): TypedContractMethod<

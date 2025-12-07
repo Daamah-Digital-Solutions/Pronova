@@ -86,6 +86,7 @@ export interface PronovaPresaleInterface extends Interface {
 
   getEvent(
     nameOrSignatureOrTopic:
+      | "ClaimStatusChanged"
       | "OperationConfirmed"
       | "OperationExecuted"
       | "Paused"
@@ -503,6 +504,18 @@ export interface PronovaPresaleInterface extends Interface {
     functionFragment: "whitelistEnabled",
     data: BytesLike
   ): Result;
+}
+
+export namespace ClaimStatusChangedEvent {
+  export type InputTuple = [enabled: boolean];
+  export type OutputTuple = [enabled: boolean];
+  export interface OutputObject {
+    enabled: boolean;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export namespace OperationConfirmedEvent {
@@ -1320,6 +1333,13 @@ export interface PronovaPresale extends BaseContract {
   ): TypedContractMethod<[], [boolean], "view">;
 
   getEvent(
+    key: "ClaimStatusChanged"
+  ): TypedContractEvent<
+    ClaimStatusChangedEvent.InputTuple,
+    ClaimStatusChangedEvent.OutputTuple,
+    ClaimStatusChangedEvent.OutputObject
+  >;
+  getEvent(
     key: "OperationConfirmed"
   ): TypedContractEvent<
     OperationConfirmedEvent.InputTuple,
@@ -1419,6 +1439,17 @@ export interface PronovaPresale extends BaseContract {
   >;
 
   filters: {
+    "ClaimStatusChanged(bool)": TypedContractEvent<
+      ClaimStatusChangedEvent.InputTuple,
+      ClaimStatusChangedEvent.OutputTuple,
+      ClaimStatusChangedEvent.OutputObject
+    >;
+    ClaimStatusChanged: TypedContractEvent<
+      ClaimStatusChangedEvent.InputTuple,
+      ClaimStatusChangedEvent.OutputTuple,
+      ClaimStatusChangedEvent.OutputObject
+    >;
+
     "OperationConfirmed(bytes32,address)": TypedContractEvent<
       OperationConfirmedEvent.InputTuple,
       OperationConfirmedEvent.OutputTuple,
