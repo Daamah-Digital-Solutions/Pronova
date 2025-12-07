@@ -7,7 +7,7 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
     let owner, admin1, admin2, user1, user2;
     let presaleContract, vestingContract, liquidityWallet, marketingWallet;
     let communityWallet, strategicReservesWallet, stakingContract;
-    let foundersWallet, teamWallet, partnershipsWallet;
+    let foundersWallet, teamWallet, partnershipsWallet, treasuryWallet;
 
     const TOTAL_SUPPLY = ethers.parseEther("1000000000"); // 1 billion tokens
     const PRESALE_ALLOCATION = ethers.parseEther("250000000"); // 25% (250M)
@@ -23,10 +23,11 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
     beforeEach(async function () {
         [owner, admin1, admin2, user1, user2, presaleContract, vestingContract,
          liquidityWallet, marketingWallet, communityWallet, strategicReservesWallet,
-         stakingContract, foundersWallet, teamWallet, partnershipsWallet] = await ethers.getSigners();
+         stakingContract, foundersWallet, teamWallet, partnershipsWallet, treasuryWallet] = await ethers.getSigners();
 
         const PronovaToken = await ethers.getContractFactory("PronovaToken");
-        pronovaToken = await PronovaToken.deploy();
+        // AUDIT FIX: Constructor now requires treasuryWallet parameter
+        pronovaToken = await PronovaToken.deploy(treasuryWallet.address);
         await pronovaToken.waitForDeployment();
 
         // Grant admin roles for multi-sig testing
@@ -74,6 +75,7 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
     describe("Multi-Signature Functionality", function () {
         it("Should require 2 confirmations for setting allocation wallets", async function () {
             // First admin confirmation
+            // AUDIT FIX: setAllocationWallets now has 9 parameters (staking removed)
             await pronovaToken.connect(admin1).setAllocationWallets(
                 presaleContract.address,
                 foundersWallet.address,
@@ -83,7 +85,6 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
                 communityWallet.address,
                 strategicReservesWallet.address,
                 marketingWallet.address,
-                stakingContract.address,
                 vestingContract.address
             );
 
@@ -100,7 +101,6 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
                 communityWallet.address,
                 strategicReservesWallet.address,
                 marketingWallet.address,
-                stakingContract.address,
                 vestingContract.address
             );
 
@@ -111,6 +111,7 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
 
         it("Should require 2 confirmations for distributing allocations", async function () {
             // Set wallets first (requires multi-sig)
+            // AUDIT FIX: setAllocationWallets now has 9 parameters (staking removed)
             await pronovaToken.connect(admin1).setAllocationWallets(
                 presaleContract.address,
                 foundersWallet.address,
@@ -120,7 +121,6 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
                 communityWallet.address,
                 strategicReservesWallet.address,
                 marketingWallet.address,
-                stakingContract.address,
                 vestingContract.address
             );
 
@@ -133,7 +133,6 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
                 communityWallet.address,
                 strategicReservesWallet.address,
                 marketingWallet.address,
-                stakingContract.address,
                 vestingContract.address
             );
 
@@ -190,6 +189,7 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
     describe("Automatic Burn Mechanism", function () {
         beforeEach(async function () {
             // Setup allocations for testing
+            // AUDIT FIX: setAllocationWallets now has 9 parameters (staking removed)
             await pronovaToken.connect(admin1).setAllocationWallets(
                 presaleContract.address,
                 foundersWallet.address,
@@ -199,7 +199,6 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
                 communityWallet.address,
                 strategicReservesWallet.address,
                 marketingWallet.address,
-                stakingContract.address,
                 vestingContract.address
             );
 
@@ -212,7 +211,6 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
                 communityWallet.address,
                 strategicReservesWallet.address,
                 marketingWallet.address,
-                stakingContract.address,
                 vestingContract.address
             );
 
@@ -247,15 +245,45 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
     });
 
     describe("Pause Functionality", function () {
+        beforeEach(async function () {
+            // Setup and distribute tokens for pause testing
+            await pronovaToken.connect(admin1).setAllocationWallets(
+                presaleContract.address,
+                foundersWallet.address,
+                liquidityWallet.address,
+                partnershipsWallet.address,
+                teamWallet.address,
+                communityWallet.address,
+                strategicReservesWallet.address,
+                marketingWallet.address,
+                vestingContract.address
+            );
+
+            await pronovaToken.connect(admin2).setAllocationWallets(
+                presaleContract.address,
+                foundersWallet.address,
+                liquidityWallet.address,
+                partnershipsWallet.address,
+                teamWallet.address,
+                communityWallet.address,
+                strategicReservesWallet.address,
+                marketingWallet.address,
+                vestingContract.address
+            );
+
+            await pronovaToken.connect(admin1).distributeAllocations();
+            await pronovaToken.connect(admin2).distributeAllocations();
+        });
+
         it("Should allow pauser to pause and unpause transfers", async function () {
             const PAUSER_ROLE = await pronovaToken.PAUSER_ROLE();
             await pronovaToken.grantRole(PAUSER_ROLE, admin1.address);
 
+            // Setup for transfer test - use marketingWallet which has tokens
+            await pronovaToken.connect(marketingWallet).transfer(user1.address, ethers.parseEther("100"));
+
             // Pause the contract
             await pronovaToken.connect(admin1).pause();
-
-            // Setup for transfer test
-            await pronovaToken.transfer(user1.address, ethers.parseEther("100"));
 
             // Transfer should fail when paused
             await expect(
@@ -283,7 +311,6 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
                     communityWallet.address,
                     strategicReservesWallet.address,
                     marketingWallet.address,
-                    stakingContract.address,
                     vestingContract.address
                 )
             ).to.be.reverted;
@@ -308,22 +335,60 @@ describe("PronovaToken - Updated with Whitepaper Specifications", function () {
 
     describe("Emergency Withdrawal", function () {
         it("Should require multi-sig for emergency withdrawal", async function () {
-            // Send some tokens to contract
-            await pronovaToken.transfer(pronovaToken.target, ethers.parseEther("1000"));
+            // AUDIT FIX: Emergency withdrawal routes to treasuryWallet (not msg.sender)
+            const contractBalance = await pronovaToken.balanceOf(pronovaToken.target);
+            const initialTreasuryBalance = await pronovaToken.balanceOf(treasuryWallet.address);
 
-            const initialBalance = await pronovaToken.balanceOf(admin1.address);
+            // Verify contract has tokens (all 1B initially)
+            expect(contractBalance).to.equal(ethers.parseEther("1000000000"));
 
             // First admin attempts withdrawal
             await pronovaToken.connect(admin1).emergencyWithdraw();
 
-            // Balance shouldn't change yet
-            expect(await pronovaToken.balanceOf(admin1.address)).to.equal(initialBalance);
+            // Treasury balance shouldn't change yet (need 2 confirmations)
+            expect(await pronovaToken.balanceOf(treasuryWallet.address)).to.equal(initialTreasuryBalance);
 
             // Second admin confirms
             await pronovaToken.connect(admin2).emergencyWithdraw();
 
-            // Now admin2 should receive the tokens
-            expect(await pronovaToken.balanceOf(admin2.address)).to.be.gt(0);
+            // AUDIT FIX: Tokens go to treasuryWallet
+            expect(await pronovaToken.balanceOf(treasuryWallet.address)).to.equal(contractBalance);
+            expect(await pronovaToken.balanceOf(pronovaToken.target)).to.equal(0);
+        });
+
+        it("Should prevent emergency withdraw after distribution", async function () {
+            // Setup and distribute tokens first
+            await pronovaToken.connect(admin1).setAllocationWallets(
+                presaleContract.address,
+                foundersWallet.address,
+                liquidityWallet.address,
+                partnershipsWallet.address,
+                teamWallet.address,
+                communityWallet.address,
+                strategicReservesWallet.address,
+                marketingWallet.address,
+                vestingContract.address
+            );
+
+            await pronovaToken.connect(admin2).setAllocationWallets(
+                presaleContract.address,
+                foundersWallet.address,
+                liquidityWallet.address,
+                partnershipsWallet.address,
+                teamWallet.address,
+                communityWallet.address,
+                strategicReservesWallet.address,
+                marketingWallet.address,
+                vestingContract.address
+            );
+
+            await pronovaToken.connect(admin1).distributeAllocations();
+            await pronovaToken.connect(admin2).distributeAllocations();
+
+            // Now emergency withdraw should be blocked
+            await expect(
+                pronovaToken.connect(admin1).emergencyWithdraw()
+            ).to.be.revertedWith("Cannot withdraw after distribution");
         });
     });
 

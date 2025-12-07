@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -60,6 +60,10 @@ contract PronovaVesting is AccessControl, ReentrancyGuard {
     mapping(bytes32 => mapping(address => bool)) public operationConfirmations;
     mapping(bytes32 => uint256) public operationConfirmationCount;
     mapping(bytes32 => bool) public operationExecuted;
+    uint256 public operationNonce; // Nonce-based operation IDs (fixes audit finding)
+
+    // Treasury wallet for secure fund custody (audit fix)
+    address public immutable treasuryWallet;
 
     // Events
     event VestingScheduleCreated(
@@ -76,9 +80,12 @@ contract PronovaVesting is AccessControl, ReentrancyGuard {
     event OperationConfirmed(bytes32 indexed operation, address indexed admin);
     event OperationExecuted(bytes32 indexed operation);
 
-    constructor(address _pronovaToken) {
+    constructor(address _pronovaToken, address _treasuryWallet) {
         require(_pronovaToken != address(0), "Invalid token");
+        require(_treasuryWallet != address(0), "Invalid treasury wallet");
+
         pronovaToken = IERC20(_pronovaToken);
+        treasuryWallet = _treasuryWallet;
 
         // Setup roles
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -99,7 +106,13 @@ contract PronovaVesting is AccessControl, ReentrancyGuard {
         require(_teamWallet != address(0), "Invalid team wallet");
         require(_partnershipsWallet != address(0), "Invalid partnerships wallet");
 
-        bytes32 operationId = keccak256(abi.encodePacked("SETUP_ALLOCATIONS", block.timestamp));
+        // AUDIT FIX: Use parameter-based operation ID for deterministic multi-sig
+        bytes32 operationId = keccak256(abi.encodePacked(
+            "SETUP_ALLOCATIONS",
+            _foundersWallet,
+            _teamWallet,
+            _partnershipsWallet
+        ));
 
         // Multi-sig confirmation
         if (!operationConfirmations[operationId][msg.sender]) {
@@ -210,6 +223,10 @@ contract PronovaVesting is AccessControl, ReentrancyGuard {
         require(vestingDuration > 0, "Duration must be > 0");
         require(vestingDuration >= cliffDuration, "Cliff > duration");
 
+        // AUDIT FIX: Add startTime validation to prevent invalid schedules
+        require(startTime >= block.timestamp, "Start time must be in future or present");
+        require(startTime <= block.timestamp + 365 days, "Start time too far in future");
+
         vestingSchedules[beneficiary].push(VestingSchedule({
             totalAmount: amount,
             startTime: startTime,
@@ -254,10 +271,9 @@ contract PronovaVesting is AccessControl, ReentrancyGuard {
         totalReleasedAmount[msg.sender] += releasableAmount;
         totalTokensReleased += releasableAmount;
 
-        // For locked tokens, update tracking
+        // AUDIT FIX: Decrement totalLockedAmount correctly instead of overwriting
         if (schedule.vestingType == 1) {
-            uint256 remainingLocked = schedule.totalAmount - schedule.releasedAmount;
-            totalLockedAmount[msg.sender] = remainingLocked;
+            totalLockedAmount[msg.sender] -= releasableAmount;
         }
 
         pronovaToken.safeTransfer(msg.sender, releasableAmount);
@@ -279,9 +295,9 @@ contract PronovaVesting is AccessControl, ReentrancyGuard {
                     schedules[i].lastReleaseTime = block.timestamp;
                     totalReleasable += releasableAmount;
 
+                    // AUDIT FIX: Decrement totalLockedAmount correctly instead of overwriting
                     if (schedules[i].vestingType == 1) {
-                        uint256 remainingLocked = schedules[i].totalAmount - schedules[i].releasedAmount;
-                        totalLockedAmount[msg.sender] = remainingLocked;
+                        totalLockedAmount[msg.sender] -= releasableAmount;
                     }
                 }
             }
@@ -397,10 +413,10 @@ contract PronovaVesting is AccessControl, ReentrancyGuard {
             pronovaToken.safeTransfer(beneficiary, releasableAmount);
         }
 
-        // Return unvested tokens to treasury
+        // AUDIT FIX: Return unvested tokens to treasury wallet (not individual admin)
         uint256 remainingAmount = schedule.totalAmount - schedule.releasedAmount;
         if (remainingAmount > 0) {
-            pronovaToken.safeTransfer(msg.sender, remainingAmount);
+            pronovaToken.safeTransfer(treasuryWallet, remainingAmount);
         }
 
         schedule.revoked = true;

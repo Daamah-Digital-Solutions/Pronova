@@ -1,4 +1,5 @@
 const hre = require("hardhat");
+require("dotenv").config();
 
 async function main() {
   console.log("🚀 Starting Pronova deployment to testnet...\n");
@@ -6,61 +7,79 @@ async function main() {
   // Get deployer account
   const [deployer] = await ethers.getSigners();
   console.log("Deploying contracts with account:", deployer.address);
-  console.log("Account balance:", (await deployer.getBalance()).toString());
+  console.log("Account balance:", ethers.formatEther(await deployer.provider.getBalance(deployer.address)), "BNB");
+
+  // Verify environment variables
+  const usdtAddress = process.env.USDT_ADDRESS_TESTNET;
+  if (!usdtAddress || usdtAddress === '') {
+    throw new Error("❌ USDT_ADDRESS_TESTNET not set in .env file");
+  }
+  console.log("USDT Address:", usdtAddress);
 
   // Deploy PronovaToken
   console.log("\n📄 Deploying PronovaToken...");
   const PronovaToken = await hre.ethers.getContractFactory("PronovaToken");
   const token = await PronovaToken.deploy();
-  await token.deployed();
-  console.log("✅ PronovaToken deployed to:", token.address);
+  await token.waitForDeployment();
+  const tokenAddress = await token.getAddress();
+  console.log("✅ PronovaToken deployed to:", tokenAddress);
 
   // Deploy PronovaPresale
   console.log("\n📄 Deploying PronovaPresale...");
   const PronovaPresale = await hre.ethers.getContractFactory("PronovaPresale");
-  
-  // Constructor parameters
-  const presaleParams = {
-    token: token.address,
-    usdt: "0x..." // Add testnet USDT address
-  };
-  
+
+  // Constructor parameters for BSC Testnet
   const presale = await PronovaPresale.deploy(
-    presaleParams.token,
-    presaleParams.usdt
+    tokenAddress,
+    usdtAddress,
+    deployer.address, // Treasury wallet (deployer for testnet)
+    ethers.ZeroAddress, // ETH price feed (using fallback for testnet)
+    ethers.ZeroAddress  // BNB price feed (using fallback for testnet)
   );
-  await presale.deployed();
-  console.log("✅ PronovaPresale deployed to:", presale.address);
+  await presale.waitForDeployment();
+  const presaleAddress = await presale.getAddress();
+  console.log("✅ PronovaPresale deployed to:", presaleAddress);
 
   // Deploy PronovaVesting
   console.log("\n📄 Deploying PronovaVesting...");
   const PronovaVesting = await hre.ethers.getContractFactory("PronovaVesting");
-  const vesting = await PronovaVesting.deploy(token.address);
-  await vesting.deployed();
-  console.log("✅ PronovaVesting deployed to:", vesting.address);
+  const vesting = await PronovaVesting.deploy(tokenAddress);
+  await vesting.waitForDeployment();
+  const vestingAddress = await vesting.getAddress();
+  console.log("✅ PronovaVesting deployed to:", vestingAddress);
 
   // Configure contracts
   console.log("\n⚙️  Configuring contracts...");
-  
-  // Set presale contract in token
-  await token.setPresaleContract(presale.address);
+
+  // Set contract addresses in token
+  await token.setPresaleContract(presaleAddress);
   console.log("✅ Set presale contract in token");
 
-  // Set vesting contract in token
-  await token.setVestingContract(vesting.address);
-  console.log("✅ Set vesting contract in token");
+  await token.setTeamWallet(deployer.address);
+  console.log("✅ Set team wallet in token");
 
-  // Transfer tokens to presale contract
-  const presaleAllocation = await token.PRESALE_ALLOCATION();
-  await token.transfer(presale.address, presaleAllocation);
-  console.log("✅ Transferred presale allocation");
+  await token.setLiquidityWallet(deployer.address);
+  console.log("✅ Set liquidity wallet in token");
 
-  // Verify contracts on Etherscan
-  console.log("\n🔍 Verifying contracts on Etherscan...");
-  
+  await token.setMarketingWallet(deployer.address);
+  console.log("✅ Set marketing wallet in token");
+
+  await token.setStakingContract(vestingAddress);
+  console.log("✅ Set staking contract in token");
+
+  // Distribute allocations
+  console.log("\n💰 Distributing token allocations...");
+  await token.distributeAllocations();
+  console.log("✅ Distributed token allocations");
+
+  // Verify contracts on BSCScan
+  console.log("\n🔍 Verifying contracts on BSCScan...");
+  console.log("⏳ Waiting 30 seconds for BSCScan to index contracts...");
+  await new Promise(resolve => setTimeout(resolve, 30000));
+
   try {
     await hre.run("verify:verify", {
-      address: token.address,
+      address: tokenAddress,
       constructorArguments: [],
     });
     console.log("✅ PronovaToken verified");
@@ -68,37 +87,83 @@ async function main() {
     console.log("❌ PronovaToken verification failed:", error.message);
   }
 
+  try {
+    await hre.run("verify:verify", {
+      address: presaleAddress,
+      constructorArguments: [
+        tokenAddress,
+        usdtAddress,
+        deployer.address,
+        ethers.ZeroAddress,
+        ethers.ZeroAddress
+      ],
+    });
+    console.log("✅ PronovaPresale verified");
+  } catch (error) {
+    console.log("❌ PronovaPresale verification failed:", error.message);
+  }
+
+  try {
+    await hre.run("verify:verify", {
+      address: vestingAddress,
+      constructorArguments: [tokenAddress],
+    });
+    console.log("✅ PronovaVesting verified");
+  } catch (error) {
+    console.log("❌ PronovaVesting verification failed:", error.message);
+  }
+
   // Summary
   console.log("\n📊 Deployment Summary:");
   console.log("========================");
-  console.log("PronovaToken:", token.address);
-  console.log("PronovaPresale:", presale.address);
-  console.log("PronovaVesting:", vesting.address);
+  console.log("Network:", hre.network.name);
+  console.log("Chain ID:", (await deployer.provider.getNetwork()).chainId.toString());
+  console.log("Deployer:", deployer.address);
+  console.log("PronovaToken:", tokenAddress);
+  console.log("PronovaPresale:", presaleAddress);
+  console.log("PronovaVesting:", vestingAddress);
+  console.log("USDT:", usdtAddress);
   console.log("========================");
-  
+
   // Save addresses to file
   const fs = require("fs");
+  const path = require("path");
+
+  // Create deployments directory if it doesn't exist
+  const deploymentsDir = path.join(__dirname, "../deployments");
+  if (!fs.existsSync(deploymentsDir)) {
+    fs.mkdirSync(deploymentsDir, { recursive: true });
+  }
+
   const addresses = {
-    PronovaToken: token.address,
-    PronovaPresale: presale.address,
-    PronovaVesting: vesting.address,
+    PronovaToken: tokenAddress,
+    PronovaPresale: presaleAddress,
+    PronovaVesting: vestingAddress,
+    USDT: usdtAddress,
     network: hre.network.name,
+    chainId: (await deployer.provider.getNetwork()).chainId.toString(),
     deployer: deployer.address,
     timestamp: new Date().toISOString()
   };
-  
-  fs.writeFileSync(
-    `./deployments/${hre.network.name}-addresses.json`,
-    JSON.stringify(addresses, null, 2)
-  );
-  
-  console.log("\n✅ Addresses saved to deployments folder");
+
+  const fileName = `${hre.network.name}-addresses.json`;
+  const filePath = path.join(deploymentsDir, fileName);
+
+  fs.writeFileSync(filePath, JSON.stringify(addresses, null, 2));
+
+  console.log(`\n✅ Addresses saved to deployments/${fileName}`);
   console.log("\n🎉 Deployment complete!");
+
+  console.log("\n📝 Next steps:");
+  console.log("1. Update frontend .env with contract addresses");
+  console.log("2. Update backend .env with contract addresses");
+  console.log("3. Test the presale functionality");
+  console.log("4. Run: npx hardhat run scripts/test-deployment.js --network bscTestnet");
 }
 
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.error(error);
+    console.error("❌ Deployment failed:", error);
     process.exit(1);
   });

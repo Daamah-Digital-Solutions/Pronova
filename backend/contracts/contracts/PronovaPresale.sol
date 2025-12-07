@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -113,6 +113,7 @@ contract PronovaPresale is AccessControl, ReentrancyGuard, Pausable {
     event PhaseUpdated(uint256 phase, bool isActive);
     event ReferralRewardEarned(address indexed referrer, address indexed buyer, uint256 reward);
     event TokensClaimed(address indexed user, uint256 amount);
+    event ClaimStatusChanged(bool enabled);
     event WhitelistUpdated(address indexed user, bool status);
     event PriceUpdated(string token, uint256 price);
     event OperationConfirmed(bytes32 indexed operation, address indexed admin);
@@ -468,18 +469,40 @@ contract PronovaPresale is AccessControl, ReentrancyGuard, Pausable {
     }
 
     /**
-     * @dev Update oracle prices with role restriction
+     * @dev Update fallback oracle prices (requires multi-sig + can only update when presale inactive)
+     * @notice Prevents price manipulation during active sale phases
      */
     function updatePrices(uint256 _ethPrice, uint256 _bnbPrice) external onlyRole(PRICE_ORACLE_ROLE) {
+        // Security: Cannot update prices during active presale phase
+        if (currentPhase > 0 && currentPhase <= TOTAL_PHASES) {
+            require(!phases[currentPhase].isActive, "Cannot update prices during active presale");
+        }
+
         // Validate prices are within reasonable bounds
         require(_ethPrice >= 100 * 10**6 && _ethPrice <= 100_000 * 10**6, "ETH price out of bounds");
         require(_bnbPrice >= 10 * 10**6 && _bnbPrice <= 10_000 * 10**6, "BNB price out of bounds");
+
+        bytes32 operationId = keccak256(abi.encodePacked("UPDATE_PRICES", _ethPrice, _bnbPrice));
+
+        if (!operationConfirmations[operationId][msg.sender]) {
+            operationConfirmations[operationId][msg.sender] = true;
+            operationConfirmationCount[operationId]++;
+            emit OperationConfirmed(operationId, msg.sender);
+
+            if (operationConfirmationCount[operationId] < REQUIRED_CONFIRMATIONS) {
+                return; // Wait for second admin confirmation
+            }
+        }
+
+        require(!operationExecuted[operationId], "Already executed");
+        operationExecuted[operationId] = true;
 
         ethToUsdPrice = _ethPrice;
         bnbToUsdPrice = _bnbPrice;
 
         emit PriceUpdated("ETH", _ethPrice);
         emit PriceUpdated("BNB", _bnbPrice);
+        emit OperationExecuted(operationId);
     }
 
     // Admin functions
@@ -491,8 +514,29 @@ contract PronovaPresale is AccessControl, ReentrancyGuard, Pausable {
         _unpause();
     }
 
+    /**
+     * @dev Enable/disable token claiming (requires multi-sig for security)
+     * @notice This is a critical function protecting user funds - requires 2 admin confirmations
+     */
     function setClaimEnabled(bool _enabled) external onlyRole(ADMIN_ROLE) {
+        bytes32 operationId = keccak256(abi.encodePacked("SET_CLAIM_ENABLED", _enabled));
+
+        if (!operationConfirmations[operationId][msg.sender]) {
+            operationConfirmations[operationId][msg.sender] = true;
+            operationConfirmationCount[operationId]++;
+            emit OperationConfirmed(operationId, msg.sender);
+
+            if (operationConfirmationCount[operationId] < REQUIRED_CONFIRMATIONS) {
+                return; // Wait for second admin confirmation
+            }
+        }
+
+        require(!operationExecuted[operationId], "Already executed");
+        operationExecuted[operationId] = true;
+
         claimEnabled = _enabled;
+        emit ClaimStatusChanged(_enabled);
+        emit OperationExecuted(operationId);
     }
 
     function updateWhitelist(address[] calldata users, bool status) external onlyRole(OPERATOR_ROLE) {

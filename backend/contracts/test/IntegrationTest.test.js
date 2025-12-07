@@ -3,11 +3,11 @@ const { ethers } = require("hardhat");
 const { time } = require("@nomicfoundation/hardhat-network-helpers");
 
 describe("Pronova Integration Tests - Full System", function () {
-    let pronovaToken, pronovaPresale, pronovaVesting;
+    let pronovaToken, pronovaPresale, pronovaVesting, mockUSDT;
     let owner, admin1, admin2, user1, user2, user3;
     let foundersWallet, teamWallet, partnershipsWallet;
     let liquidityWallet, marketingWallet, communityWallet, strategicReservesWallet;
-    let stakingContract, mockPriceFeed;
+    let stakingContract, mockPriceFeed, treasuryWallet;
 
     const TOTAL_SUPPLY = ethers.parseEther("1000000000"); // 1 billion tokens
     const PRESALE_ALLOCATION = ethers.parseEther("250000000"); // 25% (250M)
@@ -15,32 +15,40 @@ describe("Pronova Integration Tests - Full System", function () {
     beforeEach(async function () {
         [owner, admin1, admin2, user1, user2, user3, foundersWallet, teamWallet,
          partnershipsWallet, liquidityWallet, marketingWallet, communityWallet,
-         strategicReservesWallet, stakingContract] = await ethers.getSigners();
+         strategicReservesWallet, stakingContract, treasuryWallet] = await ethers.getSigners();
 
         // Deploy mock price feed
         const MockPriceFeed = await ethers.getContractFactory("MockV3Aggregator");
         mockPriceFeed = await MockPriceFeed.deploy(8, 200000000000); // $2000 ETH price
         await mockPriceFeed.waitForDeployment();
 
+        // Deploy mock USDT
+        const MockUSDT = await ethers.getContractFactory("MockUSDT");
+        mockUSDT = await MockUSDT.deploy();
+        await mockUSDT.waitForDeployment();
+
         // Deploy PronovaToken
         const PronovaToken = await ethers.getContractFactory("PronovaToken");
-        pronovaToken = await PronovaToken.deploy();
+        // AUDIT FIX: Constructor now requires treasuryWallet parameter
+        pronovaToken = await PronovaToken.deploy(treasuryWallet.address);
         await pronovaToken.waitForDeployment();
 
         // Deploy PronovaVesting
         const PronovaVesting = await ethers.getContractFactory("PronovaVesting");
+        // AUDIT FIX: Constructor signature changed to (tokenAddress, treasuryWallet)
         pronovaVesting = await PronovaVesting.deploy(
             pronovaToken.target,
-            foundersWallet.address,
-            teamWallet.address,
-            partnershipsWallet.address
+            treasuryWallet.address
         );
         await pronovaVesting.waitForDeployment();
 
         // Deploy PronovaPresale
         const PronovaPresale = await ethers.getContractFactory("PronovaPresale");
+        // AUDIT FIX: Constructor requires 5 parameters: token, usdt, treasury, ethFeed, bnbFeed
         pronovaPresale = await PronovaPresale.deploy(
             pronovaToken.target,
+            mockUSDT.target,
+            treasuryWallet.address,
             mockPriceFeed.target, // ETH/USD price feed
             mockPriceFeed.target  // BNB/USD price feed
         );
@@ -71,7 +79,6 @@ describe("Pronova Integration Tests - Full System", function () {
                 communityWallet.address,
                 strategicReservesWallet.address,
                 marketingWallet.address,
-                stakingContract.address,
                 pronovaVesting.target
             );
 
@@ -84,7 +91,6 @@ describe("Pronova Integration Tests - Full System", function () {
                 communityWallet.address,
                 strategicReservesWallet.address,
                 marketingWallet.address,
-                stakingContract.address,
                 pronovaVesting.target
             );
 

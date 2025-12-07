@@ -1,0 +1,32 @@
+{
+  "network": "bscTestnet",
+  "chainId": "97",
+  "deployer": "0xdCca72A15AA9E04cF13eda5a5369E4FE9e770573",
+  "timestamp": "2025-11-11T14:54:54.997Z",
+  "contracts": {
+    "PronovaToken": "0xa3896C07c4e7D9771e9E3417b7352fBD14704253",
+    "PronovaPresale": "0x29Ffc342bE650C1ce3e4e102AfB2285FD29f7cF5",
+    "PronovaVesting": "0xd8Cce8EE40B8BdE0f220DCa8084Cd7CeF423bD2a",
+    "USDT": "0xbcA887cE632E642DA28aF66433A70B62925F4a08"
+  },
+  "wallets": {
+    "treasury": "0x0490bac2D0F032d206d50EE3e8ba70E8287A1413",
+    "admin1": "0xc52ca59C5dA00e1c3fe74c27524692b2918E15b7",
+    "admin2": "0xC81482651055c5a9181ea6986b0607C174e4011d",
+    "founders": "0x27091d9ee966d21CE26756Ac56c4e701b2832ca5",
+    "team": "0xc77CE346B515d30008Be050Fa8358bA599E704A4",
+    "partnerships": "0xCCBD97E46CE45936f327398bFe3AECB546AD6DFA",
+    "liquidity": "0xb5D628943a0601ccc501FC47f7E45464758D547a",
+    "community": "0x7A1138433e0C2080827F44f7Bd7C6f56c37a7274",
+    "strategic": "0x117fa5FB9dC11c44fE4b3AA2F64CF3F8750847fa",
+    "marketing": "0x8dF71232dd9a9845Ea54D063A019fc483538E9D5"
+  },
+  "nextSteps": [
+    "1. Admin1 or Admin2 must call setAllocationWallets() with same parameters",
+    "2. After 2nd confirmation, Admin must call distributeAllocations() (needs 2 confirmations)",
+    "3. Setup vesting schedules: setupWhitepaperAllocations() (needs 2 confirmations)",
+    "4. Enable presale phase",
+    "5. Test multi-sig flows",
+    "6. Verify contracts on BSCScan"
+  ]
+}

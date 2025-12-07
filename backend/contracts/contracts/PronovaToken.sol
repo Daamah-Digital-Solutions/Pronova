@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity 0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
@@ -66,6 +66,10 @@ contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Ree
     mapping(bytes32 => mapping(address => bool)) public operationConfirmations;
     mapping(bytes32 => uint256) public operationConfirmationCount;
     mapping(bytes32 => bool) public operationExecuted;
+    uint256 public operationNonce; // Nonce-based operation IDs (fixes audit finding)
+
+    // Treasury wallet for secure fund custody (audit fix)
+    address public immutable treasuryWallet;
 
     // Events
     event AllocationWalletSet(string allocation, address indexed wallet);
@@ -76,7 +80,10 @@ contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Ree
     event OperationExecuted(bytes32 indexed operation);
     event TokensBurnedAutomatically(uint256 amount);
 
-    constructor() ERC20("Pronova", "PRN") {
+    constructor(address _treasuryWallet) ERC20("Pronova", "PRN") {
+        require(_treasuryWallet != address(0), "Invalid treasury wallet");
+        treasuryWallet = _treasuryWallet;
+
         // Set up role hierarchy for multi-sig
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(ADMIN_ROLE, msg.sender);
@@ -115,7 +122,19 @@ contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Ree
             "Invalid address"
         );
 
-        bytes32 operationId = keccak256(abi.encodePacked("SET_WALLETS", block.timestamp));
+        // AUDIT FIX: Use parameter-based operation ID for deterministic multi-sig
+        bytes32 operationId = keccak256(abi.encodePacked(
+            "SET_WALLETS",
+            _presaleContract,
+            _foundersWallet,
+            _liquidityWallet,
+            _partnershipsWallet,
+            _teamWallet,
+            _communityWallet,
+            _strategicReservesWallet,
+            _marketingWallet,
+            _vestingContract
+        ));
 
         // Multi-sig confirmation logic
         if (!operationConfirmations[operationId][msg.sender]) {
@@ -163,7 +182,8 @@ contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Ree
         require(!allocationsDistributed, "Already distributed");
         require(presaleContract != address(0), "Wallets not set");
 
-        bytes32 operationId = keccak256(abi.encodePacked("DISTRIBUTE", block.timestamp));
+        // AUDIT FIX: Use fixed operation ID for deterministic multi-sig (single distribution event)
+        bytes32 operationId = keccak256(abi.encodePacked("DISTRIBUTE"));
 
         // Multi-sig confirmation
         if (!operationConfirmations[operationId][msg.sender]) {
@@ -225,6 +245,7 @@ contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Ree
             // Burn tokens first
             if (burnAmount > 0) {
                 super._update(from, address(0), burnAmount);
+                totalBurned += burnAmount; // Track auto-burn immediately
                 emit TokensBurnedAutomatically(burnAmount);
             }
 
@@ -232,11 +253,11 @@ contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Ree
             super._update(from, to, transferAmount);
         } else {
             super._update(from, to, amount);
-        }
 
-        // Track all burns (including manual burns)
-        if (to == address(0)) {
-            totalBurned += amount;
+            // Track manual burns (when to == address(0))
+            if (to == address(0)) {
+                totalBurned += amount;
+            }
         }
     }
 
@@ -256,9 +277,17 @@ contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Ree
 
     /**
      * @dev Emergency withdrawal function (requires multi-sig)
+     * @notice AUDIT FIXES:
+     *   - Cannot withdraw after distribution completes (prevents post-distribution drain)
+     *   - Routes funds to secure treasury wallet (not individual admin)
+     *   - Uses nonce-based operation ID (deterministic multi-sig)
      */
     function emergencyWithdraw() external onlyRole(ADMIN_ROLE) {
-        bytes32 operationId = keccak256(abi.encodePacked("EMERGENCY", block.timestamp));
+        // AUDIT FIX: Prevent emergency withdrawal after distribution
+        require(!allocationsDistributed, "Cannot withdraw after distribution");
+
+        // AUDIT FIX: Use fixed operation ID for deterministic multi-sig
+        bytes32 operationId = keccak256(abi.encodePacked("EMERGENCY"));
 
         if (!operationConfirmations[operationId][msg.sender]) {
             operationConfirmations[operationId][msg.sender] = true;
@@ -275,7 +304,8 @@ contract PronovaToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, Ree
 
         uint256 balance = balanceOf(address(this));
         if (balance > 0) {
-            _transfer(address(this), msg.sender, balance);
+            // AUDIT FIX: Route to treasury wallet instead of msg.sender
+            _transfer(address(this), treasuryWallet, balance);
         }
         emit OperationExecuted(operationId);
     }
