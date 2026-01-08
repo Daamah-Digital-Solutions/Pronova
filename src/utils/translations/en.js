@@ -148,7 +148,7 @@ const en = {
   'team.structure': 'Team Structure',
   'team.structure.text': 'Pronova\'s team, companies, diversity, and success are managed by teams, groups, companies, and entities and are not subject to one person, one property, or one official, but there are multiple responsibilities, powers, and control.',
   'team.supervisory': 'Supervisory Board',
-  'team.supervisory.text': 'A team composed of CAPI Max for Financial and Risk Management, Cryptocurrencies, HCC Insurance & Risk, CIM Financial, and Ashorax Risk Assurance.',
+  'team.supervisory.text': 'A team composed of Capimax for Financial and Risk Management, Cryptocurrencies, HCC Insurance & Risk, CIM Financial, and Ashorax Risk Assurance.',
   'team.advisory': 'Advisory Board',
   'team.advisory.text': 'Includes HCC Insurance & Credit Risk Company, CAPIMax Risk Management Company, and CIM Finance.',
   'team.management': 'Management Team',
