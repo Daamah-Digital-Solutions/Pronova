@@ -1,7 +1,5 @@
-import sgMail from '@sendgrid/mail';
+import nodemailer from 'nodemailer';
 import { cache } from '../config/redis';
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 export interface EmailTemplate {
   subject: string;
@@ -15,11 +13,82 @@ export interface EmailOptions {
   dynamicData?: Record<string, any>;
 }
 
+export interface SmtpConfig {
+  host: string;
+  port: number;
+  secure: boolean;
+  auth: {
+    user: string;
+    pass: string;
+  };
+}
+
 export class EmailService {
+  private transporter: nodemailer.Transporter | null = null;
   private fromEmail: string;
+  private fromName: string;
+  private isConfigured: boolean = false;
 
   constructor() {
-    this.fromEmail = process.env.EMAIL_FROM || 'noreply@pronova.com';
+    this.fromEmail = process.env.SMTP_FROM_EMAIL || process.env.EMAIL_FROM || 'noreply@pronova.com';
+    this.fromName = process.env.SMTP_FROM_NAME || 'Pronova';
+    this.initializeTransporter();
+  }
+
+  private initializeTransporter(): void {
+    const host = process.env.SMTP_HOST;
+    const port = parseInt(process.env.SMTP_PORT || '587', 10);
+    const user = process.env.SMTP_USER;
+    const pass = process.env.SMTP_PASS;
+
+    // Check if SMTP is configured
+    if (!host || !user || !pass) {
+      console.warn('[EmailService] SMTP not fully configured. Emails will be logged to console.');
+      console.warn('[EmailService] Required env vars: SMTP_HOST, SMTP_USER, SMTP_PASS');
+      this.isConfigured = false;
+      return;
+    }
+
+    try {
+      this.transporter = nodemailer.createTransport({
+        host,
+        port,
+        secure: port === 465, // true for 465, false for other ports
+        auth: {
+          user,
+          pass,
+        },
+        // Connection timeout settings
+        connectionTimeout: 10000, // 10 seconds
+        greetingTimeout: 10000,
+        socketTimeout: 30000,
+      });
+
+      this.isConfigured = true;
+      console.log(`[EmailService] SMTP configured successfully (${host}:${port})`);
+    } catch (error) {
+      console.error('[EmailService] Failed to create SMTP transporter:', error);
+      this.isConfigured = false;
+    }
+  }
+
+  /**
+   * Verify SMTP connection is working
+   */
+  async verifyConnection(): Promise<boolean> {
+    if (!this.transporter || !this.isConfigured) {
+      console.warn('[EmailService] Cannot verify - transporter not configured');
+      return false;
+    }
+
+    try {
+      await this.transporter.verify();
+      console.log('[EmailService] SMTP connection verified successfully');
+      return true;
+    } catch (error) {
+      console.error('[EmailService] SMTP verification failed:', error);
+      return false;
+    }
   }
 
   async sendEmail(options: EmailOptions): Promise<boolean> {
@@ -40,18 +109,33 @@ export class EmailService {
         });
       }
 
-      const msg = {
-        to: Array.isArray(to) ? to : [to],
-        from: this.fromEmail,
+      const recipients = Array.isArray(to) ? to : [to];
+
+      const mailOptions = {
+        from: `"${this.fromName}" <${this.fromEmail}>`,
+        to: recipients.join(', '),
         subject: processedSubject,
         html: processedHtml,
         text: processedText,
       };
 
-      await sgMail.send(msg);
+      // If SMTP not configured, log email to console (development mode)
+      if (!this.transporter || !this.isConfigured) {
+        console.log('[EmailService] ========== EMAIL (Console Mode) ==========');
+        console.log(`[EmailService] To: ${recipients.join(', ')}`);
+        console.log(`[EmailService] Subject: ${processedSubject}`);
+        console.log(`[EmailService] From: ${this.fromName} <${this.fromEmail}>`);
+        console.log('[EmailService] Text Content:', processedText.substring(0, 200) + '...');
+        console.log('[EmailService] =============================================');
+        return true; // Return true in dev mode so app flow continues
+      }
+
+      // Send email via SMTP
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log(`[EmailService] Email sent successfully: ${info.messageId}`);
       return true;
     } catch (error) {
-      console.error('Email sending failed:', error);
+      console.error('[EmailService] Email sending failed:', error);
       return false;
     }
   }
@@ -82,14 +166,14 @@ export class EmailService {
       `,
       text: `
         Welcome to Pronova!
-        
+
         Hi {{userName}},
-        
+
         Thank you for joining the Pronova presale! To get started, please verify your email address by visiting:
         {{verificationUrl}}
-        
+
         This link will expire in 24 hours.
-        
+
         If you didn't create an account with Pronova, please ignore this email.
       `,
     };
@@ -131,14 +215,14 @@ export class EmailService {
       `,
       text: `
         Password Reset Request
-        
+
         Hi {{userName}},
-        
+
         We received a request to reset your password for your Pronova account. Visit this link to reset it:
         {{resetUrl}}
-        
+
         This link will expire in 1 hour.
-        
+
         If you didn't request this password reset, please ignore this email.
       `,
     };
@@ -177,18 +261,18 @@ export class EmailService {
       `,
       text: `
         KYC Verification Approved!
-        
+
         Hi {{userName}},
-        
+
         Great news! Your KYC verification has been approved. You can now participate in the Pronova presale.
-        
+
         Visit: {{presaleUrl}}
-        
+
         What you can now do:
         - Purchase PRON tokens during the presale
         - Refer friends and earn bonuses
         - Access your personalized dashboard
-        
+
         Thank you for being part of the Pronova community!
       `,
     };
@@ -225,15 +309,15 @@ export class EmailService {
       `,
       text: `
         KYC Verification Needs Attention
-        
+
         Hi {{userName}},
-        
+
         We've reviewed your KYC submission and need some additional information or corrections.
-        
+
         Reason: {{reason}}
-        
+
         Please review the feedback and resubmit your documents at: {{kycUrl}}
-        
+
         If you have any questions, please contact our support team.
       `,
     };
@@ -283,17 +367,17 @@ export class EmailService {
       `,
       text: `
         Purchase Confirmed!
-        
+
         Hi {{userName}},
-        
+
         Thank you for your purchase! Your transaction has been confirmed.
-        
+
         Transaction Details:
         - Amount Paid: \${{amount}}
         - PRON Tokens: {{tokens}}
         - Payment Method: {{paymentMethod}}
         - Transaction ID: {{transactionId}}
-        
+
         Your tokens will be available for claiming after the presale ends.
         View your dashboard: {{dashboardUrl}}
       `,
@@ -322,26 +406,32 @@ export class EmailService {
       const results = await Promise.allSettled(emailPromises);
       const successCount = results.filter(result => result.status === 'fulfilled').length;
 
-      console.log(`Bulk email sent: ${successCount}/${recipients.length} successful`);
+      console.log(`[EmailService] Bulk email sent: ${successCount}/${recipients.length} successful`);
       return successCount > 0;
     } catch (error) {
-      console.error('Bulk email sending failed:', error);
+      console.error('[EmailService] Bulk email sending failed:', error);
       return false;
     }
   }
 
   async isEmailSentRecently(email: string, type: string, windowMinutes: number = 5): Promise<boolean> {
-    const cacheKey = `email_sent:${type}:${email}`;
-    const lastSent = await cache.get(cacheKey);
-    
-    if (lastSent) {
-      const timeSinceLastSent = Date.now() - parseInt(lastSent);
-      return timeSinceLastSent < windowMinutes * 60 * 1000;
-    }
+    try {
+      const cacheKey = `email_sent:${type}:${email}`;
+      const lastSent = await cache.get(cacheKey);
 
-    // Mark as sent
-    await cache.set(cacheKey, Date.now().toString(), windowMinutes * 60);
-    return false;
+      if (lastSent) {
+        const timeSinceLastSent = Date.now() - parseInt(lastSent);
+        return timeSinceLastSent < windowMinutes * 60 * 1000;
+      }
+
+      // Mark as sent
+      await cache.set(cacheKey, Date.now().toString(), windowMinutes * 60);
+      return false;
+    } catch (error) {
+      // If Redis is not available, allow the email to be sent
+      console.warn('[EmailService] Cache check failed (Redis may be unavailable):', error);
+      return false;
+    }
   }
 }
 
