@@ -46,7 +46,9 @@ const PresalePurchase = ({ className = '' }) => {
   // Get presale info from Web3Context or use defaults
   const currentPhase = presaleInfo?.currentPhase || 1;
   const tokenPrice = presaleInfo?.tokenPrice || '0.05';
-  const isWhitelisted = presaleInfo?.isWhitelisted || false;
+  // For testnet/development, allow purchases without strict whitelist check
+  // The smart contract will enforce whitelist if enabled
+  const isWhitelisted = presaleInfo?.isWhitelisted ?? true;
 
   // Use either real account or mock account for testing
   const activeAccount = account || mockAccount;

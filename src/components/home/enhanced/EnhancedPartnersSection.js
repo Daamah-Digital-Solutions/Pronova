@@ -178,25 +178,25 @@ const EnhancedPartnersSection = () => {
       icon: <FaBuilding size={20} />,
       companies: [
         {
-          name: "CAPI Max Holdings UK",
+          name: "Capimax Holdings UK",
           logo: capiMaxHoldingsLogo,
           description: "Parent company overseeing 12 global investment divisions",
           delay: 0.4
         },
         {
-          name: "CAPI Max Investments USA",
+          name: "Capimax Investments USA",
           logo: capiMaxInvestmentsUSALogo,
           description: "US-focused investment arm with American market expertise",
           delay: 0.45
         },
         {
-          name: "CAPI Max Investments UK",
+          name: "Capimax Investments UK",
           logo: capiMaxInvestmentsUKLogo,
           description: "European market specialist for UK and EU investments",
           delay: 0.5
         },
         {
-          name: "CAPI Max Investments UAE",
+          name: "Capimax Investments UAE",
           logo: capiMaxInvestmentsUAELogo,
           description: "Middle East regional hub for Gulf market operations",
           delay: 0.55
@@ -214,7 +214,7 @@ const EnhancedPartnersSection = () => {
       icon: <FaGlobe size={20} />,
       companies: [
         {
-          name: "CAPI Max Financial UK",
+          name: "Capimax Financial UK",
           logo: capiMaxFinancialLogo,
           description: "Capital markets and financial management services",
           delay: 0.65
@@ -244,7 +244,7 @@ const EnhancedPartnersSection = () => {
       icon: <FaHandshake size={20} />,
       companies: [
         {
-          name: "CAPI Max Development UK",
+          name: "Capimax Development UK",
           logo: capiMaxDevelopmentLogo,
           description: "Construction and development projects across the UK",
           delay: 0.85
@@ -280,13 +280,13 @@ const EnhancedPartnersSection = () => {
       icon: <FaStar size={20} />,
       companies: [
         {
-          name: "CAPI Max General Trading USA",
+          name: "Capimax General Trading USA",
           logo: capiMaxTradingLogo,
           description: "International trading and commercial operations",
           delay: 1.1
         },
         {
-          name: "CAPI Max Precious Metals UK",
+          name: "Capimax Precious Metals UK",
           logo: capiMaxMetalsLogo,
           description: "Investment in gold, silver, and precious minerals",
           delay: 1.15

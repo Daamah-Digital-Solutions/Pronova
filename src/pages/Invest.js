@@ -1338,6 +1338,120 @@ const Invest = () => {
         </div>
       </section>
 
+      {/* Investment Platforms Section */}
+      <section className={`relative py-20 ${
+        darkMode ? 'bg-dark-900' : 'bg-white'
+      }`}>
+        <div className="container-custom">
+          <FadeInWhenVisible>
+            <div className="text-center mb-12">
+              <div className={`inline-flex items-center px-6 py-2 rounded-full backdrop-blur-sm border mb-6 ${
+                darkMode
+                  ? 'bg-slate-900/60 border-slate-700/50 text-slate-300'
+                  : 'bg-white/60 border-gray-200/50 text-gray-700'
+              }`}>
+                <FaGlobe className={`w-4 h-4 mr-2 ${
+                  darkMode ? 'text-violet-400' : 'text-indigo-600'
+                }`} />
+                <span className="text-sm font-medium uppercase tracking-wider">Partner Platforms</span>
+              </div>
+              <h2 className={`text-3xl md:text-4xl font-heading font-bold mb-4 ${
+                darkMode ? 'text-white' : 'text-gray-900'
+              }`}>
+                Access Our <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">Investment Platforms</span>
+              </h2>
+              <p className={`text-lg max-w-3xl mx-auto ${
+                darkMode ? 'text-gray-300' : 'text-gray-600'
+              }`}>
+                Manage your investments and access exclusive opportunities through our partner platforms
+              </p>
+            </div>
+          </FadeInWhenVisible>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Capimax Investment Panel",
+                description: "Access institutional-grade investment opportunities across real estate, commodities, and tech startups.",
+                url: "https://panel.capimaxinvestment.com/",
+                icon: "📊",
+                features: ["Portfolio Management", "Investment Tracking", "Secure Transactions"],
+                color: "from-violet-600 to-purple-600"
+              },
+              {
+                name: "Capimax Tokenization",
+                description: "Real-world asset tokenization platform for fractional ownership and digital asset management.",
+                url: "https://capimaxrt.com",
+                icon: "🪙",
+                features: ["Asset Tokenization", "Fractional Ownership", "Digital Securities"],
+                color: "from-indigo-600 to-blue-600"
+              },
+              {
+                name: "Nova Digital Finance",
+                description: "Digital finance platform offering innovative financial solutions and investment products.",
+                url: "https://novadf.com",
+                icon: "💎",
+                features: ["Digital Finance", "Investment Products", "Financial Innovation"],
+                color: "from-purple-600 to-pink-600"
+              }
+            ].map((platform, index) => (
+              <FadeInWhenVisible key={index} delay={0.1 * (index + 1)}>
+                <motion.a
+                  href={platform.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group relative overflow-hidden rounded-3xl backdrop-blur-sm border transition-all duration-500 hover:scale-105 block h-full ${
+                    darkMode
+                      ? 'bg-slate-900/60 border-slate-700/50 hover:bg-slate-900/80 hover:border-slate-600'
+                      : 'bg-white/60 border-gray-200/50 hover:bg-white/80 hover:border-gray-300'
+                  }`}
+                  whileHover={{ y: -5 }}
+                >
+                  {/* Gradient Background */}
+                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${platform.color} opacity-10 rounded-full blur-2xl transform translate-x-16 -translate-y-16 group-hover:scale-150 transition-transform duration-700`} />
+
+                  <div className="relative p-8">
+                    <div className="text-4xl mb-4">{platform.icon}</div>
+                    <h3 className={`text-xl font-bold mb-3 ${
+                      darkMode ? 'text-white' : 'text-gray-900'
+                    }`}>
+                      {platform.name}
+                    </h3>
+                    <p className={`text-sm mb-6 leading-relaxed ${
+                      darkMode ? 'text-slate-400' : 'text-gray-600'
+                    }`}>
+                      {platform.description}
+                    </p>
+
+                    {/* Features */}
+                    <div className="space-y-2 mb-6">
+                      {platform.features.map((feature, featureIndex) => (
+                        <div key={featureIndex} className="flex items-center space-x-2">
+                          <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${platform.color}`} />
+                          <span className={`text-sm ${
+                            darkMode ? 'text-slate-300' : 'text-gray-700'
+                          }`}>{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* CTA */}
+                    <div className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 group-hover:scale-105 ${
+                      darkMode
+                        ? 'bg-gradient-to-r from-slate-700 to-slate-600 text-white'
+                        : 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-900'
+                    }`}>
+                      Visit Platform
+                      <FaExternalLinkAlt className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </motion.a>
+              </FadeInWhenVisible>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Partnership Info Section */}
       <section className={`relative py-16 border-t ${
         darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-gray-50 border-gray-200'

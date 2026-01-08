@@ -11,6 +11,12 @@ import {
   EnhancedPresaleSection
 } from '../components/home/enhanced';
 
+// New sections from client requirements
+import WhatIsPronovaSection from '../components/home/WhatIsPronovaSection';
+import DualNatureSection from '../components/home/DualNatureSection';
+import HolderBenefitsSection from '../components/home/HolderBenefitsSection';
+import DemandCreationSection from '../components/home/DemandCreationSection';
+
 const Home = () => {
   return (
     <>
@@ -131,6 +137,14 @@ const Home = () => {
 
       {/* Enhanced Home Page Sections */}
       <EnhancedHeroSection />
+
+      {/* New Client Content Sections */}
+      <WhatIsPronovaSection />
+      <DualNatureSection />
+      <HolderBenefitsSection />
+      <DemandCreationSection />
+
+      {/* Original Enhanced Sections */}
       <EnhancedLatestNewsSection />
       <EnhancedFeaturesSection />
       <EnhancedTokenomicsSection />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaWallet, FaRocket, FaCheckCircle, FaExternalLinkAlt, FaDollarSign } from 'react-icons/fa';
+import { FaWallet, FaRocket, FaCheckCircle, FaExternalLinkAlt, FaDollarSign, FaMobile, FaQrcode, FaSpinner } from 'react-icons/fa';
 import { useWeb3 } from '../context/Web3Context';
 import { useTheme } from '../context/ThemeContext';
 import Button from '../components/ui/Button';
@@ -12,9 +12,15 @@ const SimplePresale = () => {
     isConnected: web3IsConnected,
     account: web3Account,
     connectWallet,
+    connectWalletConnect,
+    openInMetaMask,
     presaleInfo,
     loadPresaleInfo,
-    chainId
+    chainId,
+    isConnecting,
+    error: walletError,
+    isMobile,
+    isWalletBrowser
   } = useWeb3();
 
   const [usdAmount, setUsdAmount] = useState('100');
@@ -49,12 +55,15 @@ const SimplePresale = () => {
     }
 
     const usd = parseFloat(usdAmount);
-    const tokenPrice = presaleInfo?.tokenPrice || 0.014;
+    // Get token price with safe fallback (Phase 1 = $0.80)
+    const tokenPriceRaw = parseFloat(presaleInfo?.tokenPrice) || 0;
+    const tokenPrice = tokenPriceRaw > 0 ? tokenPriceRaw : 0.80; // Default to Phase 1 price
 
     const bnb = bnbPrice > 0 ? (usd / bnbPrice).toFixed(6) : '0';
     setBnbNeeded(bnb);
 
-    const tokens = (usd / tokenPrice).toFixed(2);
+    // Safe division - only calculate if tokenPrice is valid
+    const tokens = tokenPrice > 0 ? (usd / tokenPrice).toFixed(2) : '0';
     setPrnTokens(tokens);
   }, [usdAmount, bnbPrice, presaleInfo]);
 
@@ -107,9 +116,17 @@ const SimplePresale = () => {
     }
   };
 
-  const progressPercentage = presaleInfo?.totalRaised && presaleInfo?.hardCap
-    ? ((parseFloat(presaleInfo.totalRaised) / parseFloat(presaleInfo.hardCap)) * 100).toFixed(2)
-    : 0;
+  // Safe progress percentage calculation - avoid NaN/Infinity
+  const calculateProgressPercentage = () => {
+    const raised = parseFloat(presaleInfo?.totalRaised) || 0;
+    const cap = parseFloat(presaleInfo?.hardCap) || 0;
+    // Only calculate if hardCap is positive to avoid division by zero
+    if (cap > 0) {
+      return ((raised / cap) * 100).toFixed(2);
+    }
+    return '0.00';
+  };
+  const progressPercentage = calculateProgressPercentage();
 
   const explorerUrl = chainId === 56
     ? 'https://bscscan.com'
@@ -185,7 +202,7 @@ const SimplePresale = () => {
                 <span className={`font-semibold ${
                   darkMode ? 'text-secondary-300' : 'text-secondary-700'
                 }`}>
-                  ${presaleInfo?.tokenPrice || '0.014'} / PRN
+                  ${parseFloat(presaleInfo?.tokenPrice) || 0.80} / PRN
                 </span>
               </div>
             </div>
@@ -217,13 +234,13 @@ const SimplePresale = () => {
               <div className="text-center">
                 <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Raised</p>
                 <p className={`font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  ${presaleInfo?.totalRaised || '0'}
+                  ${parseFloat(presaleInfo?.totalRaised || 0).toLocaleString()}
                 </p>
               </div>
               <div className="text-center">
                 <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Target</p>
                 <p className={`font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  ${presaleInfo?.hardCap || '31,000,000'}
+                  ${(parseFloat(presaleInfo?.hardCap) || 31000000).toLocaleString()}
                 </p>
               </div>
             </div>
@@ -245,15 +262,76 @@ const SimplePresale = () => {
                   MetaMask, Trust Wallet, or WalletConnect
                 </p>
               </div>
+
+              {/* Wallet Error Message */}
+              {walletError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 mb-4"
+                >
+                  <p className="text-red-400 text-sm font-medium">{walletError}</p>
+                </motion.div>
+              )}
+
+              {/* Main Connect Button */}
               <Button
                 variant="gradient"
                 size="large"
                 fullWidth
-                onClick={connectWallet}
+                onClick={() => connectWallet()}
+                disabled={isConnecting}
               >
-                <FaWallet />
-                Connect Wallet
+                {isConnecting ? (
+                  <>
+                    <FaSpinner className="animate-spin" />
+                    Connecting...
+                  </>
+                ) : (
+                  <>
+                    <FaWallet />
+                    Connect Wallet
+                  </>
+                )}
               </Button>
+
+              {/* Mobile-specific options */}
+              {isMobile && !isWalletBrowser && (
+                <div className="mt-4 space-y-3">
+                  <div className={`text-center ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                    <span className="text-xs">or connect with</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    {/* Open in MetaMask App */}
+                    <button
+                      onClick={openInMetaMask}
+                      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all ${
+                        darkMode
+                          ? 'bg-dark-900 border border-primary-600/30 text-gray-300 hover:border-primary-500'
+                          : 'bg-gray-100 border border-gray-300 text-gray-700 hover:border-primary-500'
+                      }`}
+                    >
+                      <FaMobile className="text-lg" />
+                      <span className="text-sm font-medium">MetaMask App</span>
+                    </button>
+
+                    {/* WalletConnect QR */}
+                    <button
+                      onClick={() => connectWalletConnect()}
+                      disabled={isConnecting}
+                      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all ${
+                        darkMode
+                          ? 'bg-dark-900 border border-primary-600/30 text-gray-300 hover:border-primary-500'
+                          : 'bg-gray-100 border border-gray-300 text-gray-700 hover:border-primary-500'
+                      }`}
+                    >
+                      <FaQrcode className="text-lg" />
+                      <span className="text-sm font-medium">WalletConnect</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </motion.div>
           ) : (
             <motion.div

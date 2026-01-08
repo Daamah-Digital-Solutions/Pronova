@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaWallet, FaExchangeAlt, FaHistory, FaChartLine, FaEthereum, FaDollarSign } from 'react-icons/fa';
+import { FaWallet, FaExchangeAlt, FaHistory, FaChartLine, FaEthereum, FaDollarSign, FaGlobe, FaExternalLinkAlt, FaBell } from 'react-icons/fa';
 import { SiTether } from 'react-icons/si';
 import Button from '../components/ui/Button';
 import { useSimpleWallet } from '../context/SimpleWalletContext';
@@ -70,7 +70,37 @@ const Dashboard = () => {
   const tabs = [
     { id: 'buy', label: 'Buy Tokens', icon: <FaExchangeAlt /> },
     { id: 'transactions', label: 'Transactions', icon: <FaHistory /> },
-    { id: 'stats', label: 'Statistics', icon: <FaChartLine /> }
+    { id: 'stats', label: 'Statistics', icon: <FaChartLine /> },
+    { id: 'platforms', label: 'Platforms', icon: <FaGlobe /> },
+    { id: 'alerts', label: 'Alerts', icon: <FaBell /> }
+  ];
+
+  // External platform links (UI-only, no backend integration)
+  const investmentPlatforms = [
+    {
+      name: "Capimax Investment Panel",
+      description: "Access institutional-grade investment opportunities across real estate, commodities, and tech startups.",
+      url: "https://panel.capimaxinvestment.com/",
+      icon: "📊",
+      features: ["Portfolio Management", "Investment Tracking", "Secure Transactions"],
+      color: "from-violet-600 to-purple-600"
+    },
+    {
+      name: "Capimax Tokenization",
+      description: "Real-world asset tokenization platform for fractional ownership and digital asset management.",
+      url: "https://capimaxrt.com",
+      icon: "🪙",
+      features: ["Asset Tokenization", "Fractional Ownership", "Digital Securities"],
+      color: "from-indigo-600 to-blue-600"
+    },
+    {
+      name: "Nova Digital Finance",
+      description: "Digital finance platform offering innovative financial solutions and investment products.",
+      url: "https://novadf.com",
+      icon: "💎",
+      features: ["Digital Finance", "Investment Products", "Financial Innovation"],
+      color: "from-purple-600 to-pink-600"
+    }
   ];
 
   const calculateTokens = () => {
@@ -585,30 +615,30 @@ const Dashboard = () => {
                   {activeTab === 'stats' && (
                     <div className="p-6">
                       <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Presale Statistics</h2>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                         <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                           <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Raised</div>
                           <div className="text-2xl font-bold text-gray-900 dark:text-white">$36,000,000</div>
                           <div className="text-sm text-green-600 dark:text-green-400">45% of Phase 1 Goal</div>
                         </div>
-                        
+
                         <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                           <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Participants</div>
                           <div className="text-2xl font-bold text-gray-900 dark:text-white">8,459</div>
                           <div className="text-sm text-gray-600 dark:text-gray-400">Unique Wallets</div>
                         </div>
-                        
+
                         <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                           <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Time Remaining</div>
                           <div className="text-2xl font-bold text-gray-900 dark:text-white">15 Days</div>
                           <div className="text-sm text-gray-600 dark:text-gray-400">Until Phase 2</div>
                         </div>
                       </div>
-                      
+
                       <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg mb-8">
                         <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Presale Phases</h3>
-                        
+
                         <div className="space-y-6">
                           <div>
                             <div className="flex justify-between mb-2">
@@ -623,7 +653,7 @@ const Dashboard = () => {
                               <span className="text-gray-600 dark:text-gray-400">45% Complete</span>
                             </div>
                           </div>
-                          
+
                           <div>
                             <div className="flex justify-between mb-2">
                               <span className="font-medium text-gray-900 dark:text-white">Phase 2</span>
@@ -637,7 +667,7 @@ const Dashboard = () => {
                               <span className="text-gray-600 dark:text-gray-400">0% Complete</span>
                             </div>
                           </div>
-                          
+
                           <div>
                             <div className="flex justify-between mb-2">
                               <span className="font-medium text-gray-900 dark:text-white">Phase 3</span>
@@ -653,7 +683,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="text-center">
                         <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Expected Listing Price</h3>
                         <div className="bg-gradient-to-r from-primary-100 to-secondary-100 dark:from-primary-900/30 dark:to-secondary-900/30 p-4 rounded-lg inline-block">
@@ -663,6 +693,118 @@ const Dashboard = () => {
                           <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                             Up to 212.5% from Phase 1 price
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Investment Platforms Tab - UI Only with External Links */}
+                  {activeTab === 'platforms' && (
+                    <div className="p-6">
+                      <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Investment Platforms</h2>
+                      <p className="text-gray-600 dark:text-gray-400 mb-6">
+                        Access our partner investment platforms to manage your investments and explore opportunities.
+                      </p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        {investmentPlatforms.map((platform, index) => (
+                          <motion.a
+                            key={index}
+                            href={platform.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group block bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-500 transition-all duration-300 hover:shadow-lg"
+                            whileHover={{ y: -5 }}
+                          >
+                            <div className={`h-2 bg-gradient-to-r ${platform.color}`}></div>
+                            <div className="p-6">
+                              <div className="text-3xl mb-3">{platform.icon}</div>
+                              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                                {platform.name}
+                              </h3>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                {platform.description}
+                              </p>
+
+                              {/* Features */}
+                              <div className="space-y-1 mb-4">
+                                {platform.features.map((feature, featureIndex) => (
+                                  <div key={featureIndex} className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                                    <span className="w-1.5 h-1.5 bg-primary-500 rounded-full mr-2"></span>
+                                    {feature}
+                                  </div>
+                                ))}
+                              </div>
+
+                              <div className="flex items-center text-primary-600 dark:text-primary-400 font-medium text-sm group-hover:translate-x-1 transition-transform">
+                                Open Platform
+                                <FaExternalLinkAlt className="ml-2 w-3 h-3" />
+                              </div>
+                            </div>
+                          </motion.a>
+                        ))}
+                      </div>
+
+                      {/* Info Box */}
+                      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                        <div className="flex items-start">
+                          <div className="flex-shrink-0">
+                            <FaGlobe className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                          </div>
+                          <div className="ml-3">
+                            <h4 className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                              External Platforms
+                            </h4>
+                            <p className="mt-1 text-sm text-blue-700 dark:text-blue-300">
+                              These links will redirect you to external partner platforms. Each platform has its own registration and terms of service. Your Pronova tokens can be used across all partner platforms for discounts and benefits.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Alerts Tab - Coming Soon Placeholder */}
+                  {activeTab === 'alerts' && (
+                    <div className="p-6">
+                      <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Alerts & Notifications</h2>
+                      <p className="text-gray-600 dark:text-gray-400 mb-6">
+                        Stay updated with important announcements and personalized alerts.
+                      </p>
+
+                      {/* Coming Soon Banner */}
+                      <div className="text-center py-16 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full mb-6">
+                          <FaBell className="w-10 h-10 text-white" />
+                        </div>
+
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                          Coming Soon
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-6">
+                          We're building an advanced notification system to keep you informed about price alerts, presale updates, and important announcements.
+                        </p>
+
+                        {/* Planned Features */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto mt-8">
+                          {[
+                            { icon: '📈', title: 'Price Alerts', desc: 'Get notified on price changes' },
+                            { icon: '📢', title: 'Announcements', desc: 'Important project updates' },
+                            { icon: '🎯', title: 'Milestones', desc: 'Track presale progress' }
+                          ].map((feature, index) => (
+                            <div key={index} className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                              <div className="text-2xl mb-2">{feature.icon}</div>
+                              <div className="font-medium text-gray-900 dark:text-white text-sm">{feature.title}</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">{feature.desc}</div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="mt-8">
+                          <span className="inline-flex items-center px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 text-sm font-medium rounded-full">
+                            <span className="w-2 h-2 bg-primary-500 rounded-full mr-2 animate-pulse"></span>
+                            In Development
+                          </span>
                         </div>
                       </div>
                     </div>

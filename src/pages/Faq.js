@@ -23,7 +23,7 @@ const Faq = () => {
     general: [
       {
         question: "What is Pronova (PRN)?",
-        answer: "Pronova (PRN) is an innovative cryptocurrency developed by CAPI MAX Holding, a British-American company that owns 12 global investment companies operating in over 60 business fields.\n\nPronova revolutionizes the investment landscape by providing seamless integration of cryptocurrencies into traditional business practices, offering immediate utility through partnerships with 18 international companies across real estate, gold trading, insurance, and financial services.\n\nBuilt on Ethereum blockchain, Pronova serves not just as a digital currency but as a gateway to real-world investments with guaranteed discounts and corporate benefits."
+        answer: "Pronova (PRN) is an innovative cryptocurrency developed by Capimax Holding, a British-American company that owns 12 global investment companies operating in over 60 business fields.\n\nPronova revolutionizes the investment landscape by providing seamless integration of cryptocurrencies into traditional business practices, offering immediate utility through partnerships with 18 international companies across real estate, gold trading, insurance, and financial services.\n\nBuilt on Ethereum blockchain, Pronova serves not just as a digital currency but as a gateway to real-world investments with guaranteed discounts and corporate benefits."
       },
       {
         question: "What blockchain is Pronova built on?",
@@ -89,7 +89,7 @@ const Faq = () => {
     partnerships: [
       {
         question: "Which companies are partnered with Pronova?",
-        answer: "Pronova has established partnerships with 18 international companies across diverse sectors:\n\n🏢 CAPI MAX Group:\n• CAPI MAX Holdings UK (Parent Company)\n• CAPI MAX Investments (USA, UK, UAE)\n• CAPI MAX Financial UK\n• CAPI MAX Development UK\n• CAPI MAX General Trading USA\n\n🛡️ Insurance Partners:\n• HCC International Insurance (USA/UK)\n• Assurax Insurance (USA/UK)\n• CIM Financial Group (USA/UK)\n\n🏠 Real Estate Partners:\n• TDH Developments (UK/UAE)\n• Elite Gate Properties (UK)\n• Nova Property Management (UK)\n• Future Real Estate Group\n\n🏨 Hospitality:\n• Prime Inn Hotels (USA/UK)\n\n💼 Investment Partners:\n• Profit Max Investments (UK)\n• Trustech Group (UK/UAE)\n\nAll partnerships are legally documented and registered on official company websites."
+        answer: "Pronova has established partnerships with 18 international companies across diverse sectors:\n\n🏢 Capimax Group:\n• Capimax Holdings UK (Parent Company)\n• Capimax Investments (USA, UK, UAE)\n• Capimax Financial UK\n• Capimax Development UK\n• Capimax General Trading USA\n\n🛡️ Insurance Partners:\n• HCC International Insurance (USA/UK)\n• Assurax Insurance (USA/UK)\n• CIM Financial Group (USA/UK)\n\n🏠 Real Estate Partners:\n• TDH Developments (UK/UAE)\n• Elite Gate Properties (UK)\n• Nova Property Management (UK)\n• Future Real Estate Group\n\n🏨 Hospitality:\n• Prime Inn Hotels (USA/UK)\n\n💼 Investment Partners:\n• Profit Max Investments (UK)\n• Trustech Group (UK/UAE)\n\nAll partnerships are legally documented and registered on official company websites."
       },
       {
         question: "How do partnerships benefit Pronova holders?",

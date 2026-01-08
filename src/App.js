@@ -11,11 +11,12 @@ import ScrollToTop from './components/ui/ScrollToTop';
 // Pages
 import Home from './pages/Home';
 import Invest from './pages/Invest';
-import Presale from './pages/Presale';
 import SimplePresale from './pages/SimplePresale';
 import Whitepaper from './pages/Whitepaper';
 import Roadmap from './pages/Roadmap';
 import Team from './pages/Team';
+import Partners from './pages/Partners';
+import Stability from './pages/Stability';
 import Faq from './pages/Faq';
 import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
@@ -41,11 +42,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/invest" element={<Invest />} />
-          <Route path="/presale" element={<Presale />} />
-          <Route path="/simple-presale" element={<SimplePresale />} />
+          <Route path="/presale" element={<SimplePresale />} />
           <Route path="/whitepaper" element={<Whitepaper />} />
           <Route path="/roadmap" element={<Roadmap />} />
           <Route path="/team" element={<Team />} />
+          <Route path="/partners" element={<Partners />} />
+          <Route path="/stability" element={<Stability />} />
           <Route path="/faq" element={<Faq />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/dashboard" element={<Dashboard />} />

@@ -6,31 +6,31 @@ const PartnersSection = () => {
   // Partner data from whitepaper
   const partners = [
     {
-      name: "CAPI Max Holdings UK",
+      name: "Capimax Holdings UK",
       description: "British-American company that owns 12 investment companies",
       website: "#",
       delay: 0.1
     },
     {
-      name: "CAPI Max Investments USA",
+      name: "Capimax Investments USA",
       description: "US-based investment arm specializing in American markets",
       website: "#",
       delay: 0.15
     },
     {
-      name: "CAPI Max Investments UK",
+      name: "Capimax Investments UK",
       description: "UK-based investment division focusing on European markets",
       website: "#",
       delay: 0.2
     },
     {
-      name: "CAPI Max Investments UAE",
+      name: "Capimax Investments UAE",
       description: "Middle East investment division focused on regional growth",
       website: "#",
       delay: 0.25
     },
     {
-      name: "CAPI Max Financial UK",
+      name: "Capimax Financial UK",
       description: "Specializing in financial management and capital markets",
       website: "#",
       delay: 0.3

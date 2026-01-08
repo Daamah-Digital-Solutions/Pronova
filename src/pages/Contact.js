@@ -145,21 +145,21 @@ const Contact = () => {
     {
       city: 'London',
       country: 'United Kingdom',
-      address: 'CAPI MAX Holdings UK\n123 Financial District\nLondon EC2V 8AS',
+      address: 'Capimax Holdings UK\n123 Financial District\nLondon EC2V 8AS',
       timezone: 'GMT',
       flag: '🇬🇧'
     },
     {
       city: 'New York',
       country: 'United States',
-      address: 'CAPI MAX Investments USA\n456 Wall Street\nNew York, NY 10005',
+      address: 'Capimax Investments USA\n456 Wall Street\nNew York, NY 10005',
       timezone: 'EST',
       flag: '🇺🇸'
     },
     {
       city: 'Dubai',
       country: 'United Arab Emirates',
-      address: 'CAPI MAX Investments UAE\n789 Business Bay\nDubai, UAE',
+      address: 'Capimax Investments UAE\n789 Business Bay\nDubai, UAE',
       timezone: 'GST',
       flag: '🇦🇪'
     }

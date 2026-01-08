@@ -110,8 +110,8 @@ const Footer = () => {
             </div>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
               {language === 'en' 
-                ? 'Revolutionary cryptocurrency developed by CAPI MAX Holding, bridging traditional finance with blockchain technology.'
-                : 'عملة مشفرة ثورية طورتها CAPI MAX القابضة، تجمع بين التمويل التقليدي وتقنية البلوكتشين.'}
+                ? 'Revolutionary cryptocurrency developed by Capimax Holding, bridging traditional finance with blockchain technology.'
+                : 'عملة مشفرة ثورية طورتها Capimax القابضة، تجمع بين التمويل التقليدي وتقنية البلوكتشين.'}
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
               <a 

@@ -79,14 +79,14 @@ const Whitepaper = () => {
 
   // Company data arrays
   const capiMaxCompanies = [
-    { name: 'CAPI Max Holdings UK', logo: capiMaxHoldingsLogo, website: 'https://www.capimaxholding.com' },
-    { name: 'CAPI Max Investments USA', logo: capiMaxInvestmentsUSALogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'CAPI Max Investments UK', logo: capiMaxInvestmentsUKLogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'CAPI Max Investments UAE', logo: capiMaxInvestmentsUAELogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'CAPI Max Financial UK', logo: capiMaxFinancialLogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'CAPI Max General Trading USA', logo: capiMaxTradingLogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'CAPI Max Development UK', logo: capiMaxDevelopmentLogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'CAPI Max Investment in Precious Metals UK', logo: capiMaxMetalsLogo, website: 'https://www.capimaxinvestments.com' }
+    { name: 'Capimax Holdings UK', logo: capiMaxHoldingsLogo, website: 'https://www.capimaxholding.com' },
+    { name: 'Capimax Investments USA', logo: capiMaxInvestmentsUSALogo, website: 'https://www.capimaxinvestments.com' },
+    { name: 'Capimax Investments UK', logo: capiMaxInvestmentsUKLogo, website: 'https://www.capimaxinvestments.com' },
+    { name: 'Capimax Investments UAE', logo: capiMaxInvestmentsUAELogo, website: 'https://www.capimaxinvestments.com' },
+    { name: 'Capimax Financial UK', logo: capiMaxFinancialLogo, website: 'https://www.capimaxinvestments.com' },
+    { name: 'Capimax General Trading USA', logo: capiMaxTradingLogo, website: 'https://www.capimaxinvestments.com' },
+    { name: 'Capimax Development UK', logo: capiMaxDevelopmentLogo, website: 'https://www.capimaxinvestments.com' },
+    { name: 'Capimax Investment in Precious Metals UK', logo: capiMaxMetalsLogo, website: 'https://www.capimaxinvestments.com' }
   ];
 
   const partnerCompanies = [
@@ -202,7 +202,7 @@ const Whitepaper = () => {
               className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed"
             >
               Revolutionary cryptocurrency developed by 
-              <span className="text-primary-600 dark:text-primary-400 font-semibold"> CAPI MAX Holding</span> - 
+              <span className="text-primary-600 dark:text-primary-400 font-semibold"> Capimax Holding</span> - 
               bridging traditional business with cryptocurrency innovation through 
               <span className="text-secondary-600 dark:text-secondary-400 font-semibold"> 18+ international companies</span> 
               across <span className="text-primary-600 dark:text-primary-400 font-semibold">60+ business fields</span>.
@@ -363,7 +363,7 @@ const Whitepaper = () => {
                     <div className="prose prose-xl max-w-none dark:prose-invert">
                       <p className="text-xl leading-relaxed mb-6 text-gray-700 dark:text-gray-300">
                         <strong className="text-primary-600 dark:text-primary-400">Pronova</strong> is an innovative cryptocurrency developed by{' '}
-                        <strong className="text-secondary-600 dark:text-secondary-400">CAPI MAX Holding</strong>, 
+                        <strong className="text-secondary-600 dark:text-secondary-400">Capimax Holding</strong>, 
                         a British-American company that owns 12 Global companies, working in more than 60 fields including Finance, 
                         investment fund trust, Market Administration, Gold, silver, petroleum Trading, real estate financing, 
                         financial leasing, Tourism, Fintech, commercial activity, AI Activity, cryptocurrency financial management, 
@@ -373,17 +373,17 @@ const Whitepaper = () => {
                       {/* Company showcase */}
                       <div className="bg-white dark:bg-dark-800 rounded-xl p-8 my-8 border border-primary-200 dark:border-gray-700 shadow-lg">
                         <h4 className="text-2xl font-semibold mb-6 text-primary-700 dark:text-primary-400 text-center">
-                          🏢 CAPI MAX Holding Companies
+                          🏢 Capimax Holding Companies
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-base">
                           <div className="space-y-3">
                             {[
-                              'Capi Max Holding UK',
-                              'Capi Max Investments USA',
-                              'Capi Max Investments UK',
-                              'CapiMax General Trading USA',
-                              'CapiMax Development UK',
-                              'Capi Max Investment In Mineral and Precious Metal UK'
+                              'Capimax Holding UK',
+                              'Capimax Investments USA',
+                              'Capimax Investments UK',
+                              'Capimax General Trading USA',
+                              'Capimax Development UK',
+                              'Capimax Investment In Mineral and Precious Metal UK'
                             ].map((company, index) => (
                               <motion.div
                                 key={index}
@@ -402,8 +402,8 @@ const Whitepaper = () => {
                           </div>
                           <div className="space-y-3">
                             {[
-                              'Capi Max Financial UK',
-                              'Capi Max Investments UAE',
+                              'Capimax Financial UK',
+                              'Capimax Investments UAE',
                               'HCC Cyber Insurance',
                               'CIM Financial',
                               'Assurax Insurance and Credit Risk',
@@ -840,7 +840,7 @@ const Whitepaper = () => {
                     </h2>
                   </div>
                   
-                  {/* CAPI MAX Companies */}
+                  {/* Capimax Companies */}
                   <div className="mb-16">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -850,7 +850,7 @@ const Whitepaper = () => {
                       className="text-center mb-12"
                     >
                       <h3 className="text-3xl font-semibold mb-4 text-primary-700 dark:text-primary-400">
-                        🏢 CAPI MAX Group Companies
+                        🏢 Capimax Group Companies
                       </h3>
                       <p className="text-lg text-gray-600 dark:text-gray-400">
                         The core companies driving Pronova's innovation and growth
@@ -1700,7 +1700,7 @@ const Whitepaper = () => {
                           <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
                             <h4 className="font-semibold text-purple-600 dark:text-purple-400 mb-2">Supervisory Board</h4>
                             <p className="text-sm text-gray-600 dark:text-gray-400">
-                              CAPI Max Financial and Risk Management, HCC Insurance & Risk, CIM Financial, Assurax Risk Assurance
+                              Capimax Financial and Risk Management, HCC Insurance & Risk, CIM Financial, Assurax Risk Assurance
                             </p>
                           </div>
                           <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
@@ -1748,12 +1748,12 @@ const Whitepaper = () => {
                         Legal Structure
                       </h3>
                       <p className="mb-6 text-gray-700 dark:text-gray-300">
-                        Formation of CAPI Max Holding is a company registered and licensed from the following countries:
+                        Formation of Capimax Holding is a company registered and licensed from the following countries:
                       </p>
                       <div className="grid grid-cols-1 gap-3">
                         {[
-                          'CAPI Max investments UK',
-                          'CAPI Max Investments USA',
+                          'Capimax investments UK',
+                          'Capimax Investments USA',
                           'HCC Insurance & Risk',
                           'CIM Finance',
                           'Assurax Risk Assurance',

@@ -256,7 +256,7 @@ const Team = () => {
   // Core Team data with enhanced structure
   const coreTeam = [
     {
-      name: "CAPI Max Holdings UK",
+      name: "Capimax Holdings UK",
       role: "Lead Organization",
       description: "British-American company that owns 12 global investment companies across diverse sectors including finance, real estate, and precious metals.",
       icon: <FaBuilding />,
@@ -265,7 +265,7 @@ const Team = () => {
       delay: 0.1
     },
     {
-      name: "CAPI Max Financial Management",
+      name: "Capimax Financial Management",
       role: "Risk & Capital Markets",
       description: "Specializing in financial risk management, capital markets oversight, and strategic investment planning across global markets.",
       icon: <FaChartLine />,
@@ -319,35 +319,35 @@ const Team = () => {
       description: "Leading investment firms providing diverse financial services",
       partners: [
         {
-          name: "CAPI Max Holdings UK",
+          name: "Capimax Holdings UK",
           logo: capiMaxHoldingsLogo,
           description: "Parent company overseeing global investment operations",
           website: "https://www.capimaxholding.com",
           delay: 0.1
         },
         {
-          name: "CAPI Max Investments USA",
+          name: "Capimax Investments USA",
           logo: capiMaxInvestmentsUSALogo,
           description: "US investment division focusing on American markets",
           website: "https://www.capimaxinvestments.com",
           delay: 0.15
         },
         {
-          name: "CAPI Max Investments UK",
+          name: "Capimax Investments UK",
           logo: capiMaxInvestmentsUKLogo,
           description: "UK investment arm specializing in European markets",
           website: "https://www.capimaxinvestments.com",
           delay: 0.2
         },
         {
-          name: "CAPI Max Investments UAE",
+          name: "Capimax Investments UAE",
           logo: capiMaxInvestmentsUAELogo,
           description: "Middle East investment hub for regional growth",
           website: "https://www.capimaxinvestments.com",
           delay: 0.25
         },
         {
-          name: "CAPI Max Financial UK",
+          name: "Capimax Financial UK",
           logo: capiMaxFinancialLogo,
           description: "Financial management and capital markets expertise",
           website: "https://www.capimaxinvestments.com",
@@ -403,7 +403,7 @@ const Team = () => {
       description: "Premium property development and investment opportunities",
       partners: [
         {
-          name: "CAPI Max Development UK",
+          name: "Capimax Development UK",
           logo: capiMaxDevelopmentLogo,
           description: "Construction and development projects across the UK",
           website: "https://www.capimaxdevelopment.com",
@@ -445,14 +445,14 @@ const Team = () => {
       description: "Global trading operations and precious metals investment",
       partners: [
         {
-          name: "CAPI Max General Trading USA",
+          name: "Capimax General Trading USA",
           logo: capiMaxTradingLogo,
           description: "International trading and commercial operations",
           website: "https://www.capimaxtrading.com",
           delay: 0.75
         },
         {
-          name: "CAPI Max Precious Metals UK",
+          name: "Capimax Precious Metals UK",
           logo: capiMaxMetalsLogo,
           description: "Investment in gold, silver, and precious minerals",
           website: "https://www.capimaxmetals.com",
@@ -727,12 +727,12 @@ const Team = () => {
                 <h3 className={`text-3xl md:text-4xl font-heading font-bold mb-4 ${
                   darkMode ? 'text-white' : 'text-gray-900'
                 }`}>
-                  <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">Governance</span> Structure
+                  <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">Distributed</span> Governance
                 </h3>
                 <p className={`text-lg leading-relaxed max-w-3xl mx-auto ${
                   darkMode ? 'text-gray-300' : 'text-gray-600'
                 }`}>
-                  Pronova's team, companies, diversity, and success are managed by teams, groups, companies, and entities. We operate with distributed responsibilities, powers, and control across multiple organizations.
+                  Pronova is not controlled by any single individual. Our team, companies, diversity, and success are managed by <strong className={darkMode ? 'text-white' : 'text-gray-900'}>teams, groups, companies, and entities</strong> with distributed responsibilities, powers, and controls.
                 </p>
               </div>
               
@@ -741,7 +741,7 @@ const Team = () => {
                   {
                     title: "Supervisory Board",
                     icon: <FaShieldAlt className="w-6 h-6" />,
-                    description: "A team composed of CAPI Max for Financial and Risk Management, Cryptocurrencies, HCC Insurance & Risk, CIM Financial, and Assurax Risk Assurance."
+                    description: "A team composed of Capimax for Financial and Risk Management, Cryptocurrencies, HCC Insurance & Risk, CIM Financial, and Assurax Risk Assurance."
                   },
                   {
                     title: "Advisory Board",

@@ -289,7 +289,7 @@ const HeroSection = () => {
                   <span className="bg-primary-600 rounded-xl text-white text-xs py-1 px-3 mr-2">NEW</span>
                   <span className={`text-sm font-medium ${
                     darkMode ? 'text-primary-400' : 'text-primary-700'
-                  } pr-3`}>Revolutionary Cryptocurrency by CAPI MAX</span>
+                  } pr-3`}>Revolutionary Cryptocurrency by Capimax</span>
                 </div>
               </div>
               
