@@ -88,7 +88,13 @@ export const Web3Provider = ({ children }) => {
         totalRaised: progress?.totalRaised || 0,
         hardCap: progress?.hardCap || 31000000, // Total presale hard cap
         userPurchased: userInfo?.totalTokens || 0,
-        isWhitelisted
+        isWhitelisted,
+        // Phase timing info for countdown
+        phaseStartTime: phaseInfo?.startTime || null,
+        phaseEndTime: phaseInfo?.endTime || null,
+        isPhaseActive: phaseInfo?.isActive || false,
+        tokensAllocated: phaseInfo?.tokensAllocated || 0,
+        tokensSold: phaseInfo?.tokensSold || 0
       });
     } catch (error) {
       console.error('Error loading presale info:', error);
@@ -99,7 +105,12 @@ export const Web3Provider = ({ children }) => {
         totalRaised: 0,
         hardCap: 31000000, // Total presale hard cap
         userPurchased: 0,
-        isWhitelisted: false
+        isWhitelisted: false,
+        phaseStartTime: null,
+        phaseEndTime: null,
+        isPhaseActive: false,
+        tokensAllocated: 0,
+        tokensSold: 0
       });
     }
   }, [account]);

@@ -469,6 +469,39 @@ contract PronovaPresale is AccessControl, ReentrancyGuard, Pausable {
     }
 
     /**
+     * @dev Update phase time window with multi-sig (for testnet/admin adjustments)
+     * @param phaseId The phase number (1, 2, or 3)
+     * @param _startTime New start timestamp
+     * @param _endTime New end timestamp
+     */
+    function setPhaseTime(uint256 phaseId, uint256 _startTime, uint256 _endTime) external onlyRole(ADMIN_ROLE) {
+        require(phaseId >= 1 && phaseId <= TOTAL_PHASES, "Invalid phase");
+        require(_endTime > _startTime, "End must be after start");
+        require(_endTime > block.timestamp, "End time must be in future");
+
+        bytes32 operationId = keccak256(abi.encodePacked("SET_PHASE_TIME", phaseId, _startTime, _endTime));
+
+        if (!operationConfirmations[operationId][msg.sender]) {
+            operationConfirmations[operationId][msg.sender] = true;
+            operationConfirmationCount[operationId]++;
+            emit OperationConfirmed(operationId, msg.sender);
+
+            if (operationConfirmationCount[operationId] < REQUIRED_CONFIRMATIONS) {
+                return;
+            }
+        }
+
+        require(!operationExecuted[operationId], "Already executed");
+        operationExecuted[operationId] = true;
+
+        phases[phaseId].startTime = _startTime;
+        phases[phaseId].endTime = _endTime;
+
+        emit PhaseUpdated(phaseId, phases[phaseId].isActive);
+        emit OperationExecuted(operationId);
+    }
+
+    /**
      * @dev Update fallback oracle prices (requires multi-sig + can only update when presale inactive)
      * @notice Prevents price manipulation during active sale phases
      */

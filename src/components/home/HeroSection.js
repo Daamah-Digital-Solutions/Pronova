@@ -5,9 +5,13 @@ import { BiCoin } from 'react-icons/bi';
 import Button from '../ui/Button';
 import CountdownTimer from '../ui/CountdownTimer';
 import { useTheme } from '../../context/ThemeContext';
+import { getCurrentPhaseConfig, getNextPhasePrice } from '../../config/presaleConfig';
 
 const HeroSection = () => {
   const { darkMode } = useTheme();
+
+  // Get current phase from frontend config (UI/marketing only)
+  const [phaseConfig, setPhaseConfig] = useState(getCurrentPhaseConfig());
 
   // Animated code lines for tech effect
   const codeLines = [
@@ -16,8 +20,14 @@ const HeroSection = () => {
     { icon: <FaCode size={22} />, delay: 3, offsetX: '85%', offsetY: '70%', duration: 21, className: 'text-primary-500/50 floating-coin' },
   ];
 
-  // Presale Phase 1 end date (based on whitepaper roadmap)
-  const presalePhase1EndDate = new Date('2025-07-30T23:59:59');
+  // Update phase config periodically (in case phase changes)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPhaseConfig(getCurrentPhaseConfig());
+    }, 60000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, []);
   
   // State for animated text cycling
   const [textIndex, setTextIndex] = useState(0);
@@ -476,7 +486,7 @@ const HeroSection = () => {
                     >
                       <div className="flex items-center">
                         <FaChartLine className="text-primary-400 mr-2" />
-                        <span className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>Presale Phase 1 Active</span>
+                        <span className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>Presale Phase {phaseConfig.phaseNumber} Active</span>
                       </div>
                     </motion.div>
                   </motion.div>
@@ -489,9 +499,9 @@ const HeroSection = () => {
                   </p>
                 </div>
                 
-                <CountdownTimer 
-                  targetDate={presalePhase1EndDate} 
-                  phase={1}
+                <CountdownTimer
+                  targetDate={phaseConfig.endDate}
+                  phase={phaseConfig.phaseNumber}
                   variant="gradient"
                   className="mb-8"
                 />
@@ -504,17 +514,17 @@ const HeroSection = () => {
                   } p-4 rounded-xl transition-all duration-300 hover:border-primary-500/50`}>
                     <div className="absolute inset-0 bg-gradient-to-br from-primary-600/0 to-primary-500/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Current Price</div>
-                    <div className={`text-xl font-heading font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>$0.80</div>
+                    <div className={`text-xl font-heading font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{phaseConfig.displayPrice}</div>
                   </div>
-                  
+
                   <div className={`relative group overflow-hidden ${
-                    darkMode 
-                      ? 'bg-primary-600/10 backdrop-blur-sm border border-primary-600/30 hover:bg-primary-600/20' 
+                    darkMode
+                      ? 'bg-primary-600/10 backdrop-blur-sm border border-primary-600/30 hover:bg-primary-600/20'
                       : 'bg-primary-50/50 backdrop-blur-sm border border-primary-200/40 hover:bg-primary-100/60'
                   } p-4 rounded-xl transition-all duration-300 hover:border-primary-500/50`}>
                     <div className="absolute inset-0 bg-gradient-to-br from-primary-600/0 to-primary-500/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Next Phase</div>
-                    <div className={`text-xl font-heading font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>$1.00</div>
+                    <div className={`text-xl font-heading font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{getNextPhasePrice(phaseConfig.phaseNumber)}</div>
                   </div>
                 </div>
                 

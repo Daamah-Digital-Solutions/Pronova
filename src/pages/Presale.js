@@ -33,6 +33,7 @@ import { useWeb3 } from '../context/Web3Context';
 import { useSimpleWallet } from '../context/SimpleWalletContext';
 import { useNavigate } from 'react-router-dom';
 import web3Service from '../services/web3Service';
+import { getCurrentPhaseConfig, calculateTimeRemaining } from '../config/presaleConfig';
 
 const Presale = () => {
   const navigate = useNavigate();
@@ -53,12 +54,12 @@ const Presale = () => {
     loadPresaleInfo
   } = useWeb3();
 
-  // Countdown timer state (example: ends in 30 days)
+  // Countdown timer state - calculated from on-chain phase end time
   const [timeLeft, setTimeLeft] = useState({
-    days: 29,
-    hours: 23,
-    minutes: 45,
-    seconds: 30
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
   });
 
   // Investment calculator state
@@ -113,25 +114,30 @@ const Presale = () => {
     }
   }, [presaleInfo]);
 
-  // Update countdown timer
+  // Frontend phase config (UI/marketing only - does NOT affect buying logic)
+  const [phaseConfig, setPhaseConfig] = useState(getCurrentPhaseConfig());
+
+  // Update phase config periodically
   useEffect(() => {
+    const interval = setInterval(() => {
+      setPhaseConfig(getCurrentPhaseConfig());
+    }, 60000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Update countdown timer from frontend config (UI/marketing only)
+  useEffect(() => {
+    // Initial calculation
+    setTimeLeft(calculateTimeRemaining(phaseConfig.endDate));
+
+    // Update every second
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        } else if (prev.days > 0) {
-          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
-        }
-        return prev;
-      });
+      setTimeLeft(calculateTimeRemaining(phaseConfig.endDate));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [phaseConfig.endDate]);
 
   // Presale phases data
   const presalePhases = [
@@ -375,7 +381,7 @@ const Presale = () => {
               className="inline-flex items-center gap-3 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 px-6 py-3 rounded-full mb-6 font-medium"
             >
               <FaRocket className="text-xl animate-pulse" />
-              <span>Phase 1 Now Live - Limited Time Only</span>
+              <span>Phase {phaseConfig.phaseNumber} Now Live - Limited Time Only</span>
             </motion.div>
             
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 text-gray-900 dark:text-white">
@@ -396,7 +402,7 @@ const Presale = () => {
               className="bg-white dark:bg-dark-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 md:p-8 mb-8 max-w-2xl mx-auto shadow-xl"
             >
               <h3 className="text-lg md:text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                Phase 1 Ends In:
+                Phase {phaseConfig.phaseNumber} Ends In:
               </h3>
               <div className="grid grid-cols-4 gap-2 md:gap-4">
                 {[
@@ -473,13 +479,13 @@ const Presale = () => {
               </div>
               <div className="text-center">
                 <div className="text-2xl md:text-3xl font-bold mb-1 text-primary-600 dark:text-primary-400">
-                  $0.80
+                  {phaseConfig.displayPrice}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Current Price</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl md:text-3xl font-bold mb-1 text-primary-600 dark:text-primary-400">
-                  15%
+                  {phaseConfig.bonus}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Bonus Tokens</div>
               </div>

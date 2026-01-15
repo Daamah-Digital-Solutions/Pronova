@@ -70,6 +70,7 @@ export interface PronovaPresaleInterface extends Interface {
       | "renounceRole"
       | "revokeRole"
       | "setClaimEnabled"
+      | "setPhaseTime"
       | "supportsInterface"
       | "totalRaisedUSD"
       | "treasuryWallet"
@@ -274,6 +275,10 @@ export interface PronovaPresaleInterface extends Interface {
     values: [boolean]
   ): string;
   encodeFunctionData(
+    functionFragment: "setPhaseTime",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
@@ -463,6 +468,10 @@ export interface PronovaPresaleInterface extends Interface {
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setClaimEnabled",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setPhaseTime",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -979,6 +988,12 @@ export interface PronovaPresale extends BaseContract {
     "nonpayable"
   >;
 
+  setPhaseTime: TypedContractMethod<
+    [phaseId: BigNumberish, _startTime: BigNumberish, _endTime: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
   supportsInterface: TypedContractMethod<
     [interfaceId: BytesLike],
     [boolean],
@@ -1271,6 +1286,13 @@ export interface PronovaPresale extends BaseContract {
   getFunction(
     nameOrSignature: "setClaimEnabled"
   ): TypedContractMethod<[_enabled: boolean], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setPhaseTime"
+  ): TypedContractMethod<
+    [phaseId: BigNumberish, _startTime: BigNumberish, _endTime: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "supportsInterface"
   ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;

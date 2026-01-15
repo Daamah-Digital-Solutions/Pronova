@@ -90,4 +90,4 @@ backend/contracts/cache
 backend/contracts/artifacts
 
 # Keep these deployment files
-!backend/contracts/deployments/.gitkeep
+!backend/contracts/deployments/.gitkeepprompt.md
