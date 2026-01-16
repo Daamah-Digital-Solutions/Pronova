@@ -1,0 +1,72 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  FRONTEND_IMAGE: ghcr.io/${{ github.repository_owner }}/pronova-frontend
+  BACKEND_IMAGE: ghcr.io/${{ github.repository_owner }}/pronova-backend
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.frontend
+          push: true
+          tags: ${{ env.FRONTEND_IMAGE }}:latest,${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+          build-args: |
+            REACT_APP_API_URL=https://api.pronovacrypto.tech/api
+            REACT_APP_WS_URL=https://api.pronovacrypto.tech
+            REACT_APP_CHAIN_ID=97
+            REACT_APP_NETWORK_NAME=BSC Testnet
+            REACT_APP_TOKEN_CONTRACT_ADDRESS=0xa3896C07c4e7D9771e9E3417b7352fBD14704253
+            REACT_APP_PRESALE_CONTRACT_ADDRESS=0x29Ffc342bE650C1ce3e4e102AfB2285FD29f7cF5
+            REACT_APP_VESTING_CONTRACT_ADDRESS=0xd8Cce8EE40B8BdE0f220DCa8084Cd7CeF423bD2a
+            REACT_APP_NAME=Pronova
+            REACT_APP_VERSION=1.0.0
+
+  build-backend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ env.BACKEND_IMAGE }}:latest,${{ env.BACKEND_IMAGE }}:${{ github.sha }}
