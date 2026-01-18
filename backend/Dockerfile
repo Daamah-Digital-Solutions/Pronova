@@ -33,9 +33,12 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --legacy-peer-deps --omit=dev
 
-# Copy Prisma schema and generate client
+# Copy Prisma schema
 COPY prisma ./prisma
-RUN npx prisma generate
+
+# Copy generated Prisma client from builder
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
