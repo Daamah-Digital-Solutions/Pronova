@@ -29,11 +29,11 @@ RUN apk add --no-cache openssl
 
 WORKDIR /app
 
-# Copy package files and install production dependencies only
+# Copy package files and install production dependencies + prisma CLI
 COPY package*.json ./
-RUN npm install --legacy-peer-deps --omit=dev
+RUN npm install --legacy-peer-deps --omit=dev && npm install prisma --save-dev
 
-# Copy Prisma schema
+# Copy Prisma schema and migrations
 COPY prisma ./prisma
 
 # Copy generated Prisma client from builder
@@ -46,5 +46,5 @@ COPY --from=builder /app/dist ./dist
 # Expose port 5000
 EXPOSE 5000
 
-# Start the application
-CMD ["node", "dist/server.js"]
+# Run migrations and start the application
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
