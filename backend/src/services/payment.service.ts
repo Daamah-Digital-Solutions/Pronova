@@ -3,10 +3,26 @@ import { prisma } from '../config/database';
 import { presaleService } from './presale.service';
 import { PaymentMethod } from '@prisma/client';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-06-30.basil',
-  typescript: true,
-});
+// Only initialize Stripe if the API key is provided
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+let stripe: Stripe | null = null;
+
+if (stripeSecretKey && stripeSecretKey.trim() !== '') {
+  stripe = new Stripe(stripeSecretKey, {
+    apiVersion: '2025-06-30.basil',
+    typescript: true,
+  });
+  console.log('[PaymentService] Stripe initialized successfully');
+} else {
+  console.warn('[PaymentService] STRIPE_SECRET_KEY not configured. Payment features will be disabled.');
+}
+
+const ensureStripe = (): Stripe => {
+  if (!stripe) {
+    throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.');
+  }
+  return stripe;
+};
 
 export interface PaymentIntentData {
   amount: number; // Amount in USD
@@ -30,7 +46,7 @@ export class PaymentService {
     }
 
     // Create payment intent
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await ensureStripe().paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to cents
       currency: currency.toLowerCase(),
       metadata: {
@@ -54,7 +70,7 @@ export class PaymentService {
 
   async handleSuccessfulPayment(paymentIntentId: string): Promise<void> {
     // Retrieve payment intent from Stripe
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    const paymentIntent = await ensureStripe().paymentIntents.retrieve(paymentIntentId);
 
     if (paymentIntent.status !== 'succeeded') {
       throw new Error('Payment not successful');
@@ -85,7 +101,7 @@ export class PaymentService {
     let event: Stripe.Event;
 
     try {
-      event = stripe.webhooks.constructEvent(
+      event = ensureStripe().webhooks.constructEvent(
         body,
         signature,
         process.env.STRIPE_WEBHOOK_SECRET!
@@ -117,7 +133,7 @@ export class PaymentService {
   }
 
   async refundPayment(paymentIntentId: string, reason?: string): Promise<Stripe.Refund> {
-    return stripe.refunds.create({
+    return ensureStripe().refunds.create({
       payment_intent: paymentIntentId,
       reason: 'requested_by_customer',
       metadata: {
@@ -127,11 +143,11 @@ export class PaymentService {
   }
 
   async getPaymentIntent(paymentIntentId: string): Promise<Stripe.PaymentIntent> {
-    return stripe.paymentIntents.retrieve(paymentIntentId);
+    return ensureStripe().paymentIntents.retrieve(paymentIntentId);
   }
 
   async listCustomerPayments(customerId: string): Promise<Stripe.PaymentIntent[]> {
-    const paymentIntents = await stripe.paymentIntents.list({
+    const paymentIntents = await ensureStripe().paymentIntents.list({
       customer: customerId,
       limit: 100,
     });
@@ -140,14 +156,14 @@ export class PaymentService {
   }
 
   async createCustomer(email: string, name?: string): Promise<Stripe.Customer> {
-    return stripe.customers.create({
+    return ensureStripe().customers.create({
       email,
       name,
     });
   }
 
   async updateCustomer(customerId: string, data: Partial<Stripe.CustomerUpdateParams>): Promise<Stripe.Customer> {
-    return stripe.customers.update(customerId, data);
+    return ensureStripe().customers.update(customerId, data);
   }
 
   async createCheckoutSession(data: {
@@ -164,7 +180,7 @@ export class PaymentService {
     cancelUrl: string;
     metadata: Record<string, string>;
   }): Promise<Stripe.Checkout.Session> {
-    return stripe.checkout.sessions.create({
+    return ensureStripe().checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {

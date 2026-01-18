@@ -1,77 +1,29 @@
-// Add global error handler for uncaught errors during startup
-process.on('uncaughtException', (error) => {
-  console.error('UNCAUGHT EXCEPTION:', error);
-  console.error('Stack:', error.stack);
-  process.exit(1);
-});
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('UNHANDLED REJECTION at:', promise, 'reason:', reason);
-});
-
-console.log('Starting server initialization...');
-
 import express from 'express';
-console.log('Loaded: express');
-
 import cors from 'cors';
-console.log('Loaded: cors');
-
 import helmet from 'helmet';
-console.log('Loaded: helmet');
-
 import morgan from 'morgan';
-console.log('Loaded: morgan');
-
 import compression from 'compression';
-console.log('Loaded: compression');
-
 import dotenv from 'dotenv';
-console.log('Loaded: dotenv');
-
 import { createServer } from 'http';
-console.log('Loaded: http');
-
 import { rateLimit } from 'express-rate-limit';
-console.log('Loaded: express-rate-limit');
 
 // Load environment variables
 dotenv.config();
-console.log('Environment loaded');
 
 // Import database connection
-console.log('Loading database config...');
 import { connectDatabase } from './config/database';
-console.log('Loaded: database');
-
-console.log('Loading websocket service...');
 import { initializeWebSocket } from './services/websocket.service';
-console.log('Loaded: websocket');
 
 // Import routes
-console.log('Loading routes...');
 import authRoutes from './routes/auth.routes';
-console.log('Loaded: auth routes');
-
 import userRoutes from './routes/user.routes';
-console.log('Loaded: user routes');
-
 import presaleRoutes from './routes/presale.routes';
-console.log('Loaded: presale routes');
-
 import paymentRoutes from './routes/payment.routes';
-console.log('Loaded: payment routes');
-
 import kycRoutes from './routes/kyc.routes';
-console.log('Loaded: kyc routes');
-
 import adminRoutes from './routes/admin.routes';
-console.log('Loaded: admin routes');
 
 // Import middleware
-console.log('Loading error middleware...');
 import { errorHandler } from './middleware/error.middleware';
-console.log('Loaded: error middleware');
 
 const app = express();
 const server = createServer(app);
