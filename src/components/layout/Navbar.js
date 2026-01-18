@@ -4,7 +4,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { motion } from 'framer-motion';
 import { FaSun, FaMoon, FaBars, FaTimes, FaWallet } from 'react-icons/fa';
-import { BiGlobe } from 'react-icons/bi';
 import Button from '../ui/Button';
 import pronovaLogo from '../../assets/images/logos for partner/pronova coin.png';
 
@@ -40,7 +39,7 @@ const translations = {
 
 const Navbar = () => {
   const { darkMode, toggleDarkMode } = useTheme();
-  const { language, toggleLanguage } = useLanguage();
+  const { language } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -134,16 +133,6 @@ const Navbar = () => {
                 {darkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
               </button>
 
-              {/* Language Toggle */}
-              <button 
-                onClick={toggleLanguage} 
-                className="p-2 rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-                aria-label={language === 'en' ? 'Switch to Arabic' : 'Switch to English'}
-              >
-                <BiGlobe size={20} />
-                <span className="ml-1 text-sm">{language === 'en' ? 'AR' : 'EN'}</span>
-              </button>
-
               {/* Connect Wallet Button */}
               <Button 
                 to="/presale" 
@@ -212,18 +201,11 @@ const Navbar = () => {
                 {t.contact}
               </Link>
               <div className="flex space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <button 
-                  onClick={toggleDarkMode} 
+                <button
+                  onClick={toggleDarkMode}
                   className="p-2 rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
                 >
                   {darkMode ? <FaSun size={18} /> : <FaMoon size={18} />}
-                </button>
-                <button 
-                  onClick={toggleLanguage} 
-                  className="p-2 rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
-                >
-                  <BiGlobe size={20} />
-                  <span className="ml-1 text-sm">{language === 'en' ? 'AR' : 'EN'}</span>
                 </button>
               </div>
               <Button 
