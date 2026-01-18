@@ -1,13 +1,19 @@
 # Frontend Build Stage
 FROM node:20-alpine AS builder
 
+# Install build dependencies for native modules
+RUN apk add --no-cache python3 make g++ git
+
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies with legacy peer deps to handle version conflicts
+RUN npm install --legacy-peer-deps
+
+# Increase Node.js memory for build
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Copy source code
 COPY . .
