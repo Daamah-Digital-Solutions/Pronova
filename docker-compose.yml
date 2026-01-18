@@ -118,9 +118,9 @@ services:
     container_name: pronova-frontend
     restart: always
     environment:
-      - VIRTUAL_HOST=pronovacrypto.tech,www.pronovacrypto.tech
+      - VIRTUAL_HOST=pronovacrypto.tech
       - VIRTUAL_PORT=80
-      - LETSENCRYPT_HOST=pronovacrypto.tech,www.pronovacrypto.tech
+      - LETSENCRYPT_HOST=pronovacrypto.tech
     depends_on:
       - backend
     networks:
