@@ -4,6 +4,7 @@ import { useSimpleWallet } from '../../context/SimpleWalletContext';
 import { useWeb3 } from '../../context/Web3Context';
 import web3Service from '../../services/web3Service';
 import { FaFire, FaUsers, FaClock, FaChartLine, FaSpinner } from 'react-icons/fa';
+import { getCurrentPhaseConfig, calculateTimeRemaining } from '../../config/presaleConfig';
 
 const PresaleStats = ({ className = '' }) => {
   const { account: simpleAccount, chainId: simpleChainId } = useSimpleWallet();
@@ -29,6 +30,24 @@ const PresaleStats = ({ className = '' }) => {
   const [phaseInfo, setPhaseInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Frontend phase config (UI/marketing only - does NOT affect buying logic)
+  const [frontendPhaseConfig, setFrontendPhaseConfig] = useState(getCurrentPhaseConfig());
+
+  // Check if phase is active based on frontend config dates
+  const isPhaseActiveByFrontendConfig = () => {
+    const timeRemaining = calculateTimeRemaining(frontendPhaseConfig.endDate);
+    return !timeRemaining.expired;
+  };
+
+  // Update frontend phase config periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFrontendPhaseConfig(getCurrentPhaseConfig());
+    }, 60000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Load stats from Web3Context when presaleInfo changes
   useEffect(() => {
@@ -272,8 +291,8 @@ const PresaleStats = ({ className = '' }) => {
               
               <div>
                 <span className="text-gray-600 dark:text-gray-400">Status:</span>
-                <p className={`font-semibold ${phaseInfo.isActive ? 'text-green-600' : 'text-red-600'}`}>
-                  {phaseInfo.isActive ? 'Active' : 'Inactive'}
+                <p className={`font-semibold ${isPhaseActiveByFrontendConfig() ? 'text-green-600' : 'text-red-600'}`}>
+                  {isPhaseActiveByFrontendConfig() ? 'Active' : 'Ended'}
                 </p>
               </div>
             </div>
