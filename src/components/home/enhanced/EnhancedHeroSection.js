@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaArrowRight, FaFileAlt } from 'react-icons/fa';
 import { useTheme } from '../../../context/ThemeContext';
 import Button from '../../ui/Button';
 import EnhancedCountdownTimer from '../../ui/EnhancedCountdownTimer';
 import pronovaCoinLogo from '../../../assets/images/logos for partner/pronova coin.png';
+import { getCurrentPhaseConfig } from '../../../config/presaleConfig';
 
 // Animated background shape component
 const AnimatedShape = ({ className, delay = 0, duration = 20, darkMode }) => (
@@ -30,10 +31,19 @@ const AnimatedShape = ({ className, delay = 0, duration = 20, darkMode }) => (
 
 const EnhancedHeroSection = () => {
   const { darkMode } = useTheme();
-  
-  // Presale Phase 1 end date
-  const presalePhase1EndDate = new Date('2025-06-30T23:59:59');
-  
+
+  // Get current phase from frontend config (UI/marketing only)
+  const [phaseConfig, setPhaseConfig] = useState(getCurrentPhaseConfig());
+
+  // Update phase config periodically (in case phase changes)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPhaseConfig(getCurrentPhaseConfig());
+    }, 60000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className={`relative min-h-screen flex items-center pt-32 pb-24 overflow-hidden ${
       darkMode 
@@ -73,7 +83,7 @@ const EnhancedHeroSection = () => {
                 <span className="w-2 h-2 bg-primary-500 rounded-full mr-2 animate-pulse"></span>
                 <span className={`text-sm font-medium ${
                   darkMode ? 'text-primary-400' : 'text-primary-700'
-                }`}>Presale Phase 1 Live</span>
+                }`}>Presale Phase {phaseConfig.phaseNumber} Live</span>
               </div>
               
               <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold mb-6 leading-tight ${
@@ -93,7 +103,7 @@ const EnhancedHeroSection = () => {
                 <Button 
                   variant="gradient"
                   size="large"
-                  to="#presale"
+                  to="/presale"
                   className="w-full sm:w-auto"
                 >
                   <span>Join Presale</span>
@@ -245,72 +255,44 @@ const EnhancedHeroSection = () => {
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                     <span className={`text-xs font-medium ${
                       darkMode ? 'text-primary-300' : 'text-primary-700'
-                    }`}>PHASE 1 ACTIVE</span>
+                    }`}>PHASE {phaseConfig.phaseNumber} ACTIVE</span>
                   </div>
                   <h2 className="text-lg md:text-xl lg:text-2xl font-heading font-bold mb-2 gradient-text">
-                    Presale Phase 1 Ending Soon
+                    Presale Phase {phaseConfig.phaseNumber} Ending Soon
                   </h2>
                   <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Don't miss this opportunity</p>
                 </div>
                 
-                <EnhancedCountdownTimer 
-                  targetDate={presalePhase1EndDate} 
-                  phase={1}
+                <EnhancedCountdownTimer
+                  targetDate={phaseConfig.endDate}
+                  phase={phaseConfig.phaseNumber}
                   className="mb-8"
                 />
                 
-                {/* Progress Section */}
-                <div className="mb-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Progress</span>
-                    <span className="text-sm font-bold text-primary-400">45%</span>
-                  </div>
-                  <div className={`w-full rounded-full h-3 overflow-hidden shadow-inner ${
-                    darkMode ? 'bg-dark-700' : 'bg-gray-200'
-                  }`}>
-                    <div className="bg-gradient-to-r from-primary-500 via-primary-400 to-secondary-500 h-3 rounded-full transition-all duration-1000 ease-out shadow-lg" 
-                         style={{ width: '45%' }}>
-                      <div className="h-full bg-white/20 rounded-full animate-pulse"></div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Stats Grid */}
-                <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6 text-center">
-                  <div className={`rounded-lg p-2 sm:p-3 border ${
-                    darkMode 
-                      ? 'bg-dark-800/60 border-primary-600/10' 
+                {/* Stats Grid - Token Price Only (no placeholder raised/goal amounts) */}
+                <div className="grid grid-cols-2 gap-3 mb-6 text-center">
+                  <div className={`rounded-lg p-3 border ${
+                    darkMode
+                      ? 'bg-dark-800/60 border-primary-600/10'
                       : 'bg-white/60 border-primary-200/20'
                   }`}>
-                    <div className={`text-sm sm:text-base xl:text-lg font-bold ${
-                      darkMode ? 'text-white' : 'text-gray-900'
-                    }`}>$36M</div>
-                    <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Raised</div>
+                    <div className="text-lg font-bold text-primary-400">{phaseConfig.displayPrice}</div>
+                    <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Token Price</div>
                   </div>
-                  <div className={`rounded-lg p-2 sm:p-3 border ${
-                    darkMode 
-                      ? 'bg-dark-800/60 border-primary-600/10' 
+                  <div className={`rounded-lg p-3 border ${
+                    darkMode
+                      ? 'bg-dark-800/60 border-primary-600/10'
                       : 'bg-white/60 border-primary-200/20'
                   }`}>
-                    <div className="text-sm sm:text-base xl:text-lg font-bold text-primary-400">$0.80</div>
-                    <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Price</div>
-                  </div>
-                  <div className={`rounded-lg p-2 sm:p-3 border ${
-                    darkMode 
-                      ? 'bg-dark-800/60 border-primary-600/10' 
-                      : 'bg-white/60 border-primary-200/20'
-                  }`}>
-                    <div className={`text-sm sm:text-base xl:text-lg font-bold ${
-                      darkMode ? 'text-white' : 'text-gray-900'
-                    }`}>$80M</div>
-                    <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Goal</div>
+                    <div className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{phaseConfig.bonus}</div>
+                    <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Bonus</div>
                   </div>
                 </div>
                 
                 <Button 
                   variant="gradient"
                   size="large"
-                  to="#presale"
+                  to="/presale"
                   fullWidth
                   className="text-lg font-semibold py-4 shadow-xl hover:shadow-2xl transition-all duration-300"
                 >

@@ -337,7 +337,7 @@ const HeroSection = () => {
                 <Button 
                   variant="gradient"
                   size="large"
-                  to="#presale"
+                  to="/presale"
                   className="w-full sm:w-auto group"
                 >
                   Join Presale
@@ -528,27 +528,15 @@ const HeroSection = () => {
                   </div>
                 </div>
                 
-                <div className="relative mb-4">
-                  <div className="flex justify-between mb-2 text-sm">
-                    <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>Progress:</span>
-                    <span className="font-medium text-primary-400">45% of target</span>
-                  </div>
-                  
-                  <div className={`w-full ${darkMode ? 'bg-dark-800/80' : 'bg-gray-200'} rounded-full h-3 mb-4 overflow-hidden`}>
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: '45%' }}
-                      transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
-                      className="h-full relative"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-500 rounded-full"></div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary-600/60 to-primary-400/60 rounded-full blur-sm"></div>
-                    </motion.div>
-                  </div>
-                  
-                  <div className="flex justify-between text-sm">
-                    <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>$36M raised</span>
-                    <span className={darkMode ? 'text-gray-400' : 'text-gray-600'}>$80M goal</span>
+                {/* Bonus Info - no placeholder progress/raised amounts */}
+                <div className={`relative mb-4 p-3 rounded-lg border ${
+                  darkMode
+                    ? 'bg-primary-600/10 border-primary-600/20'
+                    : 'bg-primary-50/50 border-primary-200/30'
+                }`}>
+                  <div className="flex justify-between items-center">
+                    <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Phase {phaseConfig.phaseNumber} Bonus:</span>
+                    <span className="font-bold text-primary-400">{phaseConfig.bonus}</span>
                   </div>
                 </div>
                 
@@ -560,7 +548,7 @@ const HeroSection = () => {
                   <Button 
                     variant="gradient"
                     size="large"
-                    to="#presale"
+                    to="/presale"
                     fullWidth
                     className="mt-4 relative overflow-hidden group shadow-neon-strong"
                   >

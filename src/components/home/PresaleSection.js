@@ -1,52 +1,66 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Button from '../ui/Button';
 import CountdownTimer from '../ui/CountdownTimer';
 import { FaEthereum, FaBitcoin, FaDollarSign, FaArrowRight } from 'react-icons/fa';
 import { SiTether } from 'react-icons/si';
 import { useTheme } from '../../context/ThemeContext';
+import { getCurrentPhaseConfig, PRESALE_CONFIG } from '../../config/presaleConfig';
 
 const PresaleSection = () => {
   const { darkMode } = useTheme();
-  
-  // Presale phase end dates (based on whitepaper roadmap)
-  const presalePhase1EndDate = new Date('2025-07-30T23:59:59');
-  const presalePhase2EndDate = new Date('2025-08-29T23:59:59');
-  const presalePhase3EndDate = new Date('2025-09-28T23:59:59');
-  
-  // Presale phases data from whitepaper
+
+  // Get current phase from frontend config (UI/marketing only)
+  const [currentPhaseConfig, setCurrentPhaseConfig] = useState(getCurrentPhaseConfig());
+
+  // Update phase config periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPhaseConfig(getCurrentPhaseConfig());
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Determine phase status based on current date
+  const getPhaseStatus = (phaseNum) => {
+    if (phaseNum === currentPhaseConfig.phaseNumber) return 'active';
+    if (phaseNum < currentPhaseConfig.phaseNumber) return 'completed';
+    return 'upcoming';
+  };
+
+  // Presale phases data using config dates
   const presalePhases = [
     {
       phase: 1,
       tokenAmount: "100,000,000",
-      price: "$0.80",
+      price: PRESALE_CONFIG.phases[1].displayPrice,
       totalRaised: "$80,000,000",
       duration: "30 days",
-      status: "active", // active, upcoming, completed
-      progress: 45,
-      endDate: presalePhase1EndDate,
+      status: getPhaseStatus(1),
+      progress: 0, // Hidden - no placeholder data
+      endDate: PRESALE_CONFIG.phases[1].endDate,
       delay: 0.1
     },
     {
       phase: 2,
       tokenAmount: "75,000,000",
-      price: "$1.00",
+      price: PRESALE_CONFIG.phases[2].displayPrice,
       totalRaised: "$75,000,000",
       duration: "30 days",
-      status: "upcoming",
+      status: getPhaseStatus(2),
       progress: 0,
-      endDate: presalePhase2EndDate,
+      endDate: PRESALE_CONFIG.phases[2].endDate,
       delay: 0.2
     },
     {
       phase: 3,
       tokenAmount: "75,000,000",
-      price: "$1.50",
+      price: PRESALE_CONFIG.phases[3].displayPrice,
       totalRaised: "$112,500,000",
       duration: "30 days",
-      status: "upcoming",
+      status: getPhaseStatus(3),
       progress: 0,
-      endDate: presalePhase3EndDate,
+      endDate: PRESALE_CONFIG.phases[3].endDate,
       delay: 0.3
     }
   ];
