@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { FaArrowRight, FaFileAlt } from 'react-icons/fa';
 import { useTheme } from '../../../context/ThemeContext';
 import Button from '../../ui/Button';
-import EnhancedCountdownTimer from '../../ui/EnhancedCountdownTimer';
 import pronovaCoinLogo from '../../../assets/images/logos for partner/pronova coin.png';
-import { getCurrentPhaseConfig } from '../../../config/presaleConfig';
 
 // Animated background shape component
 const AnimatedShape = ({ className, delay = 0, duration = 20, darkMode }) => (
@@ -31,18 +29,6 @@ const AnimatedShape = ({ className, delay = 0, duration = 20, darkMode }) => (
 
 const EnhancedHeroSection = () => {
   const { darkMode } = useTheme();
-
-  // Get current phase from frontend config (UI/marketing only)
-  const [phaseConfig, setPhaseConfig] = useState(getCurrentPhaseConfig());
-
-  // Update phase config periodically (in case phase changes)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPhaseConfig(getCurrentPhaseConfig());
-    }, 60000); // Check every minute
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <section className={`relative min-h-screen flex items-center pt-32 pb-24 overflow-hidden ${
@@ -83,7 +69,7 @@ const EnhancedHeroSection = () => {
                 <span className="w-2 h-2 bg-primary-500 rounded-full mr-2 animate-pulse"></span>
                 <span className={`text-sm font-medium ${
                   darkMode ? 'text-primary-400' : 'text-primary-700'
-                }`}>Presale Phase {phaseConfig.phaseNumber} Live</span>
+                }`}>Presale Now Live</span>
               </div>
               
               <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold mb-6 leading-tight ${
@@ -240,70 +226,43 @@ const EnhancedHeroSection = () => {
                 ))}
               </div>
               
-              {/* Enhanced Countdown and Presale Info */}
-              <div className={`backdrop-blur-xl border rounded-2xl p-4 sm:p-6 xl:p-8 shadow-2xl max-w-md xl:max-w-none mx-auto ${
-                darkMode 
-                  ? 'bg-gradient-to-br from-dark-900/95 to-dark-800/95 border-primary-500/30' 
+              {/* Simplified Presale CTA - No countdown/stats, just marketing */}
+              <div className={`backdrop-blur-xl border rounded-2xl p-6 sm:p-8 shadow-2xl max-w-md xl:max-w-none mx-auto ${
+                darkMode
+                  ? 'bg-gradient-to-br from-dark-900/95 to-dark-800/95 border-primary-500/30'
                   : 'bg-gradient-to-br from-white/95 to-gray-50/95 border-primary-300/40'
               }`}>
                 <div className="text-center mb-6">
-                  <div className={`inline-flex items-center px-3 py-1 rounded-full border mb-3 ${
-                    darkMode 
-                      ? 'bg-primary-500/20 border-primary-500/30' 
-                      : 'bg-primary-100/60 border-primary-200/40'
+                  <div className={`inline-flex items-center px-3 py-1 rounded-full border mb-4 ${
+                    darkMode
+                      ? 'bg-green-500/20 border-green-500/30'
+                      : 'bg-green-100/60 border-green-200/40'
                   }`}>
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                     <span className={`text-xs font-medium ${
-                      darkMode ? 'text-primary-300' : 'text-primary-700'
-                    }`}>PHASE {phaseConfig.phaseNumber} ACTIVE</span>
+                      darkMode ? 'text-green-300' : 'text-green-700'
+                    }`}>PRESALE LIVE</span>
                   </div>
-                  <h2 className="text-lg md:text-xl lg:text-2xl font-heading font-bold mb-2 gradient-text">
-                    Presale Phase {phaseConfig.phaseNumber} Ending Soon
+                  <h2 className="text-xl md:text-2xl lg:text-3xl font-heading font-bold mb-3 gradient-text">
+                    Pronova Token (PRN)
                   </h2>
-                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Don't miss this opportunity</p>
+                  <p className={`text-sm mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    Join the presale and be part of the future of investment
+                  </p>
+                  <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                    See real-time presale data on the presale page
+                  </p>
                 </div>
-                
-                <EnhancedCountdownTimer
-                  targetDate={phaseConfig.endDate}
-                  phase={phaseConfig.phaseNumber}
-                  className="mb-8"
-                />
-                
-                {/* Stats Grid - Token Price Only (no placeholder raised/goal amounts) */}
-                <div className="grid grid-cols-2 gap-3 mb-6 text-center">
-                  <div className={`rounded-lg p-3 border ${
-                    darkMode
-                      ? 'bg-dark-800/60 border-primary-600/10'
-                      : 'bg-white/60 border-primary-200/20'
-                  }`}>
-                    <div className="text-lg font-bold text-primary-400">{phaseConfig.displayPrice}</div>
-                    <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Token Price</div>
-                  </div>
-                  <div className={`rounded-lg p-3 border ${
-                    darkMode
-                      ? 'bg-dark-800/60 border-primary-600/10'
-                      : 'bg-white/60 border-primary-200/20'
-                  }`}>
-                    <div className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{phaseConfig.bonus}</div>
-                    <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Bonus</div>
-                  </div>
-                </div>
-                
-                <Button 
+
+                <Button
                   variant="gradient"
                   size="large"
                   to="/presale"
                   fullWidth
                   className="text-lg font-semibold py-4 shadow-xl hover:shadow-2xl transition-all duration-300"
                 >
-                  🚀 Buy PRN Tokens Now
+                  🚀 View Presale Details
                 </Button>
-                
-                <p className={`text-xs text-center mt-3 ${
-                  darkMode ? 'text-gray-500' : 'text-gray-600'
-                }`}>
-                  Next phase starts at $1.00 per token
-                </p>
               </div>
             </motion.div>
           </div>
