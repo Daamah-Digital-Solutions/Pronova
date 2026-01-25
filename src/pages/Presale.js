@@ -37,21 +37,26 @@ import { getCurrentPhaseConfig, calculateTimeRemaining } from '../config/presale
 
 const Presale = () => {
   const navigate = useNavigate();
-  const { 
-    account: simpleAccount, 
-    connectWallet: simpleConnectWallet,
+  // Use SimpleWalletContext as fallback only
+  const {
+    account: simpleAccount,
     formatAddress: simpleFormatAddress
   } = useSimpleWallet();
+  // Use Web3Context as primary - supports WalletConnect for mobile
   const {
     account,
     chainId,
     isConnected,
+    isConnecting,
     isCorrectNetwork,
     balances,
     presaleInfo,
     formatAddress,
     formatBalance,
-    loadPresaleInfo
+    loadPresaleInfo,
+    connectWallet,
+    isMobile,
+    isWalletBrowser
   } = useWeb3();
 
   // Countdown timer state - calculated from on-chain phase end time
@@ -90,8 +95,9 @@ const Presale = () => {
   const [purchaseAmount, setPurchaseAmount] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   
-  // Use simpleAccount for wallet connection (real account or mock)
-  const activeAccount = simpleAccount || mockAccount;
+  // Use Web3Context account as primary (supports WalletConnect for mobile)
+  // Fall back to simpleAccount or mock for testing
+  const activeAccount = account || simpleAccount || mockAccount;
   const isActuallyConnected = !!activeAccount;
 
   // Load real presale data from contracts
@@ -872,13 +878,30 @@ const Presale = () => {
                       <Button
                         variant="primary"
                         size="large"
-                        onClick={simpleConnectWallet}
+                        onClick={connectWallet}
+                        disabled={isConnecting}
                         className="group"
                       >
-                        <FaWallet className="group-hover:scale-110 transition-transform" />
-                        Connect Wallet
+                        {isConnecting ? (
+                          <>
+                            <FaWallet className="animate-pulse" />
+                            Connecting...
+                          </>
+                        ) : (
+                          <>
+                            <FaWallet className="group-hover:scale-110 transition-transform" />
+                            Connect Wallet
+                          </>
+                        )}
                       </Button>
-                      
+
+                      {/* Mobile hint */}
+                      {isMobile && !isWalletBrowser && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          You'll be redirected to your wallet app to approve the connection
+                        </p>
+                      )}
+
                       {/* Mock wallet for testing */}
                       {process.env.NODE_ENV === 'development' && (
                         <div>
@@ -905,7 +928,7 @@ const Presale = () => {
                         <span className="font-medium">Wallet Connected</span>
                       </div>
                       <div className="text-sm text-green-500 dark:text-green-500 mt-1">
-                        {simpleFormatAddress(activeAccount)}
+                        {formatAddress(activeAccount) || simpleFormatAddress(activeAccount)}
                       </div>
                       {mockAccount && (
                         <button
