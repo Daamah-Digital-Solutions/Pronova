@@ -235,22 +235,35 @@ export const Web3Provider = ({ children }) => {
     try {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        if (key && key.startsWith('wc@2:core:')) {
+        if (key && (
+          key.startsWith('wc@2:') ||
+          key.includes('walletconnect') ||
+          key.includes('WALLETCONNECT')
+        )) {
           const value = localStorage.getItem(key);
-          if (value && value.includes('session')) {
+          // Check for any session-related data
+          if (value && (
+            value.includes('session') ||
+            value.includes('pairing') ||
+            value.includes('eip155')
+          )) {
+            console.log('Found WalletConnect session data in key:', key);
             return true;
           }
         }
       }
       return false;
     } catch (e) {
+      console.error('Error checking WalletConnect session:', e);
       return false;
     }
   };
 
   // Restore WalletConnect session after returning from mobile wallet
   const restoreWalletConnectSession = useCallback(async () => {
+    // Don't run if already have an account or another restore is in progress
     if (connectionAttemptRef.current || account) {
+      console.log('Restore skipped - connectionAttempt:', connectionAttemptRef.current, 'account:', account);
       return false;
     }
 
@@ -258,17 +271,19 @@ export const Web3Provider = ({ children }) => {
     const wcPending = localStorage.getItem(STORAGE_KEYS.WC_PENDING);
     const hasSession = hasWalletConnectSession();
 
+    console.log('Restore check - wcPending:', wcPending, 'hasSession:', hasSession);
+
     if (!wcPending && !hasSession) {
       return false;
     }
 
     console.log('Attempting to restore WalletConnect session...');
     connectionAttemptRef.current = true;
-    setIsConnecting(true);
 
     try {
       const { EthereumProvider } = await import('@walletconnect/ethereum-provider');
 
+      console.log('Initializing EthereumProvider...');
       const provider = await EthereumProvider.init({
         projectId: WALLETCONNECT_PROJECT_ID,
         chains: [97], // BSC Testnet
@@ -281,6 +296,10 @@ export const Web3Provider = ({ children }) => {
           icons: [`${window.location.origin}/logo192.png`]
         }
       });
+
+      console.log('Provider initialized, session:', provider.session);
+      console.log('Provider accounts:', provider.accounts);
+      console.log('Provider chainId:', provider.chainId);
 
       // Check if provider has an active session
       if (provider.session) {
@@ -309,6 +328,7 @@ export const Web3Provider = ({ children }) => {
 
           // Setup event listeners
           provider.on('accountsChanged', (newAccounts) => {
+            console.log('WalletConnect accountsChanged:', newAccounts);
             if (newAccounts.length === 0) {
               disconnectWallet();
             } else {
@@ -317,32 +337,73 @@ export const Web3Provider = ({ children }) => {
           });
 
           provider.on('chainChanged', (newChainId) => {
+            console.log('WalletConnect chainChanged:', newChainId);
             setChainId(parseInt(newChainId, 16));
           });
 
           provider.on('disconnect', () => {
+            console.log('WalletConnect disconnected');
             disconnectWallet();
           });
 
-          // Note: loadBalances and loadPresaleInfo will be called automatically
-          // via the useEffect hooks when account state updates
+          // Also listen for session events
+          provider.on('session_update', (session) => {
+            console.log('WalletConnect session_update:', session);
+          });
+
+          provider.on('session_delete', () => {
+            console.log('WalletConnect session_delete');
+            disconnectWallet();
+          });
 
           connectionAttemptRef.current = false;
           setIsConnecting(false);
           return true;
+        } else {
+          console.log('Session exists but no accounts');
+        }
+      } else {
+        console.log('No active session on provider');
+
+        // Try to get accounts directly in case session exists but wasn't detected
+        try {
+          const accounts = await provider.enable();
+          console.log('Provider.enable() returned accounts:', accounts);
+
+          if (accounts && accounts.length > 0) {
+            const chainIdNum = provider.chainId;
+
+            const ethersProvider = new ethers.providers.Web3Provider(provider);
+            const signer = ethersProvider.getSigner();
+            web3Service.initialize(ethersProvider, signer, chainIdNum);
+
+            setAccount(accounts[0]);
+            setChainId(chainIdNum);
+            setWalletConnectProvider(provider);
+            setWeb3(ethersProvider);
+            setContracts(web3Service.contracts);
+
+            localStorage.setItem(STORAGE_KEYS.WALLET_TYPE, 'walletconnect');
+            localStorage.setItem(STORAGE_KEYS.LAST_ACCOUNT, accounts[0]);
+            localStorage.removeItem(STORAGE_KEYS.WC_PENDING);
+
+            connectionAttemptRef.current = false;
+            setIsConnecting(false);
+            return true;
+          }
+        } catch (enableError) {
+          console.log('Provider.enable() failed:', enableError.message);
         }
       }
 
-      console.log('No active WalletConnect session found');
-      localStorage.removeItem(STORAGE_KEYS.WC_PENDING);
+      console.log('No active WalletConnect session found after all attempts');
       connectionAttemptRef.current = false;
-      setIsConnecting(false);
+      // Don't remove WC_PENDING here - let the retry logic handle it
       return false;
     } catch (error) {
       console.error('Error restoring WalletConnect session:', error);
-      localStorage.removeItem(STORAGE_KEYS.WC_PENDING);
       connectionAttemptRef.current = false;
-      setIsConnecting(false);
+      // Don't remove WC_PENDING here - let the retry logic handle it
       return false;
     }
   }, [account]);
@@ -352,12 +413,32 @@ export const Web3Provider = ({ children }) => {
     setIsConnecting(true);
     setError(null);
 
+    console.log('Starting WalletConnect connection...');
+
     // Mark that we're starting a WalletConnect connection (for mobile deep link return)
     localStorage.setItem(STORAGE_KEYS.WC_PENDING, 'true');
 
     try {
-      // Clear any stale sessions before connecting
-      clearWalletConnectSessions();
+      // Only clear stale sessions if we don't have an existing valid session
+      // This prevents clearing a session that was just established on mobile
+      const hasExisting = hasWalletConnectSession();
+      if (!hasExisting) {
+        console.log('No existing session, clearing stale data...');
+        clearWalletConnectSessions();
+      } else {
+        console.log('Existing session found, attempting to restore first...');
+        // Try to restore existing session
+        const restored = await restoreWalletConnectSession();
+        if (restored) {
+          console.log('Restored existing session successfully');
+          setIsConnecting(false);
+          localStorage.removeItem(STORAGE_KEYS.WC_PENDING);
+          return true;
+        }
+        // If restore failed, clear and start fresh
+        console.log('Restore failed, clearing for fresh connection...');
+        clearWalletConnectSessions();
+      }
 
       // Dynamic import to avoid issues with SSR
       const { EthereumProvider } = await import('@walletconnect/ethereum-provider');
@@ -729,24 +810,47 @@ export const Web3Provider = ({ children }) => {
 
   // Handle visibility change - when user returns to the page from MetaMask app
   useEffect(() => {
+    const attemptRestoreWithRetry = async (retryCount = 0, maxRetries = 5) => {
+      console.log(`Attempting session restore, attempt ${retryCount + 1}/${maxRetries}`);
+
+      const restored = await restoreWalletConnectSession();
+
+      if (!restored && retryCount < maxRetries - 1) {
+        // Session not found yet, retry after delay (WalletConnect might still be syncing)
+        const delay = 1000 * (retryCount + 1); // Increasing delay: 1s, 2s, 3s...
+        console.log(`Session not found, retrying in ${delay}ms...`);
+
+        visibilityCheckRef.current = setTimeout(() => {
+          attemptRestoreWithRetry(retryCount + 1, maxRetries);
+        }, delay);
+      } else if (!restored) {
+        // All retries failed, reset connecting state
+        console.log('All restore attempts failed, resetting state');
+        setIsConnecting(false);
+        localStorage.removeItem(STORAGE_KEYS.WC_PENDING);
+      }
+    };
+
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible' && !account) {
         // User returned to the page, check if WalletConnect session was established
         const wcPending = localStorage.getItem(STORAGE_KEYS.WC_PENDING);
-        const hasSession = hasWalletConnectSession();
 
-        if (wcPending || hasSession) {
-          console.log('Page became visible, checking for WalletConnect session...');
+        console.log('Page became visible, wcPending:', wcPending, 'account:', account);
+
+        if (wcPending) {
+          // Reset isConnecting in case it was stuck
+          setIsConnecting(true);
 
           // Clear any existing check
           if (visibilityCheckRef.current) {
             clearTimeout(visibilityCheckRef.current);
           }
 
-          // Add a small delay to allow WalletConnect to initialize
-          visibilityCheckRef.current = setTimeout(async () => {
-            await restoreWalletConnectSession();
-          }, 1000);
+          // Start retry attempts with initial delay
+          visibilityCheckRef.current = setTimeout(() => {
+            attemptRestoreWithRetry(0, 5);
+          }, 500);
         }
       }
     };
@@ -757,8 +861,26 @@ export const Web3Provider = ({ children }) => {
         const wcPending = localStorage.getItem(STORAGE_KEYS.WC_PENDING);
         if (wcPending) {
           console.log('Window focused, checking for WalletConnect session...');
+
+          // Reset isConnecting in case it was stuck
+          setIsConnecting(true);
+
           setTimeout(() => {
-            restoreWalletConnectSession();
+            attemptRestoreWithRetry(0, 3);
+          }, 500);
+        }
+      }
+    };
+
+    // Handle pageshow event (fires when page is restored from bfcache on mobile)
+    const handlePageShow = (event) => {
+      if (event.persisted && !account) {
+        const wcPending = localStorage.getItem(STORAGE_KEYS.WC_PENDING);
+        if (wcPending) {
+          console.log('Page restored from bfcache, checking for WalletConnect session...');
+          setIsConnecting(true);
+          setTimeout(() => {
+            attemptRestoreWithRetry(0, 5);
           }, 500);
         }
       }
@@ -766,10 +888,12 @@ export const Web3Provider = ({ children }) => {
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('focus', handleFocus);
+    window.addEventListener('pageshow', handlePageShow);
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('pageshow', handlePageShow);
       if (visibilityCheckRef.current) {
         clearTimeout(visibilityCheckRef.current);
       }
