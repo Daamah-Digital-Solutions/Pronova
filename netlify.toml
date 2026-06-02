@@ -1,0 +1,11 @@
+# Netlify build configuration for the Pronova frontend (Create React App / CRACO).
+#
+# CI = "false" prevents react-scripts from treating ESLint warnings as build
+# errors. Netlify sets CI=true by default, which makes CRA abort the build on
+# non-blocking lint warnings (unused imports, anchor-is-valid, etc.). Setting it
+# to "false" lets the production build complete while keeping those as warnings.
+[build]
+  publish = "build"
+
+[build.environment]
+  CI = "false"
