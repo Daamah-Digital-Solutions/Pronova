@@ -11,7 +11,7 @@ const RoadmapSection = () => {
       date: "April - June 2025",
       milestones: [
         { text: "Website Development", completed: true },
-        { text: "Smart Contract Deployment on Ethereum", completed: true },
+        { text: "Smart Contract Deployment on BNB Smart Chain (BSC)", completed: true },
         { text: "Community Building & Social Media Presence", completed: true },
         { text: "Private Sale & Early Investor Round", completed: false }
       ],

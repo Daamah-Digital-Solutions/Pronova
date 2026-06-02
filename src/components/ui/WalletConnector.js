@@ -263,7 +263,7 @@ const WalletConnector = ({ className = '' }) => {
 
             <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-sm text-yellow-800">
-                <strong>New to Ethereum?</strong> Learn more about wallets and how to get started.
+                <strong>New to crypto wallets?</strong> Learn more about wallets and how to get started.
               </p>
             </div>
           </div>

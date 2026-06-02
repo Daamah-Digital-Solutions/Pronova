@@ -18,13 +18,13 @@ const translations = {
     tokenomics: 'Tokenomics',
     presale: 'Presale',
     legal: 'Legal',
-    privacyPolicy: 'Privacy Policy',
+    legalDocs: 'Legal Documentation',
+    privacyPolicy: 'General Disclaimer',
     termsOfService: 'Terms of Service',
     riskDisclosure: 'Risk Disclosure',
     contactUs: 'Contact Us',
     joinCommunity: 'Join Our Community',
     copyright: '© 2025 Pronova. All rights reserved.',
-    poweredBy: 'Developed by Daamah Digital Solutions',
     disclaimer: 'Disclaimer: Cryptocurrency investments are subject to market risks. Always DYOR (Do Your Own Research).',
     subscribeTitle: 'Stay Updated',
     subscribeText: 'Get the latest news and updates about Pronova',
@@ -43,13 +43,13 @@ const translations = {
     tokenomics: 'توزيع العملة',
     presale: 'البيع التمهيدي',
     legal: 'قانوني',
-    privacyPolicy: 'سياسة الخصوصية',
+    legalDocs: 'المستندات القانونية',
+    privacyPolicy: 'إخلاء المسؤولية العام',
     termsOfService: 'شروط الخدمة',
     riskDisclosure: 'إفصاح المخاطر',
     contactUs: 'اتصل بنا',
     joinCommunity: 'انضم إلى مجتمعنا',
     copyright: '© 2025 برونوفا. جميع الحقوق محفوظة.',
-    poweredBy: 'تم التطوير بواسطة حلول دعامة الرقمية',
     disclaimer: 'إخلاء المسؤولية: استثمارات العملات المشفرة عرضة لمخاطر السوق. قم دائمًا بإجراء البحث الخاص بك.',
     subscribeTitle: 'ابق على اطلاع',
     subscribeText: 'احصل على آخر الأخبار والتحديثات حول برونوفا',
@@ -109,9 +109,9 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              {language === 'en' 
-                ? 'Revolutionary cryptocurrency developed by Capimax Holding, bridging traditional finance with blockchain technology.'
-                : 'عملة مشفرة ثورية طورتها Capimax القابضة، تجمع بين التمويل التقليدي وتقنية البلوكتشين.'}
+              {language === 'en'
+                ? 'Revolutionary cryptocurrency developed by Capimax Virtual Assets and Capimax Blockchain Company, in partnership with the Capimax Group, bridging traditional finance with blockchain technology.'
+                : 'عملة مشفرة ثورية طوّرتها Capimax Virtual Assets و Capimax Blockchain Company، بالشراكة مع مجموعة Capimax، تجمع بين التمويل التقليدي وتقنية البلوكتشين.'}
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
               <a 
@@ -239,24 +239,24 @@ const Footer = () => {
             <h3 className="text-lg font-heading font-semibold mb-4 text-gray-900 dark:text-white">{t.legal}</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#privacy" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <Link to="/legal" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  {t.legalDocs}
+                </Link>
+              </li>
+              <li>
+                <Link to="/legal#disclaimer" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                   {t.privacyPolicy}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#terms" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                  {t.termsOfService}
-                </a>
-              </li>
-              <li>
-                <a href="#risk" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <Link to="/legal#risk" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                   {t.riskDisclosure}
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#contact" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <Link to="/contact" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                   {t.contactUs}
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -264,14 +264,9 @@ const Footer = () => {
 
         {/* Divider */}
         <div className="border-t border-gray-300 dark:border-primary-600/20 pt-8">
-          <div className="flex flex-col md:flex-row md:justify-between items-center">
-            <div className="mb-4 md:mb-0 text-gray-500 dark:text-gray-400 text-sm">
-              {t.copyright}
-            </div>
+          <div className="flex flex-col md:flex-row md:justify-center items-center">
             <div className="text-gray-500 dark:text-gray-400 text-sm">
-              <a href="https://daamah.net" target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                {t.poweredBy}
-              </a>
+              {t.copyright}
             </div>
           </div>
         </div>

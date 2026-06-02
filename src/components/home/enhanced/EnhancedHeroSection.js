@@ -127,7 +127,7 @@ const EnhancedHeroSection = () => {
                   <div className={`text-xs md:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Current Price</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl md:text-3xl font-heading font-bold gradient-text mb-1">ETH</div>
+                  <div className="text-2xl md:text-3xl font-heading font-bold gradient-text mb-1">BSC</div>
                   <div className={`text-xs md:text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Blockchain</div>
                 </div>
                 <div className="text-center">

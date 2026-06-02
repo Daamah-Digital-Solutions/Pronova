@@ -13,7 +13,7 @@ import capiMaxFinancialLogo from '../assets/images/logos for partner/CAPI Max Fi
 import hccLogo from '../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png';
 import cimLogo from '../assets/images/logos for partner/cim logo.png';
-import profitmaxLogo from '../assets/images/logos for partner/profitmax logo.png';
+import profitmaxLogo from '../assets/images/logos for partner/finalprofitmax-logo.svg';
 import tdhLogo from '../assets/images/logos for partner/tdh logo.png';
 import novaPropertyLogo from '../assets/images/logos for partner/nova property logo.png';
 import primeinnLogo from '../assets/images/logos for partner/primeinn logo.png';
@@ -23,7 +23,7 @@ import capiMaxMetalsLogo from '../assets/images/logos for partner/CAPI Max for I
 import elitGatePropertiesLogo from '../assets/images/logos for partner/elitgate properties.png';
 import capiMaxVirtualAssetLogo from '../assets/images/logos for partner/capi max  Virtual Asset uk dark .png';
 import capiMaxFintechBlockchainLogo from '../assets/images/logos for partner/capi max  Fintech and Blockchain uk dark  copy.png';
-import novaDigitalFinanceLogo from '../assets/images/logos for partner/nova property logo.png';
+import novaDigitalFinanceLogo from '../assets/images/logos for partner/novadf-logo.png';
 
 // Enhanced Animation Hook
 const FadeInWhenVisible = ({ children, delay = 0, direction = null }) => {
@@ -301,7 +301,7 @@ const Team = () => {
       delay: 0.3
     },
     {
-      name: "Profit Max British Investments",
+      name: "Profitmax British Investments",
       role: "Investment Strategy",
       description: "Focusing on high-growth investment opportunities and strategic portfolio management across global markets.",
       icon: <FaUsers />,
@@ -354,7 +354,7 @@ const Team = () => {
           delay: 0.3
         },
         {
-          name: "Profit Max British Investments",
+          name: "Profitmax British Investments",
           logo: profitmaxLogo,
           description: "High-growth investment opportunities and portfolio management",
           website: "https://profitmaxinvestment.co.uk/",
@@ -434,7 +434,7 @@ const Team = () => {
           name: "Nova Digital Finance",
           logo: novaDigitalFinanceLogo,
           description: "Digital finance and property investment services",
-          website: "https://novadigitalfinance.com/",
+          website: "https://novadf.com/",
           delay: 0.75
         }
       ]

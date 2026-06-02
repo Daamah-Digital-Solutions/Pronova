@@ -21,7 +21,8 @@ import {
   FaTrophy,
   FaFlag,
   FaEye,
-  FaArrowUp
+  FaArrowUp,
+  FaExternalLinkAlt
 } from 'react-icons/fa';
 import TokenomicsChart from '../components/ui/TokenomicsChart';
 import LockedTokensChart from '../components/ui/LockedTokensChart';
@@ -35,7 +36,7 @@ import capiMaxFinancialLogo from '../assets/images/logos for partner/CAPI Max Fi
 import capiMaxTradingLogo from '../assets/images/logos for partner/CAPI Max for general Trading  USA.png';
 import capiMaxDevelopmentLogo from '../assets/images/logos for partner/CAPI Max development  UK.png';
 import capiMaxMetalsLogo from '../assets/images/logos for partner/CAPI Max for Investment in precious metals and minerals  UK.png';
-import profitMaxLogo from '../assets/images/logos for partner/profitmax logo.png';
+import profitMaxLogo from '../assets/images/logos for partner/finalprofitmax-logo.svg';
 import tdhLogo from '../assets/images/logos for partner/tdh logo.png';
 import primeInnLogo from '../assets/images/logos for partner/primeinn logo.png';
 import eliteGateLogo from '../assets/images/logos for partner/elitgate properties.png';
@@ -201,9 +202,9 @@ const Whitepaper = () => {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed"
             >
-              Revolutionary cryptocurrency developed by 
-              <span className="text-primary-600 dark:text-primary-400 font-semibold"> Capimax Holding</span> - 
-              bridging traditional business with cryptocurrency innovation through 
+              Revolutionary cryptocurrency developed by
+              <span className="text-primary-600 dark:text-primary-400 font-semibold"> Capimax Virtual Assets &amp; Capimax Blockchain Company</span> -
+              bridging traditional business with cryptocurrency innovation through
               <span className="text-secondary-600 dark:text-secondary-400 font-semibold"> 18+ international companies</span> 
               across <span className="text-primary-600 dark:text-primary-400 font-semibold">60+ business fields</span>.
             </motion.p>
@@ -363,8 +364,8 @@ const Whitepaper = () => {
                     <div className="prose prose-xl max-w-none dark:prose-invert">
                       <p className="text-xl leading-relaxed mb-6 text-gray-700 dark:text-gray-300">
                         <strong className="text-primary-600 dark:text-primary-400">Pronova</strong> is an innovative cryptocurrency developed by{' '}
-                        <strong className="text-secondary-600 dark:text-secondary-400">Capimax Holding</strong>, 
-                        a British-American company that owns 12 Global companies, working in more than 60 fields including Finance, 
+                        <strong className="text-secondary-600 dark:text-secondary-400">Capimax Virtual Assets and Capimax Blockchain Company</strong>,
+                        in partnership with the Capimax Group — a British, American &amp; Emirati group that owns 12 Global companies, working in more than 60 fields including Finance,
                         investment fund trust, Market Administration, Gold, silver, petroleum Trading, real estate financing, 
                         financial leasing, Tourism, Fintech, commercial activity, AI Activity, cryptocurrency financial management, 
                         credit risk, currencies, financial markets, real estate, general trading, and more.
@@ -373,7 +374,7 @@ const Whitepaper = () => {
                       {/* Company showcase */}
                       <div className="bg-white dark:bg-dark-800 rounded-xl p-8 my-8 border border-primary-200 dark:border-gray-700 shadow-lg">
                         <h4 className="text-2xl font-semibold mb-6 text-primary-700 dark:text-primary-400 text-center">
-                          🏢 Capimax Holding Companies
+                          🏢 Capimax Group Companies
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-base">
                           <div className="space-y-3">
@@ -407,7 +408,7 @@ const Whitepaper = () => {
                               'HCC Cyber Insurance',
                               'CIM Financial',
                               'Assurax Insurance and Credit Risk',
-                              'Profit Max British Investment'
+                              'Profitmax British Investments'
                             ].map((company, index) => (
                               <motion.div
                                 key={index}
@@ -699,7 +700,7 @@ const Whitepaper = () => {
                         {[
                           { label: 'Token Name', value: 'Pronova', icon: FaCoins },
                           { label: 'Code', value: 'PRN', icon: FaFlag },
-                          { label: 'Blockchain', value: 'Ethereum', icon: FaCog },
+                          { label: 'Blockchain', value: 'BNB Smart Chain (BSC)', icon: FaCog },
                           { label: 'Total Supply', value: '1,000,000,000', icon: FaChartLine }
                         ].map((info, index) => (
                           <motion.div
@@ -1032,7 +1033,7 @@ const Whitepaper = () => {
                     {[
                       {
                         title: 'Blockchain Technology',
-                        description: 'Ethereum blockchain for smart contract capabilities and security',
+                        description: 'BNB Smart Chain (BSC) for smart contract capabilities, low fees, and security',
                         icon: FaCog,
                         color: 'blue'
                       },
@@ -1290,7 +1291,32 @@ const Whitepaper = () => {
                       Risk Insurance and Asset Protection
                     </h2>
                   </div>
-                  
+
+                  {/* Smart Contract Audit (SolidProof) */}
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-700 shadow-xl mb-10">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                          <FaShieldAlt className="text-white text-xl" />
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-semibold text-green-700 dark:text-green-400">Independent Security Audit</h3>
+                          <p className="text-gray-700 dark:text-gray-300">
+                            Pronova's smart contracts are audited by <strong>SolidProof</strong>, a leading blockchain security firm.
+                          </p>
+                        </div>
+                      </div>
+                      <a
+                        href="https://app.solidproof.io/projects/pronova"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors whitespace-nowrap"
+                      >
+                        View Audit Report <FaExternalLinkAlt size={14} />
+                      </a>
+                    </div>
+                  </div>
+
                   <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-2xl p-10 border border-red-200 dark:border-red-700 shadow-2xl">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                       {/* Insurance Partners */}
@@ -1527,7 +1553,26 @@ const Whitepaper = () => {
                       Pronova Pre-sale
                     </h2>
                   </div>
-                  
+
+                  {/* Early Investor Advantage */}
+                  <div className="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-2xl p-8 border-l-4 border-amber-500 shadow-xl mb-10">
+                    <h3 className="text-2xl font-semibold mb-4 text-amber-700 dark:text-amber-400 flex items-center gap-2">
+                      <FaTrophy className="text-yellow-500" /> The Early Investor Advantage &amp; Safe Exit
+                    </h3>
+                    <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300 mb-4">
+                      The Pronova Pre-Sale is designed to give early investors a strategic edge: they receive PRN at a
+                      price below the platform reference price of <strong>$1.00 per token</strong> across Capimax's
+                      investment platforms — translating into an immediate advantage of up to <strong>~20%</strong> when
+                      the token is used directly to purchase income-generating assets.
+                    </p>
+                    <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+                      <li>• <strong>Instant value:</strong> use PRN immediately on the platforms at the $1.00 reference price.</li>
+                      <li>• <strong>5% discount</strong> when paying with PRN across Capimax platforms.</li>
+                      <li>• <strong>Dual returns:</strong> immediate price advantage plus long-term yield from asset-backed investments.</li>
+                      <li>• <strong>Safe exit:</strong> convert into yield-bearing assets or fractional real estate, with exit available anytime — protecting capital and reducing market-volatility risk.</li>
+                    </ul>
+                  </div>
+
                   <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-10 border border-green-200 dark:border-green-700 shadow-2xl">
                     <div className="text-center mb-12">
                       <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-neon">
@@ -1660,7 +1705,7 @@ const Whitepaper = () => {
                           },
                           {
                             category: 'Investments',
-                            items: ['Profit Max British Investments', 'CAPIMAX Investments USA', 'Advisory Board']
+                            items: ['Profitmax British Investments', 'CAPIMAX Investments USA', 'Advisory Board']
                           }
                         ].map((team, index) => (
                           <motion.div
@@ -1748,7 +1793,7 @@ const Whitepaper = () => {
                         Legal Structure
                       </h3>
                       <p className="mb-6 text-gray-700 dark:text-gray-300">
-                        Formation of Capimax Holding is a company registered and licensed from the following countries:
+                        The Capimax Group is registered and licensed across the following countries:
                       </p>
                       <div className="grid grid-cols-1 gap-3">
                         {[
@@ -1757,7 +1802,7 @@ const Whitepaper = () => {
                           'HCC Insurance & Risk',
                           'CIM Finance',
                           'Assurax Risk Assurance',
-                          'Profit Max British Investments'
+                          'Profitmax British Investments'
                         ].map((company, index) => (
                           <motion.div
                             key={index}

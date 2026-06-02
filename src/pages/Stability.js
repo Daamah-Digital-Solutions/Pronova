@@ -129,7 +129,7 @@ const Stability = () => {
     {
       icon: <FaBuilding size={28} />,
       title: "Institutional Backing",
-      description: "Managed by Capimax Blockchain & FinTech and Capimax Virtual Assets, subsidiaries of Capimax Holding UK with 7+ years experience.",
+      description: "Managed by Capimax Virtual Assets and Capimax Blockchain Company, in partnership with the Capimax Group, with 7+ years experience.",
       color: "from-green-500 to-emerald-500",
       features: [
         "Professional management team",
@@ -284,7 +284,7 @@ const Stability = () => {
                       Unlike speculative cryptocurrencies that rely solely on market sentiment, Pronova was designed from the ground up with <strong className={darkMode ? 'text-white' : 'text-gray-900'}>institutional-grade stability mechanisms</strong>.
                     </p>
                     <p>
-                      Our founding institutions - Capimax Blockchain & FinTech and Capimax Virtual Assets - added an <strong className={darkMode ? 'text-primary-400' : 'text-primary-600'}>institutional investment dimension</strong> to protect the currency, preserve its value, and ensure long-term stability.
+                      Our founding institutions - Capimax Virtual Assets and Capimax Blockchain Company - added an <strong className={darkMode ? 'text-primary-400' : 'text-primary-600'}>institutional investment dimension</strong> to protect the currency, preserve its value, and ensure long-term stability.
                     </p>
                     <p>
                       This unique approach creates a balance between <strong className={darkMode ? 'text-white' : 'text-gray-900'}>free market trading</strong> and <strong className={darkMode ? 'text-secondary-400' : 'text-secondary-600'}>institutional protection</strong>, offering the best of both worlds.

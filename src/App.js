@@ -19,6 +19,7 @@ import Partners from './pages/Partners';
 import Stability from './pages/Stability';
 import Faq from './pages/Faq';
 import Contact from './pages/Contact';
+import Legal from './pages/Legal';
 import Dashboard from './pages/Dashboard';
 import Congratulations from './pages/Congratulations';
 import NotFound from './pages/NotFound';
@@ -50,6 +51,7 @@ function App() {
           <Route path="/stability" element={<Stability />} />
           <Route path="/faq" element={<Faq />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/legal" element={<Legal />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/congratulations" element={<Congratulations />} />
           <Route path="*" element={<NotFound />} />

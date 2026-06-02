@@ -51,7 +51,7 @@ const WhatIsPronovaSection = () => {
     {
       icon: <FaBuilding size={24} />,
       title: "Institutional Foundation",
-      description: "Developed by Capimax Blockchain & FinTech and Capimax Virtual Assets, subsidiaries of the global Capimax Holding UK group."
+      description: "Developed by Capimax Virtual Assets and Capimax Blockchain Company, in partnership with the global Capimax Group."
     },
     {
       icon: <FaShieldAlt size={24} />,
@@ -93,7 +93,7 @@ const WhatIsPronovaSection = () => {
 
               <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                 <p>
-                  <strong className="text-gray-900 dark:text-white">Pronova (PRN)</strong> is a digital cryptocurrency founded and developed by a British-American global group of companies through <strong className="text-primary-600 dark:text-primary-400">Capimax Blockchain & FinTech</strong> and <strong className="text-primary-600 dark:text-primary-400">Capimax Virtual Assets</strong>, both subsidiaries of Capimax Holding UK.
+                  <strong className="text-gray-900 dark:text-white">Pronova (PRN)</strong> is a digital cryptocurrency founded and developed by a British-American global group of companies through <strong className="text-primary-600 dark:text-primary-400">Capimax Virtual Assets</strong> and <strong className="text-primary-600 dark:text-primary-400">Capimax Blockchain Company</strong>, in partnership with the global Capimax Group.
                 </p>
 
                 <p>
@@ -103,6 +103,19 @@ const WhatIsPronovaSection = () => {
                 <p>
                   With over <strong className="text-primary-600 dark:text-primary-400">7 years of experience</strong> in blockchain, fintech, and virtual assets, our group has created a currency designed for <strong className="text-gray-900 dark:text-white">real-world utility</strong> and <strong className="text-gray-900 dark:text-white">institutional stability</strong>.
                 </p>
+
+                {/* Official definition (client-approved) */}
+                <div className="mt-2 p-5 rounded-2xl border-l-4 border-primary-500 bg-primary-500/5 dark:bg-primary-500/10">
+                  <span className="block text-sm font-semibold uppercase tracking-wider text-primary-600 dark:text-primary-400 mb-2">Official Definition</span>
+                  <p className="text-base leading-relaxed">
+                    Pronova (PRN) is a multi-purpose crypto asset designed for trading and speculation in
+                    cryptocurrency markets, for use as a digital means of payment, and as a utility currency across
+                    multiple digital platforms and services. PRN can be freely bought, paid with, and traded under
+                    open-market mechanisms, with the ability to integrate across various investment, tokenization,
+                    and financial applications. Its use is subject to the laws of each jurisdiction, and it does not
+                    represent an investment commitment or a guarantee of returns.
+                  </p>
+                </div>
               </div>
             </div>
           </FadeInWhenVisible>

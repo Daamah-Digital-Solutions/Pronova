@@ -5,6 +5,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { motion } from 'framer-motion';
 import { FaSun, FaMoon, FaBars, FaTimes, FaWallet } from 'react-icons/fa';
 import Button from '../ui/Button';
+import LanguageToggle from '../ui/LanguageToggle';
 import pronovaLogo from '../../assets/images/logos for partner/pronova coin.png';
 
 // Translation data
@@ -124,9 +125,12 @@ const Navbar = () => {
             </div>
 
             <div className="flex items-center space-x-4">
+              {/* Language Toggle */}
+              <LanguageToggle />
+
               {/* Theme Toggle */}
-              <button 
-                onClick={toggleDarkMode} 
+              <button
+                onClick={toggleDarkMode}
                 className="p-2 rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
                 aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
               >
@@ -200,7 +204,8 @@ const Navbar = () => {
               <Link to="/contact" className={`nav-link ${location.pathname === '/contact' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                 {t.contact}
               </Link>
-              <div className="flex space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <LanguageToggle />
                 <button
                   onClick={toggleDarkMode}
                   className="p-2 rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"

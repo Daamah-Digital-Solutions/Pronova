@@ -16,6 +16,11 @@ import WhatIsPronovaSection from '../components/home/WhatIsPronovaSection';
 import DualNatureSection from '../components/home/DualNatureSection';
 import HolderBenefitsSection from '../components/home/HolderBenefitsSection';
 import DemandCreationSection from '../components/home/DemandCreationSection';
+import PrivateSaleSection from '../components/home/PrivateSaleSection';
+import UseCasesSection from '../components/home/UseCasesSection';
+import StakingSection from '../components/home/StakingSection';
+import SecurityTrustSection from '../components/home/SecurityTrustSection';
+import SmartContractSection from '../components/home/SmartContractSection';
 
 const Home = () => {
   return (
@@ -140,9 +145,14 @@ const Home = () => {
 
       {/* New Client Content Sections */}
       <WhatIsPronovaSection />
+      <PrivateSaleSection />
       <DualNatureSection />
       <HolderBenefitsSection />
+      <UseCasesSection />
+      <StakingSection />
       <DemandCreationSection />
+      <SecurityTrustSection />
+      <SmartContractSection />
 
       {/* Original Enhanced Sections */}
       <EnhancedLatestNewsSection />

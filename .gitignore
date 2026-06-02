@@ -68,6 +68,10 @@ backend/prisma/dev.db-journal
 backend/uploads/
 uploads/
 
+# Internal client docs (not for the public repo)
+Edits fom client/
+CLIENT_REQUESTS_CHECKLIST.md
+
 # Misc
 .cache/
 .parcel-cache/

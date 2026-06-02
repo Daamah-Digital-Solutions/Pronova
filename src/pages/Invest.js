@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { FaChartLine, FaShieldAlt, FaGlobe, FaHandshake, FaExternalLinkAlt, FaRocket, FaGem, FaStar } from 'react-icons/fa';
 
@@ -311,9 +312,9 @@ const Invest = () => {
                   <h1 className={`text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[0.9] mb-8 ${
                     darkMode ? 'text-white' : 'text-gray-900'
                   }`}>
-                    <span className="block mb-2">Invest</span>
-                    <span className="block bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Beyond</span>
-                    <span className="block">Crypto</span>
+                    <span className="block mb-2">Buy &amp; Invest</span>
+                    <span className="block bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">with PRN</span>
+                    <span className="block">Beyond Crypto</span>
                   </h1>
 
                   {/* Elite Subtitle */}
@@ -327,32 +328,42 @@ const Invest = () => {
                   </div>
 
                   {/* Value Proposition */}
-                  <p className={`text-lg md:text-xl mb-12 leading-relaxed max-w-2xl ${
+                  <p className={`text-lg md:text-xl mb-6 leading-relaxed max-w-2xl ${
                     darkMode ? 'text-slate-300' : 'text-gray-700'
                   }`}>
                     Partner with Capimax Investments to diversify your portfolio with premium assets typically reserved for institutional clients. Bridge digital and traditional finance with confidence.
                   </p>
 
+                  {/* Instant-utility message */}
+                  <div className={`mb-12 p-5 rounded-2xl border max-w-2xl ${
+                    darkMode ? 'bg-violet-500/10 border-violet-500/30' : 'bg-indigo-50 border-indigo-200'
+                  }`}>
+                    <p className={`text-base md:text-lg leading-relaxed ${darkMode ? 'text-slate-200' : 'text-gray-700'}`}>
+                      As a <strong>PRN holder, you can use your tokens instantly</strong> — pay, buy, and invest
+                      directly across Capimax investment platforms, tokenization platforms, applications, and partner
+                      companies. PRN is real, usable utility from day one — not just a token to hold.
+                    </p>
+                  </div>
+
                   {/* Premium CTA */}
                   <div className="flex flex-col sm:flex-row gap-6">
-                    <motion.a
-                      href="https://panel.capimaxinvestment.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      to="/presale"
                       className={`group inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-2xl transition-all duration-300 transform hover:scale-105 ${
                         darkMode
                           ? 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-xl shadow-violet-500/25'
                           : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-xl shadow-indigo-500/25'
                       }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
                     >
-                      <span className="mr-2">Access Investment Portal</span>
-                      <FaExternalLinkAlt className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </motion.a>
+                      <span className="mr-2">Buy Now with PRN</span>
+                      <FaRocket className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
 
-                    <motion.button
-                      className={`inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-2xl border-2 backdrop-blur-sm transition-all duration-300 ${
+                    <motion.a
+                      href="https://panel.capimaxinvestment.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`group inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-2xl border-2 backdrop-blur-sm transition-all duration-300 ${
                         darkMode
                           ? 'border-slate-600 text-slate-300 hover:bg-slate-800/50 hover:border-slate-500'
                           : 'border-gray-300 text-gray-700 hover:bg-white/50 hover:border-gray-400'
@@ -360,8 +371,9 @@ const Invest = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      Learn More
-                    </motion.button>
+                      <span className="mr-2">Invest with PRN</span>
+                      <FaExternalLinkAlt className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </motion.a>
                   </div>
                 </div>
               </FadeInWhenVisible>

@@ -44,7 +44,13 @@ npx hardhat run scripts/verify-deployment.js --network bscTestnet    # Verify de
 npx hardhat node                                                      # Start local Hardhat node
 ```
 
-Note: Hardhat configured for BSC Testnet (chainId 97) and BSC Mainnet (chainId 56). Requires PRIVATE_KEY and BSCSCAN_API_KEY in backend/contracts/.env
+Note: Hardhat configured for BSC Testnet (chainId 97) and BSC Mainnet (chainId 56). Mainnet network is named `bscMainnet` (NOT `bsc` — the README example is stale).
+
+**CRITICAL — Two separate Hardhat configs exist:**
+- `backend/hardhat.config.ts` — active when running Hardhat from `backend/`. This is what `backend/`'s `npm test` uses. Reads the deployer key from `DEPLOYER_PRIVATE_KEY`; `paths.sources` points to `./contracts/contracts`, tests to `./contracts/test`.
+- `backend/contracts/hardhat.config.js` — active when running from `backend/contracts/` (the commands above). Reads the deployer key from `PRIVATE_KEY`; includes a gas reporter (`REPORT_GAS=true`) and a 100s Mocha timeout.
+
+The two configs use **different env var names for the private key** (`DEPLOYER_PRIVATE_KEY` vs `PRIVATE_KEY`). When deployments or tests fail with an empty-accounts error, confirm you're in the right directory for the key you've set.
 
 ## Architecture & Key Components
 
@@ -87,6 +93,8 @@ Note: Hardhat configured for BSC Testnet (chainId 97) and BSC Mainnet (chainId 5
   - `payment.service.ts`, `presale.service.ts`, `kyc.service.ts`, `admin.service.ts`
 
 - **Middleware** (`middleware/`): JWT auth, validation, error handling
+
+- **Server entry** (`server.ts`): All routes mounted under `/api/*` (`/api/auth`, `/api/users`, `/api/presale`, `/api/payments`, `/api/kyc`, `/api/admin`). Health check at `/health`. Uploaded files served from `/uploads`. Global rate limit of 100 req/15min applies to `/api`. The Stripe webhook route (`/api/payments/webhook`) is registered with `express.raw()` **before** the JSON body parser — signature verification needs the raw body, so don't reorder these middlewares.
 
 - **Database** (`prisma/schema.prisma`):
   - PostgreSQL with Prisma ORM

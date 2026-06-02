@@ -11,7 +11,7 @@ import capiMaxFinancialLogo from '../../../assets/images/logos for partner/CAPI 
 import hccLogo from '../../../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../../../assets/images/logos for partner/assurax logo-01.png';
 import cimLogo from '../../../assets/images/logos for partner/cim logo.png';
-import profitmaxLogo from '../../../assets/images/logos for partner/profitmax logo.png';
+import profitmaxLogo from '../../../assets/images/logos for partner/finalprofitmax-logo.svg';
 import tdhLogo from '../../../assets/images/logos for partner/tdh logo.png';
 import novaPropertyLogo from '../../../assets/images/logos for partner/nova property logo.png';
 import primeinnLogo from '../../../assets/images/logos for partner/primeinn logo.png';
@@ -21,7 +21,8 @@ import capiMaxMetalsLogo from '../../../assets/images/logos for partner/CAPI Max
 import elitGatePropertiesLogo from '../../../assets/images/logos for partner/elitgate properties.png';
 import capiMaxVirtualAssetLogo from '../../../assets/images/logos for partner/capi max  Virtual Asset uk dark .png';
 import capiMaxFintechBlockchainLogo from '../../../assets/images/logos for partner/capi max  Fintech and Blockchain uk dark  copy.png';
-import novaDigitalFinanceLogo from '../../../assets/images/logos for partner/nova property logo.png';
+import novaDigitalFinanceLogo from '../../../assets/images/logos for partner/novadf-logo.png';
+import capimaxGroupLogo from '../../../assets/images/logos for partner/capimax-group-logo.png';
 
 // Animation for section elements when they come into view
 const FadeInWhenVisible = ({ children, delay = 0, direction = null }) => {
@@ -178,6 +179,12 @@ const EnhancedPartnersSection = () => {
       icon: <FaBuilding size={20} />,
       companies: [
         {
+          name: "Capimax Group",
+          logo: capimaxGroupLogo,
+          description: "The global parent group uniting all Capimax companies worldwide",
+          delay: 0.38
+        },
+        {
           name: "Capimax Holdings UK",
           logo: capiMaxHoldingsLogo,
           description: "Parent company overseeing 12 global investment divisions",
@@ -202,7 +209,7 @@ const EnhancedPartnersSection = () => {
           delay: 0.55
         },
         {
-          name: "Profit Max British Investments",
+          name: "Profitmax British Investments",
           logo: profitmaxLogo,
           description: "High-growth opportunity specialist and portfolio manager",
           delay: 0.6

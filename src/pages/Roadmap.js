@@ -275,7 +275,7 @@ const Roadmap = () => {
       date: "April - June 2025",
       milestones: [
         { text: "Website Development -- Launch of the official Pronova website with detailed whitepaper, tokenomics, and project vision", completed: true },
-        { text: "Smart Contract Deployment -- Developing and deploying the Pronova token on Ethereum network with a security-first approach", completed: true },
+        { text: "Smart Contract Deployment -- Developing and deploying the Pronova token on the BNB Smart Chain (BSC) network with a security-first approach", completed: true },
         { text: "Community Building & Social Media Presence -- Launching Telegram, Twitter, and Discord channels for engagement", completed: true },
         { text: "Private Sale & Early Investor Round -- Offering early investment opportunities to strategic partners and investors", completed: false }
       ],
@@ -345,7 +345,7 @@ const Roadmap = () => {
       milestones: [
         { text: "Pronova 2.0 Ecosystem Upgrade -- Scalability improvements, Layer 2 solutions, and lower transaction fees", completed: false },
         { text: "Global Financial Partnerships -- Expanding partnerships with banks, fintech startups, and governments", completed: false },
-        { text: "Pronova Blockchain Mainnet Development -- Transitioning from Ethereum/BSC to a dedicated blockchain (if needed)", completed: false },
+        { text: "Pronova Blockchain Mainnet Development -- Transitioning from BNB Smart Chain (BSC) to a dedicated blockchain (if needed)", completed: false },
         { text: "Sustainable Growth & Long-Term Vision -- Establishing Pronova as a top-tier digital asset for payments, trading, and investments", completed: false }
       ],
       isActive: false,

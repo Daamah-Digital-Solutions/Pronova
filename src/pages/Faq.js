@@ -23,11 +23,11 @@ const Faq = () => {
     general: [
       {
         question: "What is Pronova (PRN)?",
-        answer: "Pronova (PRN) is an innovative cryptocurrency developed by Capimax Holding, a British-American company that owns 12 global investment companies operating in over 60 business fields.\n\nPronova revolutionizes the investment landscape by providing seamless integration of cryptocurrencies into traditional business practices, offering immediate utility through partnerships with 18 international companies across real estate, gold trading, insurance, and financial services.\n\nBuilt on Ethereum blockchain, Pronova serves not just as a digital currency but as a gateway to real-world investments with guaranteed discounts and corporate benefits."
+        answer: "Pronova (PRN) is an innovative cryptocurrency developed by Capimax Virtual Assets and Capimax Blockchain Company, in partnership with the Capimax Group — a British-American group that owns 12 global investment companies operating in over 60 business fields.\n\nPronova revolutionizes the investment landscape by providing seamless integration of cryptocurrencies into traditional business practices, offering immediate utility through partnerships with 18 international companies across real estate, gold trading, insurance, and financial services.\n\nBuilt on the BNB Smart Chain (BSC), Pronova serves not just as a digital currency but as a gateway to real-world investments with guaranteed discounts and corporate benefits."
       },
       {
         question: "What blockchain is Pronova built on?",
-        answer: "Pronova is built on the Ethereum blockchain, leveraging its robust smart contract capabilities, security, and widespread adoption.\n\nEthereum was chosen for its:\n• Proven security and decentralization\n• Advanced smart contract functionality\n• Extensive ecosystem and DeFi integration\n• Strong developer community and tools\n• Compatibility with major wallets and exchanges"
+        answer: "Pronova is built on the BNB Smart Chain (BSC), leveraging its robust smart contract capabilities, low transaction fees, security, and widespread adoption.\n\nBNB Smart Chain was chosen for its:\n• Proven security and decentralization\n• Advanced smart contract functionality\n• Low, fast transaction fees\n• Extensive ecosystem and DeFi integration\n• Compatibility with major wallets and exchanges"
       },
       {
         question: "What makes Pronova unique in the crypto space?",
@@ -35,7 +35,7 @@ const Faq = () => {
       },
       {
         question: "How can I store Pronova tokens?",
-        answer: "Pronova tokens can be stored in any Ethereum-compatible wallet:\n\n• MetaMask (Web browser and mobile)\n• Trust Wallet (Mobile)\n• Ledger Hardware Wallet (Most secure)\n• Trezor Hardware Wallet\n• MyEtherWallet (Web interface)\n• Any ERC-20 compatible wallet\n\nFor maximum security, we recommend using hardware wallets for large amounts. The official Pronova wallet with enhanced features will be launched in Q4 2025."
+        answer: "Pronova tokens can be stored in any BNB Smart Chain (BEP-20) compatible wallet:\n\n• MetaMask (Web browser and mobile)\n• Trust Wallet (Mobile)\n• Ledger Hardware Wallet (Most secure)\n• Trezor Hardware Wallet\n• SafePal Wallet\n• Any BEP-20 compatible wallet\n\nFor maximum security, we recommend using hardware wallets for large amounts. The official Pronova wallet with enhanced features will be launched in Q4 2025."
       },
       {
         question: "What are the main use cases for Pronova?",

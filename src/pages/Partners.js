@@ -10,6 +10,7 @@ import { useTheme } from '../context/ThemeContext';
 import { Helmet } from 'react-helmet';
 
 // Import partner logos
+import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-logo.png';
 import capiMaxHoldingsLogo from '../assets/images/logos for partner/CAPI Max Holdings UK.png';
 import capiMaxInvestmentsUSALogo from '../assets/images/logos for partner/CAPI Max Investments USA.png';
 import capiMaxInvestmentsUKLogo from '../assets/images/logos for partner/CAPI Max Investments UK.png';
@@ -18,7 +19,7 @@ import capiMaxFinancialLogo from '../assets/images/logos for partner/CAPI Max Fi
 import hccLogo from '../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png';
 import cimLogo from '../assets/images/logos for partner/cim logo.png';
-import profitmaxLogo from '../assets/images/logos for partner/profitmax logo.png';
+import profitmaxLogo from '../assets/images/logos for partner/finalprofitmax-logo.svg';
 import tdhLogo from '../assets/images/logos for partner/tdh logo.png';
 import novaPropertyLogo from '../assets/images/logos for partner/nova property logo.png';
 import primeinnLogo from '../assets/images/logos for partner/primeinn logo.png';
@@ -194,6 +195,13 @@ const Partners = () => {
   // All 18+ partner companies accepting Pronova
   const partners = [
     {
+      name: "Capimax Group",
+      logo: capimaxGroupLogo,
+      description: "The global parent group behind Pronova, uniting Capimax's investment, fintech, and blockchain companies worldwide.",
+      sectors: ["Group", "Global"],
+      website: "https://capimaxgroup.com/"
+    },
+    {
       name: "Capimax Holdings UK",
       logo: capiMaxHoldingsLogo,
       description: "Parent company overseeing 12 global investment companies across diverse sectors.",
@@ -250,7 +258,7 @@ const Partners = () => {
       website: "https://cimfinancialgroup.com/"
     },
     {
-      name: "Profit Max British Investments",
+      name: "Profitmax British Investments",
       logo: profitmaxLogo,
       description: "High-growth investment opportunities and portfolio management.",
       sectors: ["Investments", "UK"],
