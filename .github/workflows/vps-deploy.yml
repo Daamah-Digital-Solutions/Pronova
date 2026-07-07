@@ -1,0 +1,33 @@
+name: Deploy to VPS
+
+# Automatically rebuilds & redeploys the live frontend on the Hostinger VPS
+# (pronovacrypto.tech) whenever code is pushed to `main`. It SSHes into the
+# server and runs /root/deploy-pronova.sh (frontend only; backend/DB untouched).
+#
+# Required repository secrets (Settings → Secrets and variables → Actions):
+#   VPS_HOST     -> the server IP / hostname
+#   VPS_USER     -> ssh user (root)
+#   VPS_SSH_KEY  -> the PRIVATE deploy key (ed25519)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+# Never run two deploys at the same time; let the running one finish.
+concurrency:
+  group: vps-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          command_timeout: 20m
+          script: /root/deploy-pronova.sh
