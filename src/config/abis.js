@@ -69,10 +69,11 @@ export const PRONOVA_PRESALE_ABI = [
   "function getUserPurchaseInfo(address user) view returns (uint256, uint256, uint256, bool)",
   "function getUserRemainingLimit(address user) view returns (uint256)",
 
-  // Purchase Functions
-  "function buyWithETH(address referrer) payable",
-  "function buyWithBNB(address referrer) payable", 
-  "function buyWithUSDT(uint256 amount, address referrer)",
+  // Purchase Functions (match deployed contract: slippage + MEV-protection args)
+  "function commitPurchase(bytes32 commitment)",
+  "function buyWithETH(address referrer, uint256 minTokensExpected, bytes32 nonce) payable",
+  "function buyWithBNB(address referrer, uint256 minTokensExpected, bytes32 nonce) payable",
+  "function buyWithUSDT(uint256 amount, address referrer, uint256 minTokensExpected, bytes32 nonce)",
   "function claimTokens()",
 
   // Price Functions

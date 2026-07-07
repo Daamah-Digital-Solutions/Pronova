@@ -147,9 +147,14 @@ class Web3Service {
       if (!contract) throw new Error('Contract not available');
       
       const value = ethers.utils.parseEther(ethAmount.toString());
-      const gasEstimate = await contract.estimateGas.buyWithETH(referrer, { value });
-      
-      const tx = await contract.buyWithETH(referrer, {
+      // Deployed contract signature: buyWithETH(referrer, minTokensExpected, nonce).
+      // minTokensExpected = 0 disables slippage revert; nonce is only checked if the
+      // buyer pre-committed (commit-reveal is optional for wallets that never commit).
+      const minTokens = 0;
+      const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32));
+      const gasEstimate = await contract.estimateGas.buyWithETH(referrer, minTokens, nonce, { value });
+
+      const tx = await contract.buyWithETH(referrer, minTokens, nonce, {
         value,
         gasLimit: gasEstimate.mul(120).div(100) // Add 20% buffer
       });
@@ -171,9 +176,12 @@ class Web3Service {
       if (!contract) throw new Error('Contract not available');
       
       const value = ethers.utils.parseEther(bnbAmount.toString());
-      const gasEstimate = await contract.estimateGas.buyWithBNB(referrer, { value });
-      
-      const tx = await contract.buyWithBNB(referrer, {
+      // Deployed contract signature: buyWithBNB(referrer, minTokensExpected, nonce).
+      const minTokens = 0;
+      const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32));
+      const gasEstimate = await contract.estimateGas.buyWithBNB(referrer, minTokens, nonce, { value });
+
+      const tx = await contract.buyWithBNB(referrer, minTokens, nonce, {
         value,
         gasLimit: gasEstimate.mul(120).div(100)
       });
@@ -208,9 +216,11 @@ class Web3Service {
         await approveTx.wait();
       }
       
-      // Execute purchase
-      const gasEstimate = await presaleContract.estimateGas.buyWithUSDT(amount, referrer);
-      const tx = await presaleContract.buyWithUSDT(amount, referrer, {
+      // Execute purchase — deployed signature: buyWithUSDT(amount, referrer, minTokensExpected, nonce)
+      const minTokens = 0;
+      const nonce = ethers.utils.hexlify(ethers.utils.randomBytes(32));
+      const gasEstimate = await presaleContract.estimateGas.buyWithUSDT(amount, referrer, minTokens, nonce);
+      const tx = await presaleContract.buyWithUSDT(amount, referrer, minTokens, nonce, {
         gasLimit: gasEstimate.mul(120).div(100)
       });
       
