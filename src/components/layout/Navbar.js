@@ -5,16 +5,16 @@ import { useLanguage } from '../../context/LanguageContext';
 import { motion } from 'framer-motion';
 import { FaSun, FaMoon, FaBars, FaTimes, FaWallet } from 'react-icons/fa';
 import Button from '../ui/Button';
-import LanguageToggle from '../ui/LanguageToggle';
 import pronovaLogo from '../../assets/images/logos for partner/pronova coin.png';
 
 // Translation data
 const translations = {
   en: {
     home: 'Home',
-    invest: 'Invest',
+    invest: 'Use PRN',
     whitepaper: 'Whitepaper',
     roadmap: 'Roadmap',
+    news: 'News',
     team: 'Team & Partners',
     faq: 'FAQ',
     contact: 'Contact Us',
@@ -113,6 +113,9 @@ const Navbar = () => {
               <Link to="/roadmap" className={`nav-link ${location.pathname === '/roadmap' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                 {t.roadmap}
               </Link>
+              <Link to="/news" className={`nav-link ${location.pathname === '/news' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
+                {t.news}
+              </Link>
               <Link to="/team" className={`nav-link ${location.pathname === '/team' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                 {t.team}
               </Link>
@@ -125,9 +128,6 @@ const Navbar = () => {
             </div>
 
             <div className="flex items-center space-x-4">
-              {/* Language Toggle */}
-              <LanguageToggle />
-
               {/* Theme Toggle */}
               <button
                 onClick={toggleDarkMode}
@@ -195,6 +195,9 @@ const Navbar = () => {
               <Link to="/roadmap" className={`nav-link ${location.pathname === '/roadmap' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                 {t.roadmap}
               </Link>
+              <Link to="/news" className={`nav-link ${location.pathname === '/news' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
+                {t.news}
+              </Link>
               <Link to="/team" className={`nav-link ${location.pathname === '/team' ? 'text-primary-600 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
                 {t.team}
               </Link>
@@ -205,7 +208,6 @@ const Navbar = () => {
                 {t.contact}
               </Link>
               <div className="flex items-center space-x-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <LanguageToggle />
                 <button
                   onClick={toggleDarkMode}
                   className="p-2 rounded-full text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"

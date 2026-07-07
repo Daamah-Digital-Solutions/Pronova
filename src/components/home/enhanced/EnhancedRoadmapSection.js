@@ -137,30 +137,33 @@ const EnhancedRoadmapItem = ({
 };
 
 const EnhancedRoadmapSection = () => {
-  // Roadmap data from whitepaper
+  // Roadmap data from whitepaper (v2)
   const roadmapItems = [
     {
-      title: "Q2 2025 - Development & Initial Launch",
-      date: "April - June 2025",
+      title: "Phase 1 — Foundation & Pre-Sale",
+      date: "Completed / In Progress",
       milestones: [
-        { text: "Website Development", completed: true },
-        { text: "Smart Contract Deployment on BNB Smart Chain (BSC)", completed: true },
-        { text: "Community Building & Social Media Presence", completed: true },
-        { text: "Private Sale & Early Investor Round", completed: false }
+        { text: "Six incorporated entities (USA + UK)", completed: true },
+        { text: "SolidProof audit — token, vesting & pre-sale contracts", completed: true },
+        { text: "Insurance frameworks (HCC, Assurax, HCC International)", completed: true },
+        { text: "18+ partner company PRN acceptance announcements", completed: true },
+        { text: "CIM Financial Group oversight established", completed: true },
+        { text: "Pre-Sale Stage 1 launch (100M PRN @ $0.80)", completed: false }
       ],
       isActive: true,
       isCompleted: false,
-      progress: 75,
+      progress: 85,
       delay: 0.1
     },
     {
-      title: "Q3 2025 - Token Sale & DEX Listing",
-      date: "July - September 2025",
+      title: "Phase 2 — Ecosystem Activation",
+      date: "2026",
       milestones: [
-        { text: "Initial Smart Contract Audit", completed: false },
-        { text: "Beginning of Pre-Sale (ICO/IDO/IEO)", completed: false },
-        { text: "DEX Listing on Uniswap, Pancake Swap", completed: false },
-        { text: "CEX Negotiations with Kucoin, bitget, Gate.io", completed: false }
+        { text: "Pre-Sale Stages 2 & 3 completion", completed: false },
+        { text: "Staking & lending protocol deployment", completed: false },
+        { text: "First tokenized real estate properties", completed: false },
+        { text: "AI investment analytics beta", completed: false },
+        { text: "Tier 2 CEX listings & GCC market launch", completed: false }
       ],
       isActive: false,
       isCompleted: false,
@@ -168,12 +171,13 @@ const EnhancedRoadmapSection = () => {
       delay: 0.2
     },
     {
-      title: "Q4 2025 - Ecosystem Expansion & Adoption",
-      date: "October - December 2025",
+      title: "Phase 3 — Institutional Scale",
+      date: "2026 – 2027",
       milestones: [
-        { text: "Pronova Wallet Launch (Beta Version)", completed: false },
-        { text: "Payment Gateway Integration", completed: false },
-        { text: "Pronova Rewards Program", completed: false }
+        { text: "Tier 1 CEX listing campaign", completed: false },
+        { text: "100+ properties tokenized across the ecosystem", completed: false },
+        { text: "Institutional investment fund products", completed: false },
+        { text: "Cross-chain bridges & Asia-Pacific expansion", completed: false }
       ],
       isActive: false,
       isCompleted: false,
@@ -181,12 +185,13 @@ const EnhancedRoadmapSection = () => {
       delay: 0.3
     },
     {
-      title: "Q1 2026 - Utility & Real-World Use Cases",
-      date: "January - March 2026",
+      title: "Phase 4 — Global Leadership",
+      date: "2027+",
       milestones: [
-        { text: "Integration with E-commerce Platforms", completed: false },
-        { text: "Real Estate & Gold Investment Use Cases", completed: false },
-        { text: "Expansion into More Exchanges", completed: false }
+        { text: "Layer 2 integration & dedicated blockchain evaluation", completed: false },
+        { text: "Global top-tier exchange listings", completed: false },
+        { text: "Full cross-chain interoperability", completed: false },
+        { text: "Traditional finance & institutional custody integration", completed: false }
       ],
       isActive: false,
       isCompleted: false,
@@ -222,18 +227,18 @@ const EnhancedRoadmapSection = () => {
           <div className="mb-16 flex flex-col md:flex-row items-center justify-center p-8 bg-gradient-to-r from-primary-500/10 via-white dark:via-dark-900 to-secondary-500/10 border border-primary-500/20 rounded-2xl backdrop-blur-sm shadow-lg">
             <div className="mb-6 md:mb-0 md:mr-8 w-24 h-24 rounded-full flex items-center justify-center bg-gradient-to-br from-primary-500 to-secondary-500 shadow-lg">
               <div className="text-center text-white">
-                <span className="block text-3xl font-bold">75%</span>
+                <span className="block text-3xl font-bold">85%</span>
                 <span className="text-xs opacity-90">Phase 1</span>
               </div>
             </div>
             <div className="text-center md:text-left">
               <h3 className="text-2xl font-heading font-bold mb-2 text-gray-900 dark:text-white">
-                Currently in Development Phase
+                Foundation Complete — Pre-Sale Underway
               </h3>
               <p className="text-gray-600 dark:text-gray-300 max-w-2xl leading-relaxed">
-                We're currently in the first phase of our roadmap, with website development, 
-                smart contract deployment, and community building already completed. 
-                Join us as we prepare for the private sale and early investor round!
+                Phase 1 is largely accomplished: six incorporated entities, a completed SolidProof audit,
+                institutional insurance frameworks, CIM oversight, and 18+ partner integrations are all in place.
+                Join us as Pre-Sale Stage 1 goes live.
               </p>
             </div>
           </div>

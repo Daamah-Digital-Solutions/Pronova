@@ -143,25 +143,25 @@ const Contact = () => {
 
   const officeLocations = [
     {
-      city: 'London',
-      country: 'United Kingdom',
-      address: 'Capimax Holdings UK\n123 Financial District\nLondon EC2V 8AS',
-      timezone: 'GMT',
-      flag: '🇬🇧'
+      city: 'Wyoming',
+      country: 'United States',
+      address: 'Pronova Virtual Asset\nRegistered in Wyoming, USA',
+      timezone: 'MST',
+      flag: '🇺🇸'
     },
     {
-      city: 'New York',
+      city: 'Delaware',
       country: 'United States',
-      address: 'Capimax Investments USA\n456 Wall Street\nNew York, NY 10005',
+      address: 'Capimax Group Holding\nRegistered in Delaware, USA',
       timezone: 'EST',
       flag: '🇺🇸'
     },
     {
-      city: 'Dubai',
-      country: 'United Arab Emirates',
-      address: 'Capimax Investments UAE\n789 Business Bay\nDubai, UAE',
-      timezone: 'GST',
-      flag: '🇦🇪'
+      city: 'United Kingdom',
+      country: 'United Kingdom',
+      address: 'Capimax Virtual Asset · Capimax Blockchain · Nova Digital Finance\nRegistered in the United Kingdom',
+      timezone: 'GMT',
+      flag: '🇬🇧'
     }
   ];
 

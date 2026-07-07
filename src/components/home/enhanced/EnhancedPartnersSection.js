@@ -1,28 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaBuilding, FaGlobe, FaHandshake, FaStar, FaUsers } from 'react-icons/fa';
+import { FaBuilding, FaHandshake, FaStar, FaUsers } from 'react-icons/fa';
 
-// Import partner logos
-import capiMaxHoldingsLogo from '../../../assets/images/logos for partner/CAPI Max Holdings UK.png';
-import capiMaxInvestmentsUSALogo from '../../../assets/images/logos for partner/CAPI Max Investments USA.png';
-import capiMaxInvestmentsUKLogo from '../../../assets/images/logos for partner/CAPI Max Investments UK.png';
-import capiMaxInvestmentsUAELogo from '../../../assets/images/logos for partner/CAPI Max Investments UAE.png';
-import capiMaxFinancialLogo from '../../../assets/images/logos for partner/CAPI Max Financial  uk.png';
+// Import partner logos (v2 corporate structure)
 import hccLogo from '../../../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../../../assets/images/logos for partner/assurax logo-01.png';
 import cimLogo from '../../../assets/images/logos for partner/cim logo.png';
-import profitmaxLogo from '../../../assets/images/logos for partner/finalprofitmax-logo.svg';
-import tdhLogo from '../../../assets/images/logos for partner/tdh logo.png';
-import novaPropertyLogo from '../../../assets/images/logos for partner/nova property logo.png';
 import primeinnLogo from '../../../assets/images/logos for partner/primeinn logo.png';
-import capiMaxDevelopmentLogo from '../../../assets/images/logos for partner/CAPI Max development  UK.png';
-import capiMaxTradingLogo from '../../../assets/images/logos for partner/CAPI Max for general Trading  USA.png';
-import capiMaxMetalsLogo from '../../../assets/images/logos for partner/CAPI Max for Investment in precious metals and minerals  UK.png';
 import elitGatePropertiesLogo from '../../../assets/images/logos for partner/elitgate properties.png';
 import capiMaxVirtualAssetLogo from '../../../assets/images/logos for partner/capi max  Virtual Asset uk dark .png';
 import capiMaxFintechBlockchainLogo from '../../../assets/images/logos for partner/capi max  Fintech and Blockchain uk dark  copy.png';
 import novaDigitalFinanceLogo from '../../../assets/images/logos for partner/novadf-logo.png';
 import capimaxGroupLogo from '../../../assets/images/logos for partner/capimax-group-logo.png';
+import capiMaxTokenizationLogo from '../../../assets/images/logos for partner/capimax logos png/dark/capi max all versions logos-tokenization dark.png';
 
 // Animation for section elements when they come into view
 const FadeInWhenVisible = ({ children, delay = 0, direction = null }) => {
@@ -122,12 +112,20 @@ const SupportingPartnerCard = ({ name, logo, description, delay = 0 }) => {
     <FadeInWhenVisible delay={delay}>
       <div className="group bg-white/80 dark:bg-dark-900/80 backdrop-blur-sm rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:scale-105 border border-gray-200/50 dark:border-primary-600/20 hover:border-primary-300/60 dark:hover:border-primary-500/40">
         {/* Logo Container - Compact */}
-        <div className="mb-4 bg-white dark:bg-gray-100 rounded-lg shadow-inner p-3 flex items-center justify-center h-16 group-hover:shadow-md transition-all duration-300">
-          <img
-            src={logo}
-            alt={`${name} logo`}
-            className="max-w-full max-h-full object-contain filter drop-shadow-sm"
-          />
+        <div className={`mb-4 rounded-lg shadow-inner p-3 flex items-center justify-center h-16 group-hover:shadow-md transition-all duration-300 ${
+          logo ? 'bg-white dark:bg-gray-100' : 'bg-gradient-to-br from-primary-500 to-secondary-500'
+        }`}>
+          {logo ? (
+            <img
+              src={logo}
+              alt={`${name} logo`}
+              className="max-w-full max-h-full object-contain filter drop-shadow-sm"
+            />
+          ) : (
+            <span className="text-lg font-heading font-bold text-white tracking-wide">
+              {name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
+            </span>
+          )}
         </div>
 
         {/* Company Info - Compact */}
@@ -150,153 +148,123 @@ const SupportingPartnerCard = ({ name, logo, description, delay = 0 }) => {
 };
 
 const EnhancedPartnersSection = () => {
-  // Main Featured Partners (The strongest 3 companies)
+  // Main Featured Partners (core strategic entities)
   const featuredPartners = [
     {
       name: "Capimax Virtual Asset",
       logo: capiMaxVirtualAssetLogo,
-      description: "Leading virtual asset management platform specializing in digital currency services, blockchain infrastructure, and cryptocurrency investment solutions for institutional and retail clients.",
+      description: "UK-registered virtual asset service provider enabling European market access and FCA-framework compliance positioning within the Pronova ecosystem.",
       delay: 0.1
     },
     {
-      name: "Capimax Fintech and Blockchain",
+      name: "Capimax Blockchain",
       logo: capiMaxFintechBlockchainLogo,
-      description: "Cutting-edge financial technology company focused on blockchain innovation, smart contract development, and revolutionary fintech solutions that bridge traditional and digital finance.",
+      description: "Financial technology and blockchain systems development — technical infrastructure management and protocol governance for the ecosystem.",
       delay: 0.2
     },
     {
       name: "Nova Digital Finance",
       logo: novaDigitalFinanceLogo,
-      description: "Premier digital finance institution offering comprehensive property investment services, digital asset management, and innovative financial solutions for the modern economy.",
+      description: "One of the first platforms globally to provide financing and lending using PRN itself — the digital finance engine of the ecosystem.",
       delay: 0.3
     }
   ];
 
-  // Supporting Companies organized by category
+  // Supporting Companies organized by category (v2)
   const supportingCompanies = [
     {
-      category: "Investment & Holdings",
+      category: "Capimax Ecosystem",
       icon: <FaBuilding size={20} />,
       companies: [
         {
           name: "Capimax Group",
           logo: capimaxGroupLogo,
-          description: "The global parent group uniting all Capimax companies worldwide",
+          description: "Strategic holding group of 12 companies — the operational backbone of the ecosystem",
           delay: 0.38
         },
         {
-          name: "Capimax Holdings UK",
-          logo: capiMaxHoldingsLogo,
-          description: "Parent company overseeing 12 global investment divisions",
-          delay: 0.4
+          name: "Capimax Real Estate Technologies",
+          logo: capiMaxTokenizationLogo,
+          description: "Real estate tokenization and property technology arm",
+          delay: 0.42
         },
         {
-          name: "Capimax Investments USA",
-          logo: capiMaxInvestmentsUSALogo,
-          description: "US-focused investment arm with American market expertise",
-          delay: 0.45
-        },
-        {
-          name: "Capimax Investments UK",
-          logo: capiMaxInvestmentsUKLogo,
-          description: "European market specialist for UK and EU investments",
-          delay: 0.5
-        },
-        {
-          name: "Capimax Investments UAE",
-          logo: capiMaxInvestmentsUAELogo,
-          description: "Middle East regional hub for Gulf market operations",
-          delay: 0.55
-        },
-        {
-          name: "Profitmax British Investments",
-          logo: profitmaxLogo,
-          description: "High-growth opportunity specialist and portfolio manager",
-          delay: 0.6
+          name: "Capimax Asset Structure",
+          logo: null,
+          description: "Asset structuring and digital asset management",
+          delay: 0.46
         }
       ]
     },
     {
-      category: "Financial Services & Insurance",
-      icon: <FaGlobe size={20} />,
-      companies: [
-        {
-          name: "Capimax Financial UK",
-          logo: capiMaxFinancialLogo,
-          description: "Capital markets and financial management services",
-          delay: 0.65
-        },
-        {
-          name: "HCC International Insurance",
-          logo: hccLogo,
-          description: "Cyber insurance for blockchain and digital assets",
-          delay: 0.7
-        },
-        {
-          name: "Assurax Insurance",
-          logo: assuraxLogo,
-          description: "Credit risk management and asset protection",
-          delay: 0.75
-        },
-        {
-          name: "CIM Financial Group",
-          logo: cimLogo,
-          description: "Financial technology and virtual asset services",
-          delay: 0.8
-        }
-      ]
-    },
-    {
-      category: "Real Estate & Development",
+      category: "Real Estate Partners",
       icon: <FaHandshake size={20} />,
       companies: [
         {
-          name: "Capimax Development UK",
-          logo: capiMaxDevelopmentLogo,
-          description: "Construction and development projects across the UK",
-          delay: 0.85
+          name: "Westoria Capital",
+          logo: null,
+          description: "US capital and institutional investment platform accepting PRN",
+          delay: 0.5
         },
         {
-          name: "TDH British Properties",
-          logo: tdhLogo,
-          description: "Real estate development and investment solutions",
-          delay: 0.9
+          name: "Crestmark Global",
+          logo: null,
+          description: "UK global real estate and investment management",
+          delay: 0.54
         },
         {
-          name: "Nova British Real Estate",
-          logo: novaPropertyLogo,
-          description: "Luxury and commercial property specialists",
-          delay: 0.95
+          name: "Valora Estates",
+          logo: null,
+          description: "Spanish real estate platform accepting PRN",
+          delay: 0.58
+        },
+        {
+          name: "Aethera Development",
+          logo: null,
+          description: "Greek property development accepting PRN",
+          delay: 0.62
+        },
+        {
+          name: "Verdea Estates",
+          logo: null,
+          description: "Eastern European real estate accepting PRN",
+          delay: 0.66
         },
         {
           name: "Elite Gate Properties",
           logo: elitGatePropertiesLogo,
-          description: "Premium property management services",
-          delay: 1.0
+          description: "UK luxury and premium real estate agency accepting PRN",
+          delay: 0.7
         },
         {
           name: "Prime Inn Hotels",
           logo: primeinnLogo,
-          description: "Hotel chain with exclusive investment opportunities",
-          delay: 1.05
+          description: "International hospitality and hotel investment accepting PRN",
+          delay: 0.74
         }
       ]
     },
     {
-      category: "Trading & Precious Metals",
+      category: "Supporting Entities",
       icon: <FaStar size={20} />,
       companies: [
         {
-          name: "Capimax General Trading USA",
-          logo: capiMaxTradingLogo,
-          description: "International trading and commercial operations",
-          delay: 1.1
+          name: "CIM Financial Group",
+          logo: cimLogo,
+          description: "Compliance, intelligence & risk monitoring — institutional oversight",
+          delay: 0.78
         },
         {
-          name: "Capimax Precious Metals UK",
-          logo: capiMaxMetalsLogo,
-          description: "Investment in gold, silver, and precious minerals",
-          delay: 1.15
+          name: "HCC",
+          logo: hccLogo,
+          description: "Technology & digital asset insurance infrastructure",
+          delay: 0.82
+        },
+        {
+          name: "Assurax Insurance",
+          logo: assuraxLogo,
+          description: "Cyber insurance and digital asset protection",
+          delay: 0.86
         }
       ]
     }
@@ -353,7 +321,7 @@ const EnhancedPartnersSection = () => {
               Our <span className="bg-gradient-to-r from-gray-600 to-gray-700 bg-clip-text text-transparent">Extended</span> Network
             </h3>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              <span className="font-semibold text-gray-700 dark:text-gray-300">18 additional companies</span> providing comprehensive support across multiple industries and sectors
+              <span className="font-semibold text-gray-700 dark:text-gray-300">The Capimax ecosystem, real estate partners, and supporting entities</span> providing comprehensive support and real-world PRN utility across multiple sectors
             </p>
           </div>
         </FadeInWhenVisible>
@@ -410,13 +378,13 @@ const EnhancedPartnersSection = () => {
               <div className="bg-white/80 dark:bg-dark-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-primary-600/20 shadow-lg">
                 <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">🤝 Supporting Network</h4>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                  18 established companies across investment, insurance, real estate, and trading sectors provide comprehensive ecosystem support and real-world utility.
+                  International real estate partners plus insurance and oversight entities (CIM, HCC, Assurax) provide comprehensive ecosystem support and verifiable, real-world PRN utility.
                 </p>
               </div>
             </div>
 
             <div className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300">
-              ✨ 21 Global Partners & Growing
+              ✨ 18+ Global Partners & Growing
             </div>
           </div>
         </FadeInWhenVisible>

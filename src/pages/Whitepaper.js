@@ -1,2128 +1,1182 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Button from '../components/ui/Button';
-import PartnerCard from '../components/ui/PartnerCard';
-import { 
-  FaDownload, 
-  FaBook, 
-  FaShieldAlt, 
-  FaChartLine, 
-  FaUsers, 
-  FaHandshake, 
-  FaRoad, 
-  FaGavel, 
-  FaFileContract, 
-  FaGlobe, 
-  FaCoins,
-  FaCog,
-  FaLightbulb,
-  FaRocket,
-  FaStar,
-  FaTrophy,
-  FaFlag,
-  FaEye,
-  FaArrowUp,
-  FaExternalLinkAlt
-} from 'react-icons/fa';
+import { Helmet } from 'react-helmet';
+import { useTheme } from '../context/ThemeContext';
 import TokenomicsChart from '../components/ui/TokenomicsChart';
-import LockedTokensChart from '../components/ui/LockedTokensChart';
+import {
+  FaFileContract, FaBullseye, FaExclamationTriangle, FaProjectDiagram, FaWater,
+  FaBuilding, FaCoins, FaMicrochip, FaGavel, FaShieldAlt, FaRobot, FaChartPie,
+  FaGlobeAmericas, FaRoad, FaHandshake, FaHandHoldingUsd, FaFlag, FaArrowUp,
+  FaExternalLinkAlt, FaCheckCircle, FaLock, FaInfinity, FaNetworkWired, FaRocket,
+  FaHome, FaExchangeAlt, FaCube, FaBalanceScale, FaLayerGroup, FaMoneyBillWave,
+  FaNewspaper, FaLink
+} from 'react-icons/fa';
 
-// Import partner logos
-import capiMaxHoldingsLogo from '../assets/images/logos for partner/CAPI Max Holdings UK.png';
-import capiMaxInvestmentsUKLogo from '../assets/images/logos for partner/CAPI Max Investments UK.png';
-import capiMaxInvestmentsUSALogo from '../assets/images/logos for partner/CAPI Max Investments USA.png';
-import capiMaxInvestmentsUAELogo from '../assets/images/logos for partner/CAPI Max Investments UAE.png';
-import capiMaxFinancialLogo from '../assets/images/logos for partner/CAPI Max Financial  uk.png';
-import capiMaxTradingLogo from '../assets/images/logos for partner/CAPI Max for general Trading  USA.png';
-import capiMaxDevelopmentLogo from '../assets/images/logos for partner/CAPI Max development  UK.png';
-import capiMaxMetalsLogo from '../assets/images/logos for partner/CAPI Max for Investment in precious metals and minerals  UK.png';
-import profitMaxLogo from '../assets/images/logos for partner/finalprofitmax-logo.svg';
-import tdhLogo from '../assets/images/logos for partner/tdh logo.png';
-import primeInnLogo from '../assets/images/logos for partner/primeinn logo.png';
-import eliteGateLogo from '../assets/images/logos for partner/elitgate properties.png';
-import novaPropertyLogo from '../assets/images/logos for partner/nova property logo.png';
-// Note: trustech and future group logos not available in assets folder
+// Logos (available in assets)
+import solidproofLogo from '../assets/images/logos for partner/logo_shield_trustnet.svg';
+import novaDigitalFinanceLogo from '../assets/images/logos for partner/novadf-logo.png';
+import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-logo.png';
+import capiMaxVirtualAssetLogo from '../assets/images/logos for partner/capi max  Virtual Asset uk dark .png';
+import capiMaxFintechBlockchainLogo from '../assets/images/logos for partner/capi max  Fintech and Blockchain uk dark  copy.png';
+import capiMaxTokenizationLogo from '../assets/images/logos for partner/capimax logos png/dark/capi max all versions logos-tokenization dark.png';
 import hccLogo from '../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png';
 import cimLogo from '../assets/images/logos for partner/cim logo.png';
+import eliteGateLogo from '../assets/images/logos for partner/elitgate properties.png';
+import primeInnLogo from '../assets/images/logos for partner/primeinn logo.png';
+import pronovaLogo from '../assets/images/logos for partner/pronova coin.png';
+
+const AUDIT_URL = 'https://app.solidproof.io/projects/pronova';
+
+const SECTIONS = [
+  { id: 'executive-summary', title: 'Executive Summary', icon: FaFileContract },
+  { id: 'vision-mission', title: 'Vision & Mission', icon: FaBullseye },
+  { id: 'problem', title: 'The Problem', icon: FaExclamationTriangle },
+  { id: 'ecosystem', title: 'The Ecosystem', icon: FaProjectDiagram },
+  { id: 'liquidity', title: 'Utility-Backed Liquidity', icon: FaWater },
+  { id: 'rwa', title: 'RWA Integration', icon: FaBuilding },
+  { id: 'tokenomics', title: 'Tokenomics', icon: FaCoins },
+  { id: 'technology', title: 'Technology & Audit', icon: FaMicrochip },
+  { id: 'governance', title: 'Governance & Legal', icon: FaGavel },
+  { id: 'insurance', title: 'Insurance & Risk', icon: FaShieldAlt },
+  { id: 'ai', title: 'AI Infrastructure', icon: FaRobot },
+  { id: 'revenue', title: 'Revenue Model', icon: FaChartPie },
+  { id: 'expansion', title: 'Global Expansion', icon: FaGlobeAmericas },
+  { id: 'roadmap', title: 'Roadmap', icon: FaRoad },
+  { id: 'partnerships', title: 'Partnerships', icon: FaHandshake },
+  { id: 'financing', title: 'Financing', icon: FaHandHoldingUsd },
+  { id: 'media', title: 'Media & Links', icon: FaNewspaper },
+  { id: 'conclusion', title: 'Conclusion', icon: FaFlag },
+];
+
+const TOKEN_METRICS = [
+  { label: 'Token', value: 'Pronova (PRN)', icon: FaCoins },
+  { label: 'Network', value: 'BNB Smart Chain', icon: FaNetworkWired },
+  { label: 'Total Supply', value: '1,000,000,000', icon: FaInfinity },
+  { label: 'Pre-Sale', value: '250M (25%)', icon: FaRocket },
+  { label: 'Long-Term Lock', value: '~45% · 9 yrs', icon: FaLock },
+  { label: 'Audit', value: 'SolidProof ✓', icon: FaShieldAlt },
+];
+
+const DIFF_TABLE = [
+  ['Utility Model', 'Speculation-driven; utility typically post-listing', 'Real utility active from pre-sale day one'],
+  ['Asset Backing', 'None or synthetic', 'Real estate, RWA & tokenized property — accepted on 4 platforms + 12 companies, usable now'],
+  ['Institutional Structure', 'Typically anonymous or minimally incorporated', 'Six incorporated entities across US & UK — all verifiable'],
+  ['Insurance & Protection', 'Absent or unverified', 'HCC, Assurax & HCC International (hccglobalcoverage.com, assuraxinsurance.com)'],
+  ['Audit Status', 'Often pending or absent at launch', 'Completed by SolidProof for three contracts prior to pre-sale launch'],
+];
+
+const CORE_PRINCIPLES = [
+  ['Utility Before Speculation', 'Every design decision prioritizes operational utility over speculative value creation — demand generated through real economic activity.', FaBullseye, 'from-primary-500 to-secondary-500'],
+  ['Institutional Governance', 'Built on incorporated global entities, insurance partnerships, audit completion, and financial oversight — operational from launch, not a roadmap item.', FaBalanceScale, 'from-indigo-500 to-blue-500'],
+  ['Real Asset Anchoring', 'Liquidity deliberately anchored to real-world assets, principally real estate, creating a demand floor independent of crypto cycles.', FaHome, 'from-teal-500 to-emerald-500'],
+  ['Transparent Operations', 'All activities, deployments, audit results, insurance, and partnerships are reflected through publicly accessible channels for independent verification.', FaShieldAlt, 'from-amber-500 to-orange-500'],
+  ['Long-Term Sustainable Growth', 'Tokenomics, locking schedules, and governance calibrated for multi-year sustainable growth — the 45% lock extends up to nine years.', FaRocket, 'from-violet-500 to-purple-500'],
+];
+
+const MARKET_CONTEXT = [
+  'The global RWA tokenization market is projected to grow from ~$0.6T (2023) to over $16T by 2030 — a CAGR exceeding 50%.',
+  'Institutional digital asset allocation is accelerating, with BlackRock, Fidelity, Franklin Templeton, and 40+ major asset managers developing digital asset products.',
+  'BNB Smart Chain demonstrates 3M+ daily transactions with sub-$0.01 costs — an operationally validated layer for utility-first tokens.',
+  "FATF's Travel Rule and the EU's MiCA are driving rapid formalization of digital asset compliance — an advantage for institutionally governed projects.",
+  'Global cross-border payment volumes are projected to exceed $250T annually by 2027.',
+];
+
+const PROBLEMS = [
+  ['01 · Absence of Real-World Economic Utility', 'Most digital assets derive value entirely from speculative demand — fewer than 10% of the top 500 operate within ecosystems generating measurable economic activity.', 'PRN token utility was engineered to be active from the first day of the pre-sale, integrated with real estate, investment, and payment systems already operational at launch.'],
+  ['02 · Institutional Infrastructure Deficit', 'The vast majority of projects lack governance, compliance, legal incorporation, insurance, and audit — a segment that has suffered over $50B in documented losses since 2017.', 'Six incorporated entities across the US & UK, a completed SolidProof audit (token + vesting + pre-sale), institutional insurance via HCC/Assurax/HCC International, plus CIM Financial Group oversight.'],
+  ['03 · The Real Asset Integration Gap', "Real estate is the world's largest asset class (~$380T), yet its blockchain integration remains fragmented — a trillion-dollar opportunity substantially unfilled.", 'A purpose-built RWA framework connecting PRN to property acquisition, fractional ownership, and real estate-backed liquidity through operational platforms.'],
+  ['04 · Security & Trust Infrastructure Failure', 'The sector has suffered ~$70B in documented security incidents since 2011, eroding institutional trust and complicating regulatory engagement.', 'Pre-launch SolidProof audit, multi-layered institutional insurance, professional cybersecurity infrastructure, and operational risk management at the architecture level.'],
+  ['05 · Traditional Business Integration Failure', 'Merchant acceptance and enterprise-grade crypto payment rails are available from fewer than 1% of global businesses.', 'A business integration model spanning payments, real estate, fractional investment, and digital finance — designed for seamless adoption by traditional businesses.'],
+];
+
+const ARCH_LAYERS = [
+  ['Layer 1 — Blockchain', 'BNB Smart Chain (BEP-20), smart contract layer, security audit, Layer 2 scalability'],
+  ['Layer 2 — Token Utility', 'PRN payments, staking, lending, fees, rewards'],
+  ['Layer 3 — Real Asset', 'Real estate acquisition, fractional ownership, tokenized assets, RWA integration'],
+  ['Layer 4 — Institutional', 'Investment funds, portfolio management, financial oversight, insurance'],
+  ['Layer 5 — Digital Finance', 'Cross-border payments, lending, digital banking integration'],
+  ['Layer 6 — AI Intelligence', 'Smart investment analytics, risk scoring, portfolio optimization'],
+  ['Layer 7 — Governance', 'DAO structures, compliance frameworks, multi-jurisdictional legal entities'],
+];
+
+const OP_FLOW = [
+  ['Real Estate Pathway', 'Fractional & full property acquisition, tokenized property pools, and rental yield distributions in PRN.', FaHome],
+  ['Investment Pathway', 'Institutional investment structures with AI-powered portfolio management and institutional oversight.', FaChartPie],
+  ['Finance Pathway', 'PRN used as collateral for lending facilities, enabling leveraged investment without token liquidation.', FaHandHoldingUsd],
+  ['Payment Pathway', 'PRN accepted across 18+ integrated partner companies — continuous organic demand from real business activity.', FaMoneyBillWave],
+  ['Staking Pathway', 'PRN staked to earn yield, participate in governance, and access premium features and fee discounts.', FaCoins],
+];
+
+const ENTITIES = [
+  { name: 'Pronova Virtual Assets', juris: 'Wyoming, USA', fn: 'Primary token issuer & ecosystem anchor; Wyoming’s progressive blockchain legislation provides an optimal regulatory environment', logo: pronovaLogo },
+  { name: 'Capimax Group Holding', juris: 'Delaware, USA', fn: 'Strategic holding company for ecosystem investments, institutional capital management, and cross-entity governance', logo: capimaxGroupLogo },
+  { name: 'Capimax Real Estate Technologies', juris: 'Delaware, USA', fn: 'Strategic holding for real estate technologies and tokenization', logo: capiMaxTokenizationLogo },
+  { name: 'Capimax Virtual Asset', juris: 'United Kingdom', fn: 'UK-registered virtual asset service provider enabling European market access and FCA-framework positioning', logo: capiMaxVirtualAssetLogo },
+  { name: 'Capimax Blockchain', juris: 'United Kingdom', fn: 'Financial technology and blockchain systems development; technical infrastructure and protocol governance', logo: capiMaxFintechBlockchainLogo },
+  { name: 'Nova Digital Finance', juris: 'United Kingdom', fn: 'Digital financing, lending, and investment platform; cross-border digital payment infrastructure', logo: novaDigitalFinanceLogo },
+  { name: 'CIM Financial Group', juris: 'UK & USA', fn: 'Financial oversight, institutional supervision, risk assessment, and governance monitoring', logo: cimLogo },
+];
+
+const LIQ_INFLOWS = ['Pre-Sale purchases (Stages 1–3)', 'Real estate transaction fees', 'Platform service fees (18+ partners)', 'Staking rewards reinvestment', 'Institutional investment inflows', 'Lending collateral'];
+const LIQ_OUTFLOWS = ['Long-term lock (45% of supply, up to 9 years)', 'Staking lock (voluntary participant locking)', 'Burn mechanisms (deflationary pressure)', 'Gradual release schedules', 'Vesting timelines (founders & team)'];
+
+const STABILITY = [
+  ['Supply Control', 'Fixed 1B cap, ~45% locked up to 9 years, graduated release schedules, and burn mechanisms linked to activity — structural scarcity that compounds with demand.'],
+  ['Demand Expansion', 'Systematic growth of the partner network, continuous real estate integration, expanded payment acceptance, and new PRN-denominated investment products.'],
+  ['Value Protection', 'Real-world property anchoring, institutional governance across six entities, and professional insurance (HCC, Assurax, HCC International).'],
+  ['Institutional Foundation', 'Multi-entity structure, regulatory compliance, audit completion, and CIM oversight — the conditions for compounding institutional participation.'],
+];
+
+const RWA_MODELS = [
+  ['Full Property Acquisition via PRN', 'Integrated platforms accept PRN as consideration for full property acquisitions; the settlement infrastructure handles conversion, title transfer, and legal completion.', FaBuilding, 'from-primary-500 to-secondary-500'],
+  ['Fractional Ownership via Tokenization', 'Properties tokenized on BSC, each token a defined fractional stake — holders acquire with PRN and gain rental yield (in PRN), appreciation, and governance rights.', FaChartPie, 'from-amber-500 to-orange-500'],
+  ['Tokenized Property Investment Pools', 'Diversified pools assembled by ecosystem entities — like a blockchain-native REIT with fractional granularity, automated distribution, and 24/7 platform liquidity.', FaLayerGroup, 'from-violet-500 to-purple-500'],
+];
+
+const RWA_INSTITUTIONAL = [
+  ['Club Deal Structures', 'PRN-denominated co-investment vehicles for multiple institutions to jointly acquire and manage high-value assets, governed by smart contracts.'],
+  ['Separately Managed RWA Accounts', 'Customized tokenized real estate portfolios by risk/return, geography, and asset-class specifications.'],
+  ['Liquidity Bridge Mechanisms', 'Pre-listing exit pathways enabling institutions to realize returns from tokenized real estate before exchange listing.'],
+];
+
+const TOKEN_PARAMS = [
+  ['Token Name', 'Pronova'],
+  ['Token Symbol', 'PRN'],
+  ['Token Standard', 'BEP-20 (BNB Smart Chain)'],
+  ['Total Supply', '1,000,000,000 PRN — Fixed, Non-Inflationary, Permanently Capped'],
+  ['Decimal Places', '18 (standard BEP-20)'],
+  ['Mint Authority', 'Renounced post-launch — no additional minting possible'],
+  ['Burn Mechanism', 'Active — transaction-linked deflationary burn schedule'],
+  ['Audit Status', 'Completed by SolidProof — publicly published'],
+];
+
+const ALLOCATION = [
+  ['Pre-Sale', 25, '250,000,000', 'Primary ecosystem funding across three stages', '#2563eb'],
+  ['Direct Asset Purchase', 15, '150,000,000', 'For real estate & finance platforms, after the pre-sale', '#14b8a6'],
+  ['Partnerships', 15, '150,000,000', 'Strategic partners, ecosystem allocations, incentives', '#7c3aed'],
+  ['Liquidity', 12, '120,000,000', 'DEX/CEX liquidity provision and market depth', '#f59e0b'],
+  ['Marketing & Development', 12, '120,000,000', 'Global campaigns, technology, ecosystem expansion', '#8b5cf6'],
+  ['Founders', 7.5, '75,000,000', 'Multi-year vesting with cliff periods', '#ef4444'],
+  ['Reserves', 6, '60,000,000', 'Compliance, insurance, and unforeseen needs', '#6366f1'],
+  ['Community', 5, '50,000,000', 'Incentives, rewards, governance programs', '#10b981'],
+  ['Team', 2.5, '25,000,000', 'Core team compensation, long vesting', '#f97316'],
+];
+
+const STAGES = [
+  { stage: 'Stage 1', tokens: '100,000,000 PRN', price: '$0.80', target: '$80,000,000', valuation: '$800M implied', live: true },
+  { stage: 'Stage 2', tokens: '75,000,000 PRN', price: '$1.00', target: '$75,000,000', valuation: '$1.0B implied', live: false },
+  { stage: 'Stage 3', tokens: '75,000,000 PRN', price: '$1.50', target: '$112,500,000', valuation: '$1.5B implied', live: false },
+];
+
+const BSC_COMPARE = [
+  ['Avg. Transaction Cost', '< $0.01', '$1–$50+ (variable)', '< $0.001'],
+  ['Block Time', '~3 seconds', '~12 seconds', '~0.4 seconds'],
+  ['EVM Compatibility', 'Full', 'Native', 'Partial (SVM)'],
+  ['Daily Active Addresses', '1–3M+', '500K–1M', 'Variable'],
+  ['Institutional Wallet Support', 'Broad', 'Broadest', 'Growing'],
+];
+
+const CONTRACT_MODULES = [
+  ['PRN Core Token Contract', 'BEP-20 with fixed supply, burn functionality, and event logging. Audit: Completed by SolidProof.'],
+  ['Staking Contract', 'Time-locked pools with configurable APY, automated rewards, and multi-sig emergency withdrawal.'],
+  ['Vesting Contract', 'Time-locked release for team, founder & partner allocations — cannot be accelerated by any single party.'],
+  ['RWA Fractional Ownership Contract', 'Tokenization framework for real estate representation, stake management, and automated yield distribution.'],
+  ['Lending & Collateral Contract', 'Collateralized lending with automated liquidation triggers and collateral-ratio management.'],
+  ['Governance Contract', 'Weighted on-chain voting by staked PRN with multi-tiered proposal thresholds.'],
+];
+
+const RISK_CATS = [
+  ['Technology & Security Risk', 'Pre-launch SolidProof audit, modular architecture, multi-sig treasury, cold storage, ongoing assessments, and incident response protocols.'],
+  ['Market & Liquidity Risk', 'Multi-pillar utility-backed liquidity, 45% long-term lock, diversified pre-sale pricing, and planned market-making infrastructure.'],
+  ['Regulatory & Compliance Risk', 'Multi-jurisdictional structure, proactive framework aligned with MiCA/FCA/US guidance, and ongoing legal counsel engagement.'],
+  ['Counterparty & Operational Risk', 'Formal agreements with incorporated entities, due diligence, and diversification across 18+ partner companies.'],
+  ['Real Estate & RWA Risk', 'Valuation governance, geographic diversification, professional management, legal title insurance, and clear liquidation protocols.'],
+  ['Governance Risk', 'Hybrid on-chain/off-chain model, CIM oversight, multi-sig for major decisions, and predefined escalation procedures.'],
+];
+
+const AI_DOMAINS = [
+  ['Smart Portfolio Optimization', 'Real-time analysis of market data, correlations, and ecosystem metrics to generate dynamic allocation across staking, RWA, lending, and liquidity.', FaChartPie, 'from-primary-500 to-secondary-500'],
+  ['Real Estate Valuation Intelligence', 'ML models trained on property datasets provide AI-assisted valuations supporting fractional ownership token issuance.', FaHome, 'from-teal-500 to-emerald-500'],
+  ['Risk Scoring & Credit Assessment', 'AI evaluates on-chain history, staking behaviour, and portfolio composition to generate dynamic credit scores for lending.', FaBalanceScale, 'from-indigo-500 to-blue-500'],
+  ['Market Intelligence & Predictive Analytics', 'Aggregates transaction data and external indicators for early-warning signals and demand forecasting.', FaRobot, 'from-violet-500 to-purple-500'],
+  ['Automated Compliance Monitoring', 'Continuous AML/KYC screening, suspicious-activity recognition, and automated regulatory reporting.', FaGavel, 'from-amber-500 to-orange-500'],
+];
+
+const REVENUE_STREAMS = [
+  ['Transaction Fees', 'Percentage of transaction value in PRN; partial burn, partial treasury allocation'],
+  ['Real Estate Platform Fees', 'Fixed & percentage fees on property tokenization, issuance, and management'],
+  ['Lending Interest Revenue', 'Interest-rate spread between borrowing costs and lending rates'],
+  ['Staking Pool Management', 'Percentage of staking yields allocated to ecosystem treasury'],
+  ['Investment Management Fees', 'AUM-based management fees plus performance fees on RWA pools'],
+  ['Partner Integration Fees', 'One-time integration fees plus recurring volume-linked fees'],
+  ['AI Analytics Subscriptions', 'Tiered subscriptions with PRN payment discounts for participants'],
+];
+
+const FORECAST = [
+  ['Active Ecosystem Partners', '18–30', '50–100', '200+'],
+  ['Properties Tokenized', '10–25', '100–250', '1,000+'],
+  ['Active Stakers', '5,000–15,000', '50,000–150,000', '500,000+'],
+  ['Lending Book (PRN)', '10M–50M', '100M–300M', '500M+'],
+  ['Ecosystem Transaction Volume', '$10M–$50M', '$100M–$500M', '$1B+'],
+];
+
+const EXPANSION_PHASES = [
+  ['Phase 1 · Core Markets', 'USA & UK', "Corporate domicile jurisdictions; access to the world's deepest institutional capital pools."],
+  ['Phase 2 · GCC & Middle East', 'Saudi Arabia, UAE, Qatar, Kuwait, Bahrain, Oman', 'Fastest-growing adoption region; progressive regulation (ADGM, VARA, CBB); strong real estate culture.'],
+  ['Phase 3 · Asia-Pacific', 'Singapore, Hong Kong, Japan, South Korea, Australia', 'Multiple advanced regulatory frameworks and significant institutional markets.'],
+  ['Phase 4 · Emerging Markets', 'Southeast Asia, South Asia, Africa, Latin America', 'High adoption; demand for fractional ownership and cross-border payment utility.'],
+];
+
+const COMPETITIVE = [
+  ['RWA Tokenization', 'Centrifuge, RealT, Maple Finance', 'Multi-asset RWA + payments + institutional governance combined', 'Earlier stage vs. established protocols'],
+  ['Utility Token Ecosystems', 'BNB, MATIC, AVAX', 'Real estate anchoring, institutional insurance, pre-sale utility', 'Lower current liquidity vs. large-caps'],
+  ['Institutional Digital Finance', 'Fireblocks, Anchorage, Copper', 'Token-native ecosystem vs. custody infrastructure only', 'Different product category'],
+  ['Real Estate Platforms', 'Lofty.ai, Fundrise (tokenized)', 'Broader ecosystem beyond a single asset class', 'Specialists have deeper UX'],
+];
+
+const SECTORS = [
+  ['Real Estate & Property Development', 'Developers, agencies, and property investment platforms enabling PRN acceptance for acquisitions, fractional participation, and management fees.'],
+  ['Blockchain & Technology', 'Development firms, smart contract specialists, security providers, and Web3 operators supporting technical infrastructure.'],
+  ['Digital Finance & Fintech', 'Digital banking, payment processors, and lending infrastructure supporting cross-border PRN payments and lending.'],
+  ['Investment & Asset Management', 'Funds, asset managers, family offices, and institutional platforms creating demand from high-value participants.'],
+  ['Insurance & Risk Management', 'HCC, Assurax, and HCC International — protective arrangements and institutional credibility signaling.'],
+];
+
+const PLATFORMS = [
+  { name: 'Capimax RT', url: 'https://capimaxrt.com/', desc: 'Tokenized real estate trading & digital real estate asset marketplace', icon: FaCube },
+  { name: 'Capimax BRX', url: 'https://capimaxbrx.com/', desc: 'Blockchain real estate exchange — institutional-grade access to digitized property', icon: FaExchangeAlt },
+  { name: 'Capimax ProShare', url: 'https://capimaxpropshare.com/', desc: 'Fractional property ownership marketplace — stake acquisition & yield receipt', icon: FaChartPie },
+  { name: 'Capimax ASseT', url: 'https://capimaxasset.com/', desc: 'Digital asset & RWA management — connecting capital to property investment', icon: FaBuilding },
+];
+
+const COMPANIES = [
+  { name: 'Capimax Group', country: 'USA & UK', url: 'https://capimaxgroup.com/', role: 'Primary holding group of 12 subsidiaries — the operational backbone of the ecosystem' },
+  { name: 'Westoria Capital', country: 'United States', url: 'https://westoriacapital.com/', role: 'US capital & institutional investment platform accepting PRN' },
+  { name: 'Crestmark Global', country: 'United Kingdom', url: 'https://crestmarkglobal.com/', role: 'UK global real estate & investment management integrating PRN' },
+  { name: 'Valora Estates', country: 'Spain', url: 'https://valoraestatesglobal.com/', role: 'Spanish real estate platform — EU property acquisitions in PRN' },
+  { name: 'Aethera Development', country: 'Greece', url: 'https://aetheradevelopment.com/', role: 'Greek property development accepting PRN for Mediterranean projects' },
+  { name: 'Verdea Estates', country: 'Georgia', url: 'https://verdeaestates.com/', role: 'Caucasus & Eastern European real estate accepting PRN' },
+  { name: 'Elite Gate Properties', country: 'United Kingdom', url: 'https://elitegateproperties.com/', role: 'UK luxury & premium real estate agency accepting PRN' },
+  { name: 'Prime Inn Hotels', country: 'USA & Europe', url: 'https://priminnhotels.com/', role: 'International hospitality & hotel investment accepting PRN' },
+];
+
+const PLATFORM_APPS = [
+  ['Pronova Exchange Interface', 'PRN acquisition, trading (post-listing), staking, and portfolio management.'],
+  ['Real Estate Investment Platform', 'Fractional property ownership, tokenized listing, yield tracking, and governance.'],
+  ['Institutional Investment Dashboard', 'Portfolio management, RWA allocation tracking, analytics, and governance for institutions.'],
+  ['Lending & Finance Portal', 'PRN-collateralized lending, loan management, and collateral-ratio monitoring.'],
+  ['AI Analytics Suite', 'AI-powered optimization, risk assessment, and market intelligence for premium participants.'],
+  ['Business Integration Portal', 'Onboarding for businesses accepting PRN payments, with conversion facilities and partner benefits.'],
+];
+
+const NOVA_ROLES = [
+  ['Financing Asset', 'Deployed as the primary asset in structured financing without traditional banking intermediaries.'],
+  ['Lending Asset', 'Used in collateralized loan structures; borrowers receive PRN-denominated facilities against qualified collateral.'],
+  ['Real Estate Financing Tool', 'Deployed to finance property acquisitions — a mortgage-equivalent instrument.'],
+  ['Partial Property Financing', 'Enables fractional property financing without requiring full purchase capital.'],
+  ['Operational Digital Instrument', 'An active financial tool within Nova Digital Finance’s comprehensive services.'],
+  ['Asset Acquisition Currency', 'Used directly to acquire real-world assets and investment opportunities.'],
+];
+
+const MULTI_ARM = [
+  ['Speculative & Trading Arm', 'Traders & market participants', 'Post-listing trading, arbitrage, market-making'],
+  ['Utility & Operational Arm', 'Platform users & businesses', 'Fee payments, partner transactions, discounts across companies'],
+  ['Investment & Asset-Backed Arm', 'Real estate & RWA investors', 'Property acquisition, fractional stakes, tokenized pools'],
+  ['Financing & Lending Arm', 'Borrowers & leveraged investors', 'Collateral deployment, mortgages, Nova Digital Finance products'],
+];
+
+const INCENTIVES = [
+  ['Platform Fee Discounts', '5–30% discount on platform fees when paid in PRN vs. fiat or other crypto'],
+  ['Staking Yield Enhancement', 'Elevated APY for participants meeting minimum holding & activity thresholds'],
+  ['Investment Access Priority', 'Priority access to premium real estate & investment opportunities for qualified stakers'],
+  ['Partner Exclusive Benefits', 'Exclusive PRN-holder discounts and priority services across partner companies'],
+];
+
+const UNIFIED = [
+  ['Trading', 'Post-listing CEX trading and DEX liquidity pools on BNB Smart Chain'],
+  ['Financing', 'Nova Digital Finance PRN-based lending & mortgage infrastructure'],
+  ['Real Estate Participation', 'Four Capimax platforms + international partners accepting PRN across six countries'],
+  ['Tokenized Assets', 'On-chain RWA framework with fractional ownership, yield distribution & governance'],
+  ['Institutional Ecosystems', 'Six incorporated entities, CIM oversight, insurance & SolidProof audit'],
+  ['Real Operational Utility', 'Active pre-listing utility across 18+ platforms & partners — verifiable today'],
+  ['Asset-Backed Liquidity', 'Real estate-anchored liquidity independent of crypto market sentiment'],
+];
+
+const ROADMAP = [
+  { phase: 'Phase 1 — Foundation & Pre-Sale', when: 'Completed / In Progress', done: true, items: ['Six incorporated entities (USA & UK)', 'SolidProof audit — token, vesting & pre-sale contracts', 'Insurance frameworks (HCC, Assurax, HCC International)', '18+ partner PRN acceptance announcements', 'CIM Financial Group oversight & real estate platform integrations', 'Pre-Sale Stage 1 launch (100M PRN @ $0.80)'] },
+  { phase: 'Phase 2 — Ecosystem Activation', when: '2026', done: false, items: ['Pre-Sale Stages 2 & 3 completion', 'Staking protocol deployment & activation', 'Lending & collateral protocol launch', 'First tokenized real estate properties listed', 'AI analytics beta & Tier 2 CEX listings', 'Partner network expansion & GCC regional launch'] },
+  { phase: 'Phase 3 — Institutional Scale', when: '2026 – 2027', done: false, items: ['Tier 1 CEX listing campaign', '100+ properties tokenized across the ecosystem', 'Institutional investment fund products', 'Cross-chain interoperability bridges', 'Asia-Pacific market expansion & Layer 2 integration'] },
+  { phase: 'Phase 4 — Global Leadership', when: '2027+', done: false, items: ['Dedicated blockchain infrastructure evaluation', 'Global top-tier exchange listings', 'Full cross-chain interoperability', 'Integration with traditional finance & institutional custodians'] },
+];
+
+const MEDIA = [
+  { name: 'GB Journal', url: 'https://www.gbjournal.world/' },
+  { name: 'Domynex Global', url: 'https://domynexglobal.com/' },
+  { name: 'Econix Global', url: 'https://econixglobal.com/' },
+];
+
+const OFFICIAL_LINKS = [
+  ['Smart Contract Audit', 'Published via SolidProof', AUDIT_URL],
+  ['Nova Digital Finance', 'PRN-based financing platform', 'https://novadf.com/'],
+  ['Capimax Group', 'Ecosystem holding group', 'https://capimaxgroup.com/'],
+  ['HCC Insurance', 'Technology & digital asset coverage', 'https://hccglobalcoverage.com/'],
+  ['Assurax Insurance', 'Cyber & digital asset protection', 'https://assuraxinsurance.com/'],
+  ['CIM Financial Group', 'Financial oversight', 'https://cimfingroup.com/'],
+];
+
+// ---------- Presentational helpers ----------
+
+const Fade = ({ children, delay = 0, className = '' }) => (
+  <motion.div
+    className={className}
+    initial={{ opacity: 0, y: 24 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-60px' }}
+    transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+  >
+    {children}
+  </motion.div>
+);
+
+const Section = ({ id, number, eyebrow, title, children }) => (
+  <section id={id} className="scroll-mt-28 mb-20 md:mb-28">
+    <Fade>
+      <div className="flex items-center gap-4 mb-6">
+        <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-600 to-secondary-500 text-white flex items-center justify-center font-heading font-bold text-xl shadow-lg shadow-primary-500/25">
+          {number}
+        </div>
+        <div>
+          {eyebrow && <div className="text-primary-500 text-xs font-semibold uppercase tracking-[0.2em] mb-1">{eyebrow}</div>}
+          <h2 className="text-2xl md:text-4xl font-heading font-bold text-gray-900 dark:text-white leading-tight">{title}</h2>
+        </div>
+      </div>
+      <div className="h-px w-full bg-gradient-to-r from-primary-500/40 via-secondary-500/20 to-transparent mb-8" />
+      <div className="space-y-5 text-gray-600 dark:text-gray-300 leading-relaxed text-[1.03rem]">{children}</div>
+    </Fade>
+  </section>
+);
+
+const SubHead = ({ children }) => (
+  <h3 className="text-xl font-heading font-bold mt-10 mb-4 text-gray-900 dark:text-white">{children}</h3>
+);
+
+const IconCard = ({ icon: Icon, title, children, accent = 'from-primary-500 to-secondary-500' }) => {
+  const { darkMode } = useTheme();
+  return (
+    <motion.div
+      whileHover={{ y: -5 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className={`group relative overflow-hidden rounded-2xl border p-6 h-full ${
+        darkMode ? 'bg-dark-800 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200/80 hover:border-primary-300/70 shadow-sm hover:shadow-xl'
+      }`}
+    >
+      <div className={`absolute -top-10 -right-10 w-28 h-28 rounded-full bg-gradient-to-br ${accent} opacity-[0.07] group-hover:opacity-[0.14] blur-2xl transition-opacity`} />
+      {Icon && (
+        <div className={`relative inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br ${accent} text-white mb-4 shadow-md`}>
+          <Icon size={20} />
+        </div>
+      )}
+      <h4 className="relative font-semibold text-gray-900 dark:text-white mb-2">{title}</h4>
+      <p className="relative text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{children}</p>
+    </motion.div>
+  );
+};
+
+const Callout = ({ icon: Icon, title, children, href, hrefLabel, tone = 'primary' }) => {
+  const tones = {
+    primary: { chip: 'from-primary-500 to-secondary-500', box: 'border-primary-500/30 bg-primary-500/[0.06]' },
+    amber: { chip: 'from-amber-500 to-orange-500', box: 'border-amber-500/30 bg-amber-500/[0.06]' },
+  };
+  const t = tones[tone] || tones.primary;
+  return (
+    <div className={`rounded-2xl border ${t.box} p-6 my-8`}>
+      <div className="flex items-start gap-4">
+        {Icon && (
+          <div className={`flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br ${t.chip} text-white flex items-center justify-center shadow-md`}>
+            <Icon size={20} />
+          </div>
+        )}
+        <div className="min-w-0">
+          {title && <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{title}</h4>}
+          <div className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{children}</div>
+          {href && (
+            <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-primary-500 hover:gap-3 transition-all">
+              {hrefLabel} <FaExternalLinkAlt size={11} />
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Table = ({ head, rows }) => {
+  const { darkMode } = useTheme();
+  return (
+    <div className={`overflow-x-auto my-8 rounded-2xl border ${darkMode ? 'border-primary-600/20' : 'border-gray-200/80 shadow-sm'}`}>
+      <table className="w-full text-sm text-left">
+        <thead>
+          <tr className="bg-gradient-to-r from-primary-500/10 to-secondary-500/10">
+            {head.map((h, i) => (
+              <th key={i} className="px-5 py-4 font-semibold text-gray-900 dark:text-white whitespace-nowrap">{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i} className={`border-t transition-colors ${darkMode ? 'border-primary-600/10 hover:bg-dark-800/60' : 'border-gray-100 hover:bg-primary-50/40'}`}>
+              {r.map((c, j) => (
+                <td key={j} className={`px-5 py-4 align-top ${j === 0 ? 'font-medium text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300'}`}>{c}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const Grid = ({ children, cols = 'md:grid-cols-3' }) => (
+  <div className={`grid grid-cols-1 ${cols} gap-5 my-8`}>{children}</div>
+);
+
+const Bullets = ({ items, cols = 'sm:grid-cols-2' }) => {
+  const { darkMode } = useTheme();
+  return (
+    <div className={`grid grid-cols-1 ${cols} gap-3 my-6`}>
+      {items.map((it, i) => (
+        <div key={i} className={`flex items-start gap-3 p-4 rounded-xl border ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80'}`}>
+          <FaCheckCircle className="text-primary-500 flex-shrink-0 mt-0.5" size={14} />
+          <span className="text-sm text-gray-700 dark:text-gray-300">{it}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const Whitepaper = () => {
-  const [activeSection, setActiveSection] = useState('executive-summary');
-  const [isScrollTopVisible, setIsScrollTopVisible] = useState(false);
+  const { darkMode } = useTheme();
+  const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
+  const [showTop, setShowTop] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-  // Handle scroll to top visibility
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrollTopVisible(window.scrollY > 300);
+    const onScroll = () => {
+      setShowTop(window.scrollY > 500);
+      const h = document.documentElement;
+      const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
+      setProgress(Math.min(1, Math.max(0, scrolled)));
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll);
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const sections = [
-    { id: 'executive-summary', title: 'Executive Summary', icon: FaFileContract },
-    { id: 'introduction', title: 'Introduction', icon: FaBook },
-    { id: 'features', title: 'Features & Support', icon: FaChartLine },
-    { id: 'basic-services', title: 'Basic Services', icon: FaGlobe },
-    { id: 'tokenomics', title: 'Tokenomics', icon: FaCoins },
-    { id: 'technical-architecture', title: 'Technical Architecture', icon: FaCog },
-    { id: 'business-model', title: 'Business Model', icon: FaHandshake },
-    { id: 'use-cases', title: 'Use Cases', icon: FaUsers },
-    { id: 'risk-insurance', title: 'Risk Insurance', icon: FaShieldAlt },
-    { id: 'roadmap', title: 'Roadmap', icon: FaRoad },
-    { id: 'presale', title: 'Pre-sale Information', icon: FaChartLine },
-    { id: 'team', title: 'Team & Consultants', icon: FaUsers },
-    { id: 'partners', title: 'Partners', icon: FaHandshake },
-    { id: 'legal', title: 'Law & Compliance', icon: FaGavel },
-    { id: 'risks', title: 'Risks & Challenges', icon: FaShieldAlt },
-    { id: 'conclusion', title: 'Conclusion', icon: FaFlag }
-  ];
-
-  // Company data arrays
-  const capiMaxCompanies = [
-    { name: 'Capimax Holdings UK', logo: capiMaxHoldingsLogo, website: 'https://www.capimaxholding.com' },
-    { name: 'Capimax Investments USA', logo: capiMaxInvestmentsUSALogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'Capimax Investments UK', logo: capiMaxInvestmentsUKLogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'Capimax Investments UAE', logo: capiMaxInvestmentsUAELogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'Capimax Financial UK', logo: capiMaxFinancialLogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'Capimax General Trading USA', logo: capiMaxTradingLogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'Capimax Development UK', logo: capiMaxDevelopmentLogo, website: 'https://www.capimaxinvestments.com' },
-    { name: 'Capimax Investment in Precious Metals UK', logo: capiMaxMetalsLogo, website: 'https://www.capimaxinvestments.com' }
-  ];
-
-  const partnerCompanies = [
-    { name: 'Profit Max Investments UK', logo: profitMaxLogo, website: '#' },
-    { name: 'TDH Development UK-UAE', logo: tdhLogo, website: '#' },
-    { name: 'Prime Inn Hotels USA-UK', logo: primeInnLogo, website: '#' },
-    { name: 'Elite Gate Properties UK', logo: eliteGateLogo, website: '#' },
-    { name: 'Nova Property Management UK', logo: novaPropertyLogo, website: '#' }
-    // Note: Trustech Group and Future Group logos not available
-  ];
-
-  const insuranceCompanies = [
-    { name: 'HCC International Insurance USA-UK', logo: hccLogo, website: 'https://www.hccinternationalinsurance.com' },
-    { name: 'Assurax Insurance USA-UK', logo: assuraxLogo, website: 'https://www.assurainsurance.com' }
-  ];
-
-  const financialCompanies = [
-    { name: 'CIM Financial Group UK-USA', logo: cimLogo, website: '#' }
-  ];
-
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 120; // Account for fixed header
-      const elementPosition = element.offsetTop - offset;
-      window.scrollTo({
-        top: elementPosition,
-        behavior: 'smooth'
-      });
-      setActiveSection(sectionId);
-    }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
-
-  // Scroll spy functionality
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = document.querySelectorAll('[id^=""]');
-      let currentSection = '';
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) setActiveSection(e.target.id); }),
+      { rootMargin: '-30% 0px -60% 0px' }
+    );
+    SECTIONS.forEach((s) => { const el = document.getElementById(s.id); if (el) observer.observe(el); });
+    return () => observer.disconnect();
+  }, []);
 
-      sections.forEach((section) => {
-        const sectionTop = section.offsetTop - 150;
-        const sectionHeight = section.offsetHeight;
-        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-          currentSection = section.getAttribute('id');
-        }
-      });
-
-      if (currentSection && currentSection !== activeSection) {
-        setActiveSection(currentSection);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [activeSection]);
+  const scrollTo = (id) => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); };
 
   return (
     <>
-      {/* Enhanced Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0 bg-white dark:bg-dark-900">
-          <div className="absolute inset-0 bg-grid-pattern opacity-30"></div>
-          {/* Floating orbs */}
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary-500/20 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-secondary-500/20 rounded-full blur-3xl animate-float-slow"></div>
+      <Helmet>
+        <title>Whitepaper — Pronova (PRN) Institutional Ecosystem</title>
+        <meta name="description" content="The official Pronova (PRN) whitepaper — an institutional, utility-backed digital asset ecosystem bridging real estate, RWA, and institutional finance on BNB Smart Chain." />
+      </Helmet>
+
+      {/* Reading progress bar */}
+      <div className="fixed top-0 left-0 right-0 h-1 z-50 bg-transparent">
+        <div className="h-full bg-gradient-to-r from-primary-500 to-secondary-500 origin-left transition-transform duration-150" style={{ transform: `scaleX(${progress})` }} />
+      </div>
+
+      {/* Hero */}
+      <section className={`relative pt-32 pb-20 overflow-hidden ${darkMode ? 'bg-dark-900' : 'bg-white'}`}>
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-[-10%] left-[10%] w-[420px] h-[420px] rounded-full bg-primary-600/20 blur-[120px]" />
+          <div className="absolute top-[20%] right-[5%] w-[380px] h-[380px] rounded-full bg-secondary-500/20 blur-[120px]" />
+          <div className={`absolute inset-0 opacity-[0.35] ${darkMode
+            ? 'bg-[radial-gradient(circle_at_1px_1px,rgba(148,130,255,0.12)_1px,transparent_0)]'
+            : 'bg-[radial-gradient(circle_at_1px_1px,rgba(124,66,255,0.07)_1px,transparent_0)]'}`}
+            style={{ backgroundSize: '32px 32px' }} />
         </div>
-        
+
         <div className="container-custom relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-5xl mx-auto"
-          >
-            {/* Badge */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary-500/10 to-secondary-500/10 backdrop-blur border border-primary-500/20 mb-8"
-            >
-              <FaBook className="text-primary-500" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Revolutionary Cryptocurrency Whitepaper</span>
-            </motion.div>
-
-            {/* Main Title */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="mb-8"
-            >
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold mb-4 text-gray-900 dark:text-white leading-tight">
-                Pronova 
-                <span className="block text-gradient-animated">Whitepaper</span>
+          <Fade>
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-600/15 border border-primary-500/25 text-primary-500 text-sm font-semibold mb-6 backdrop-blur-sm">
+                <FaFileContract /> Official Whitepaper · v1.0 — Institutional Edition
+              </div>
+              <h1 className={`text-5xl md:text-7xl font-heading font-bold mb-6 leading-[0.95] ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                Pronova <span className="gradient-text">(PRN)</span>
               </h1>
-              <div className="w-32 h-1.5 bg-gradient-to-r from-primary-600 to-secondary-600 mx-auto rounded-full shadow-neon"></div>
-            </motion.div>
-            
-            {/* Subtitle */}
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed"
-            >
-              Revolutionary cryptocurrency developed by
-              <span className="text-primary-600 dark:text-primary-400 font-semibold"> Capimax Virtual Assets &amp; Capimax Blockchain Company</span> -
-              bridging traditional business with cryptocurrency innovation through
-              <span className="text-secondary-600 dark:text-secondary-400 font-semibold"> 18+ international companies</span> 
-              across <span className="text-primary-600 dark:text-primary-400 font-semibold">60+ business fields</span>.
-            </motion.p>
-            
-            {/* Action Buttons */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-              className="flex flex-col sm:flex-row justify-center gap-6"
-            >
-              <Button 
-                variant="gradient"
-                size="large"
-                href="https://drive.google.com/file/d/1cslWhHupmJs8sPg8RLFnbjaavv7ljNvp/view"
-                target="_blank"
-                className="shadow-2xl hover:shadow-neon-strong transform hover:scale-105 transition-all duration-300 group"
-              >
-                <FaDownload className="mr-3 group-hover:animate-bounce" />
-                <span>Download Complete PDF</span>
-              </Button>
-              <Button 
-                variant="outline"
-                size="large"
-                onClick={() => scrollToSection('executive-summary')}
-                className="border-2 hover:shadow-lg transform hover:scale-105 transition-all duration-300 group"
-              >
-                <FaEye className="mr-3 group-hover:scale-110 transition-transform" />
-                <span>Read Online</span>
-              </Button>
-            </motion.div>
+              <p className={`text-lg md:text-2xl leading-relaxed font-light ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                An institutional, global, <span className="font-semibold text-primary-500">utility-backed</span> digital asset
+                ecosystem — bridging blockchain with real-world investment, real estate, tokenized assets, and institutional finance.
+              </p>
 
-            {/* Stats */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16"
-            >
-              {[
-                { number: '18+', label: 'Partner Companies', icon: FaHandshake },
-                { number: '60+', label: 'Business Fields', icon: FaGlobe },
-                { number: '1B', label: 'Total Supply', icon: FaCoins },
-                { number: '10%', label: 'User Discount', icon: FaStar }
-              ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-3 shadow-neon">
-                    <stat.icon className="text-white text-xl" />
+              <div className="flex flex-wrap gap-2.5 mt-8">
+                {[
+                  { icon: FaShieldAlt, label: 'SolidProof Audited' },
+                  { icon: FaBalanceScale, label: '6 Incorporated Entities' },
+                  { icon: FaLayerGroup, label: 'BNB Smart Chain' },
+                  { icon: FaLock, label: 'Insured Pre-Launch' },
+                ].map((c, i) => {
+                  const Icon = c.icon;
+                  return (
+                    <span key={i} className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border ${darkMode ? 'bg-dark-800 border-primary-600/20 text-gray-300' : 'bg-white border-gray-200/80 text-gray-600 shadow-sm'}`}>
+                      <Icon className="text-primary-500" size={12} /> {c.label}
+                    </span>
+                  );
+                })}
+              </div>
+
+              <div className="flex flex-wrap gap-3 mt-8">
+                <a href={AUDIT_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-semibold shadow-lg shadow-primary-500/25 hover:scale-105 transition-transform">
+                  View SolidProof Audit <FaExternalLinkAlt size={13} />
+                </a>
+                <button onClick={() => scrollTo('tokenomics')} className={`inline-flex items-center gap-2 px-7 py-3.5 rounded-full border-2 font-semibold transition-colors ${darkMode ? 'border-slate-600 text-slate-200 hover:bg-slate-800/50' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
+                  Explore Tokenomics
+                </button>
+              </div>
+            </div>
+          </Fade>
+
+          <Fade delay={0.1}>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-16">
+              {TOKEN_METRICS.map((m, i) => {
+                const Icon = m.icon;
+                return (
+                  <div key={i} className={`group rounded-2xl border p-5 transition-all hover:-translate-y-1 ${darkMode ? 'bg-dark-800 border-primary-600/20 hover:border-primary-500/40' : 'bg-white border-gray-200/80 shadow-sm hover:shadow-lg'}`}>
+                    <div className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 text-white mb-3">
+                      <Icon size={15} />
+                    </div>
+                    <div className="text-[0.68rem] uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-0.5">{m.label}</div>
+                    <div className={`font-heading font-bold text-sm ${darkMode ? 'text-white' : 'text-gray-900'}`}>{m.value}</div>
                   </div>
-                  <div className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{stat.number}</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
-                </div>
-              ))}
-            </motion.div>
-          </motion.div>
+                );
+              })}
+            </div>
+          </Fade>
         </div>
       </section>
 
-      {/* Main Content Section */}
-      <section className="py-20 bg-gray-50 dark:bg-dark-800 relative">
-        <div className="container-custom">
-          <div className="flex flex-col lg:flex-row gap-12">
-            {/* Enhanced Sidebar Navigation */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="lg:w-1/4"
-            >
-              <div className="lg:sticky lg:top-32">
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark-900 dark:to-dark-800 rounded-2xl p-8 shadow-2xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
-                  <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-neon">
-                      <FaBook className="text-white text-xl" />
+      {/* Body */}
+      <div className={`${darkMode ? 'bg-dark-900' : 'bg-gray-50'}`}>
+        <div className="container-custom py-16">
+          <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-14">
+            {/* Sidebar TOC */}
+            <aside className="hidden lg:block">
+              <div className="sticky top-28">
+                <div className="text-[0.7rem] uppercase tracking-[0.2em] text-gray-400 mb-4 font-semibold px-3">Contents</div>
+                <nav className="space-y-0.5">
+                  {SECTIONS.map((s, idx) => {
+                    const Icon = s.icon;
+                    const active = activeSection === s.id;
+                    return (
+                      <button
+                        key={s.id}
+                        onClick={() => scrollTo(s.id)}
+                        className={`w-full text-left flex items-center gap-3 pl-3 pr-2 py-2 rounded-lg text-sm transition-all border-l-2 ${
+                          active
+                            ? 'border-primary-500 bg-primary-500/10 text-primary-500 font-semibold'
+                            : darkMode ? 'border-transparent text-gray-400 hover:text-white hover:bg-dark-800' : 'border-transparent text-gray-500 hover:text-gray-900 hover:bg-white'
+                        }`}
+                      >
+                        <span className={`flex-shrink-0 text-[0.65rem] font-mono ${active ? 'text-primary-500' : 'text-gray-400'}`}>{String(idx + 1).padStart(2, '0')}</span>
+                        <Icon size={13} className="flex-shrink-0" />
+                        <span className="truncate">{s.title}</span>
+                      </button>
+                    );
+                  })}
+                </nav>
+              </div>
+            </aside>
+
+            {/* Content */}
+            <div className="min-w-0">
+              {/* 01 */}
+              <Section id="executive-summary" number="01" eyebrow="Overview" title="Executive Summary">
+                <p>
+                  Pronova (PRN) is a next-generation institutional digital asset ecosystem, owned by{' '}
+                  <strong className="text-gray-900 dark:text-white">Pronova Virtual Asset</strong> (Wyoming, USA) and operated
+                  through a network of incorporated entities across the USA and UK, in partnership with 12 companies from the
+                  Capimax Group ecosystem — purpose-built to bridge blockchain infrastructure with real-world investment, real
+                  estate ownership, tokenized assets, and institutional finance.
+                </p>
+                <p>
+                  The global digital asset sector has grown into a multi-trillion-dollar asset class, yet a profound structural gap
+                  persists: most projects remain disconnected from real-world economic activity. Pronova was conceived to address
+                  this gap — the PRN token functions as the operational currency of a multi-layered investment, real estate, and
+                  digital finance infrastructure, deriving demand from real economic activity rather than speculation.
+                </p>
+
+                <SubHead>The Pronova Differentiation</SubHead>
+                <Table head={['Dimension', 'Traditional Crypto Projects', 'Pronova Ecosystem']} rows={DIFF_TABLE} />
+
+                <SubHead>Ecosystem Architecture at a Glance</SubHead>
+                <p>
+                  Pronova operates through an integrated multi-layer architecture spanning six dimensions: (1) the PRN utility token
+                  on BNB Smart Chain; (2) a real estate & RWA integration framework; (3) institutional investment infrastructure;
+                  (4) a digital finance & payment network; (5) a governance & compliance framework across US & UK entities; and
+                  (6) an AI-powered smart investment layer.
+                </p>
+
+                <SubHead>Investment Thesis</SubHead>
+                <p>
+                  Pronova converges three of the most compelling institutional themes of the decade: the maturation of blockchain
+                  from speculative asset to institutional infrastructure; the tokenization of real-world assets; and the integration
+                  of AI into investment management. Backed by incorporated entities, insurance frameworks, independent audits, and
+                  real estate-anchored liquidity, Pronova invites participants into an already-operational ecosystem.
+                </p>
+              </Section>
+
+              {/* 02 */}
+              <Section id="vision-mission" number="02" eyebrow="Direction" title="Vision, Mission & Core Principles">
+                <p>
+                  <strong className="text-gray-900 dark:text-white">Vision:</strong> to become the world's leading institutional
+                  ecosystem integrating blockchain technology, real-world asset ownership, tokenized investment infrastructure, and
+                  digital financial services — a globally accessible, institutionally governed, utility-first digital asset standard.
+                </p>
+                <p>
+                  <strong className="text-gray-900 dark:text-white">Mission:</strong> to architect, deploy, and scale an
+                  institutional-grade ecosystem that democratizes access to real-world investment, real estate ownership, and digital
+                  financial services — while maintaining the highest standards of governance, compliance, security, and transparency.
+                </p>
+                <SubHead>Five Core Strategic Principles</SubHead>
+                <Grid cols="md:grid-cols-2 lg:grid-cols-3">
+                  {CORE_PRINCIPLES.map(([t, d, Icon, accent], i) => (
+                    <IconCard key={i} icon={Icon} title={t} accent={accent}>{d}</IconCard>
+                  ))}
+                </Grid>
+                <SubHead>The Market Opportunity</SubHead>
+                <p>
+                  The total addressable market spans several converging sectors: the global real estate market (~$380 trillion), the
+                  RWA tokenization market (projected to exceed $16 trillion by 2030), and the digital payments market (expected to
+                  surpass $15 trillion in annual volume by the end of the decade).
+                </p>
+                <Bullets items={MARKET_CONTEXT} cols="sm:grid-cols-1" />
+              </Section>
+
+              {/* 03 */}
+              <Section id="problem" number="03" eyebrow="Market Gap" title="Problem Statement & Global Market Analysis">
+                <p>
+                  Despite generating over $2 trillion in peak market capitalization, the sector suffers from deeply embedded
+                  structural deficiencies. Pronova was designed with explicit awareness of each, with institutional-grade solutions
+                  engineered into its core architecture from day one.
+                </p>
+                <div className="space-y-4 my-6">
+                  {PROBLEMS.map(([title, problem, response], i) => (
+                    <div key={i} className={`rounded-2xl border p-6 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                      <h4 className="font-heading font-bold text-gray-900 dark:text-white mb-2">{title}</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">{problem}</p>
+                      <div className="flex items-start gap-2 text-sm">
+                        <span className="text-primary-500 font-semibold flex-shrink-0">Pronova Response:</span>
+                        <span className="text-gray-600 dark:text-gray-300">{response}</span>
+                      </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">Table of Contents</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Navigate through the whitepaper</p>
+                  ))}
+                </div>
+                <Callout icon={FaLink} title="Verify the operational platforms" href="https://capimaxgroup.com/" hrefLabel="capimaxgroup.com">
+                  Check capimaxrt.com · capimaxbrx.com · capimaxpropshare.com · capimaxasset.com · and finance with PRN at novadf.com —
+                  all linked from the Pronova web and independently verifiable.
+                </Callout>
+              </Section>
+
+              {/* 04 */}
+              <Section id="ecosystem" number="04" eyebrow="Architecture" title="The Pronova Ecosystem">
+                <p>
+                  The PRN token functions as the central operational currency connecting six interdependent domains. Pronova is not a
+                  token seeking to build utility in the future — it is an operational ecosystem with existing infrastructure that the
+                  token powers from launch.
+                </p>
+                <SubHead>Seven-Layer Architecture</SubHead>
+                <div className="space-y-2 my-6">
+                  {ARCH_LAYERS.map(([name, desc], i) => (
+                    <div key={i} className={`flex items-center gap-4 p-4 rounded-xl border ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80'}`}>
+                      <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 text-white flex items-center justify-center text-xs font-bold">{i + 1}</div>
+                      <div>
+                        <span className="font-semibold text-gray-900 dark:text-white text-sm">{name}</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400"> — {desc}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <SubHead>Institutional Entity Structure</SubHead>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {ENTITIES.map((e, i) => (
+                    <motion.div key={i} whileHover={{ y: -4 }} className={`rounded-2xl border p-5 flex items-center gap-4 ${darkMode ? 'bg-dark-800 border-primary-600/20 hover:border-primary-500/40' : 'bg-white border-gray-200/80 shadow-sm hover:shadow-lg'}`}>
+                      <div className={`flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center p-2.5 ${darkMode ? 'bg-white' : 'bg-gray-50 border border-gray-100'}`}>
+                        <img src={e.logo} alt={e.name} className="max-h-full max-w-full object-contain" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-gray-900 dark:text-white text-sm leading-snug">{e.name}</div>
+                        <div className="text-xs text-primary-500 font-medium mb-1">{e.juris}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 leading-snug">{e.fn}</div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <SubHead>Ecosystem Operational Flow</SubHead>
+                <p>A participant may acquire PRN and deploy it across any combination of five operational pathways:</p>
+                <Grid cols="md:grid-cols-2 lg:grid-cols-3">
+                  {OP_FLOW.map(([t, d, Icon], i) => (
+                    <IconCard key={i} icon={Icon} title={t}>{d}</IconCard>
+                  ))}
+                </Grid>
+              </Section>
+
+              {/* 05 */}
+              <Section id="liquidity" number="05" eyebrow="Innovation" title="Utility-Backed Liquidity Model">
+                <p>
+                  Conventional crypto liquidity is generated almost exclusively through speculative trading, which evaporates in bear
+                  markets. Pronova's Utility-Backed Liquidity Model (UBLM) supplements — and ultimately partially supplants —
+                  speculative liquidity with liquidity generated by real economic activity, across three pillars:
+                </p>
+                <Grid>
+                  <IconCard icon={FaHome} title="1 · Real Estate-Backed" accent="from-teal-500 to-emerald-500">Property transactions in PRN create economically-motivated demand; the property's valuation anchors the PRN transacted.</IconCard>
+                  <IconCard icon={FaExchangeAlt} title="2 · Operational Platform">18+ companies accepting PRN create continuous, cycling buy/sell demand proportional to operational volume.</IconCard>
+                  <IconCard icon={FaLock} title="3 · Staking & Lock" accent="from-indigo-500 to-blue-500">~45% of supply locked up to 9 years creates asymmetric dynamics — natural price support from supply scarcity.</IconCard>
+                </Grid>
+
+                <SubHead>Liquidity Flow Architecture</SubHead>
+                <div className="grid md:grid-cols-2 gap-5 my-6">
+                  <div className={`rounded-2xl border p-6 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                    <div className="text-xs uppercase tracking-wider text-green-500 font-semibold mb-3">Inflow Sources</div>
+                    <ul className="space-y-2">{LIQ_INFLOWS.map((x, i) => <li key={i} className="text-sm text-gray-600 dark:text-gray-300 flex items-start gap-2"><span className="text-green-500 mt-0.5">↓</span>{x}</li>)}</ul>
                   </div>
-                  
-                  <div className="space-y-3 max-h-96 overflow-y-auto custom-scrollbar">
-                    {sections.map((section, index) => {
-                      const IconComponent = section.icon;
-                      const isActive = activeSection === section.id;
-                      return (
-                        <motion.button
-                          key={section.id}
-                          onClick={() => scrollToSection(section.id)}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.3, delay: index * 0.05 }}
-                          className={`text-left w-full px-4 py-4 rounded-xl transition-all duration-300 flex items-center text-sm group relative overflow-hidden ${
-                            isActive
-                              ? 'bg-gradient-to-r from-primary-100 to-primary-50 dark:from-primary-900/50 dark:to-primary-800/50 text-primary-700 dark:text-primary-400 font-semibold shadow-lg border-l-4 border-primary-500'
-                              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-800/70 hover:shadow-md hover:scale-105'
-                          }`}
-                        >
-                          <IconComponent className={`mr-3 flex-shrink-0 transition-all duration-300 ${isActive ? 'text-primary-600 dark:text-primary-400' : 'group-hover:text-primary-500'}`} />
-                          <span className="truncate">{section.title}</span>
-                          {isActive && (
-                            <motion.div 
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              className="absolute right-3 w-2 h-2 bg-primary-500 rounded-full"
-                            />
-                          )}
-                        </motion.button>
-                      );
-                    })}
-                  </div>
-                  
-                  <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                    <Button 
-                      variant="gradient"
-                      href="https://drive.google.com/file/d/1cslWhHupmJs8sPg8RLFnbjaavv7ljNvp/view"
-                      target="_blank"
-                      fullWidth
-                      className="shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                    >
-                      <FaDownload className="mr-2" />
-                      <span>Download PDF</span>
-                    </Button>
+                  <div className={`rounded-2xl border p-6 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                    <div className="text-xs uppercase tracking-wider text-primary-500 font-semibold mb-3">Outflow Controls</div>
+                    <ul className="space-y-2">{LIQ_OUTFLOWS.map((x, i) => <li key={i} className="text-sm text-gray-600 dark:text-gray-300 flex items-start gap-2"><span className="text-primary-500 mt-0.5">•</span>{x}</li>)}</ul>
                   </div>
                 </div>
-              </div>
-            </motion.div>
 
-            {/* Enhanced Main Content */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="lg:w-3/4"
-            >
-              {/* Executive Summary */}
-              <div id="executive-summary" className="mb-20 scroll-mt-32">
-                <div className="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900/50 dark:to-gray-800/50 rounded-2xl p-10 shadow-2xl border border-primary-200 dark:border-gray-700 mb-12 relative overflow-hidden">
-                  {/* Background decoration */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-full blur-3xl"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-full blur-2xl"></div>
-                  
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="relative z-10"
-                  >
-                    <div className="flex items-center gap-4 mb-8">
-                      <div className="w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center shadow-neon">
-                        <FaFileContract className="text-white text-xl" />
-                      </div>
-                      <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                        Executive Summary
-                      </h2>
-                    </div>
-                    
-                    <div className="prose prose-xl max-w-none dark:prose-invert">
-                      <p className="text-xl leading-relaxed mb-6 text-gray-700 dark:text-gray-300">
-                        <strong className="text-primary-600 dark:text-primary-400">Pronova</strong> is an innovative cryptocurrency developed by{' '}
-                        <strong className="text-secondary-600 dark:text-secondary-400">Capimax Virtual Assets and Capimax Blockchain Company</strong>,
-                        in partnership with the Capimax Group — a British, American &amp; Emirati group that owns 12 Global companies, working in more than 60 fields including Finance,
-                        investment fund trust, Market Administration, Gold, silver, petroleum Trading, real estate financing, 
-                        financial leasing, Tourism, Fintech, commercial activity, AI Activity, cryptocurrency financial management, 
-                        credit risk, currencies, financial markets, real estate, general trading, and more.
-                      </p>
-                      
-                      {/* Company showcase */}
-                      <div className="bg-white dark:bg-dark-800 rounded-xl p-8 my-8 border border-primary-200 dark:border-gray-700 shadow-lg">
-                        <h4 className="text-2xl font-semibold mb-6 text-primary-700 dark:text-primary-400 text-center">
-                          🏢 Capimax Group Companies
-                        </h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-base">
-                          <div className="space-y-3">
-                            {[
-                              'Capimax Holding UK',
-                              'Capimax Investments USA',
-                              'Capimax Investments UK',
-                              'Capimax General Trading USA',
-                              'Capimax Development UK',
-                              'Capimax Investment In Mineral and Precious Metal UK'
-                            ].map((company, index) => (
-                              <motion.div
-                                key={index}
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.3, delay: index * 0.1 }}
-                                className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20"
-                              >
-                                <span className="w-6 h-6 bg-primary-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                                  {index + 1}
-                                </span>
-                                <span className="text-gray-700 dark:text-gray-300">{company}</span>
-                              </motion.div>
-                            ))}
+                <SubHead>Stability Strategy Framework</SubHead>
+                <Grid cols="md:grid-cols-2">
+                  {STABILITY.map(([t, d], i) => <IconCard key={i} icon={[FaCoins, FaChartPie, FaShieldAlt, FaBalanceScale][i]} title={t} accent={['from-primary-500 to-secondary-500', 'from-teal-500 to-emerald-500', 'from-amber-500 to-orange-500', 'from-indigo-500 to-blue-500'][i]}>{d}</IconCard>)}
+                </Grid>
+              </Section>
+
+              {/* 06 */}
+              <Section id="rwa" number="06" eyebrow="Real Assets" title="Real World Asset (RWA) Integration Framework">
+                <p>
+                  RWA tokenization is identified by institutional analysts as the most transformative application of blockchain in
+                  finance. BlackRock's Larry Fink described it as the 'next generation for markets,' and Boston Consulting Group
+                  projects the tokenized asset market to reach $16 trillion by 2030. Pronova connects PRN to this megatrend through
+                  three principal models:
+                </p>
+                <Grid>
+                  {RWA_MODELS.map(([t, d, Icon, accent], i) => <IconCard key={i} icon={Icon} title={t} accent={accent}>{d}</IconCard>)}
+                </Grid>
+                <SubHead>Institutional RWA Investment Framework</SubHead>
+                <Grid>
+                  {RWA_INSTITUTIONAL.map(([t, d], i) => <IconCard key={i} icon={[FaHandshake, FaChartPie, FaWater][i]} title={t}>{d}</IconCard>)}
+                </Grid>
+                <SubHead>Legal & Compliance Framework for RWA</SubHead>
+                <Bullets items={[
+                  'Jurisdictional Legal Review — tokenized structures reviewed for property-law compliance in the asset’s jurisdiction.',
+                  'KYC/AML Integration — identity verification and screening consistent with FCA (UK) and US regulations.',
+                  'Smart Contract Legal Wrapping — contractual frameworks ensuring on-chain transfers have off-chain recognition.',
+                  'Regulatory Monitoring — ongoing monitoring of property tokenization regulations, particularly under MiCA.',
+                ]} />
+              </Section>
+
+              {/* 07 */}
+              <Section id="tokenomics" number="07" eyebrow="Economics" title="Tokenomics & Token Architecture">
+                <p>
+                  PRN's tokenomics were designed to support sustainable, long-term ecosystem growth with structural protections
+                  against the supply-side shocks and governance failures that undermine most comparable projects.
+                </p>
+                <SubHead>Core Token Parameters</SubHead>
+                <Table head={['Parameter', 'Specification']} rows={TOKEN_PARAMS} />
+
+                <SubHead>Token Allocation</SubHead>
+                <div className={`rounded-3xl border p-6 md:p-8 my-8 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                  <div className="grid lg:grid-cols-2 gap-8 items-center">
+                    <div><TokenomicsChart /></div>
+                    <div className="space-y-2.5">
+                      {ALLOCATION.map(([label, pct, tokens, , color], i) => (
+                        <div key={i} className={`flex items-center justify-between gap-3 p-3 rounded-xl ${darkMode ? 'bg-dark-900' : 'bg-gray-50'}`}>
+                          <div className="flex items-center gap-3 min-w-0">
+                            <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+                            <span className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{label}</span>
                           </div>
-                          <div className="space-y-3">
-                            {[
-                              'Capimax Financial UK',
-                              'Capimax Investments UAE',
-                              'HCC Cyber Insurance',
-                              'CIM Financial',
-                              'Assurax Insurance and Credit Risk',
-                              'Profitmax British Investments'
-                            ].map((company, index) => (
-                              <motion.div
-                                key={index}
-                                initial={{ opacity: 0, x: 20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.3, delay: index * 0.1 }}
-                                className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-secondary-50 to-primary-50 dark:from-secondary-900/20 dark:to-primary-900/20"
-                              >
-                                <span className="w-6 h-6 bg-secondary-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                                  {index + 7}
-                                </span>
-                                <span className="text-gray-700 dark:text-gray-300">{company}</span>
-                              </motion.div>
-                            ))}
+                          <div className="flex items-center gap-4 flex-shrink-0">
+                            <span className="text-sm font-bold text-gray-900 dark:text-white">{pct}%</span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400 w-24 text-right hidden sm:block">{tokens}</span>
                           </div>
                         </div>
-                      </div>
-
-                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 rounded-xl p-8 border-l-4 border-green-500 shadow-lg">
-                        <h4 className="text-xl font-semibold mb-4 text-green-700 dark:text-green-400 flex items-center gap-2">
-                          <FaTrophy className="text-yellow-500" />
-                          Revolutionary Vision
-                        </h4>
-                        <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-                          To bridge the gap between traditional business practices and the rapidly evolving world of cryptocurrencies, 
-                          Pronova aims to revolutionize the investment landscape by providing seamless integration of cryptocurrencies 
-                          into investment, trading and investment strategies with <strong className="text-green-600 dark:text-green-400">18 international companies</strong> specializing 
-                          in Investments and financial, funds, real estate, gold, metals, hotels, oil, bonds, insurance, and other real 
-                          contracts fixed on opportunities, investments, and documents.
-                        </p>
-                      </div>
+                      ))}
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
-              </div>
 
-              {/* Introduction */}
-              <div id="introduction" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaBook className="text-white text-xl" />
+                <SubHead>Token Locking & Vesting</SubHead>
+                <p>
+                  Approximately 45% of total supply — 450,000,000 tokens — is subject to long-term locking extending up to nine years,
+                  implemented through time-locked smart contracts that cannot be modified by any single party, including the founding
+                  entities. This provides cryptographic guarantees, not merely contractual promises.
+                </p>
+
+                <SubHead>Pre-Sale Structure</SubHead>
+                <div className="grid sm:grid-cols-3 gap-5">
+                  {STAGES.map((s, i) => (
+                    <motion.div key={i} whileHover={{ y: -6 }} className={`relative rounded-2xl border p-6 text-center overflow-hidden ${
+                      s.live
+                        ? 'bg-gradient-to-br from-primary-600 to-secondary-600 text-white border-transparent shadow-xl shadow-primary-500/30'
+                        : darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'
+                    }`}>
+                      {s.live && <span className="absolute top-3 right-3 text-[0.6rem] font-bold uppercase tracking-wider bg-white/25 px-2 py-0.5 rounded-full">Live</span>}
+                      <div className={`text-xs uppercase tracking-wider mb-2 ${s.live ? 'text-white/80' : 'text-primary-500'}`}>{s.stage}</div>
+                      <div className={`text-4xl font-heading font-bold mb-1 ${s.live ? 'text-white' : 'text-gray-900 dark:text-white'}`}>{s.price}</div>
+                      <div className={`text-sm mb-4 ${s.live ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'}`}>per PRN</div>
+                      <div className={`text-sm font-medium ${s.live ? 'text-white/90' : 'text-gray-700 dark:text-gray-300'}`}>{s.tokens}</div>
+                      <div className={`text-xs mt-1 ${s.live ? 'text-white/70' : 'text-gray-400'}`}>Target: {s.target}</div>
+                      <div className={`text-xs ${s.live ? 'text-white/70' : 'text-gray-400'}`}>{s.valuation}</div>
+                    </motion.div>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-6">
+                  Accepted currencies: ETH, BNB, USD, and USDT. All figures are targets; digital assets carry market risk and no price
+                  performance is guaranteed.
+                </p>
+              </Section>
+
+              {/* 08 */}
+              <Section id="technology" number="08" eyebrow="Infrastructure" title="Technology & Infrastructure">
+                <p>
+                  Pronova is deployed on BNB Smart Chain following a comprehensive technical evaluation of throughput, cost,
+                  ecosystem maturity, and institutional adoption. Its sub-cent costs and three-second finality are operational
+                  necessities for real estate micro-transactions, fractional distributions, staking, and lending.
+                </p>
+                <Table head={['Metric', 'BNB Smart Chain', 'Ethereum', 'Solana']} rows={BSC_COMPARE} />
+                <SubHead>Smart Contract Architecture</SubHead>
+                <div className="grid sm:grid-cols-2 gap-4 my-6">
+                  {CONTRACT_MODULES.map(([t, d], i) => (
+                    <div key={i} className={`rounded-2xl border p-5 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                      <div className="flex items-center gap-2 mb-1"><FaCube className="text-primary-500" size={13} /><span className="font-semibold text-gray-900 dark:text-white text-sm">{t}</span></div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{d}</p>
                     </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Introduction
-                    </h2>
+                  ))}
+                </div>
+                <div className={`rounded-3xl border p-6 md:p-8 my-8 flex flex-col sm:flex-row items-center gap-6 ${darkMode ? 'bg-dark-800 border-primary-500/30' : 'bg-white border-primary-200 shadow-sm'}`}>
+                  <img src={solidproofLogo} alt="SolidProof" className="h-24 w-24 object-contain flex-shrink-0" />
+                  <div>
+                    <div className="inline-flex items-center gap-2 text-xs font-semibold text-green-500 mb-2"><FaCheckCircle /> Audit Completed & Published</div>
+                    <h4 className="text-xl font-heading font-bold text-gray-900 dark:text-white mb-2">Independent Security Audit — SolidProof</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">A comprehensive audit of the token, vesting, and pre-sale contracts was completed and published prior to the pre-sale launch — independently verifiable by any counterparty.</p>
+                    <a href={AUDIT_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500 hover:gap-3 transition-all">View published report <FaExternalLinkAlt size={11} /></a>
                   </div>
-                  
-                  <div className="prose prose-xl max-w-none dark:prose-invert">
-                    <p className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300">
-                      Despite the increasing adoption, many companies and investors face challenges in integrating these technologies 
-                      into their existing systems. Pronova addresses these challenges by offering a comprehensive range of services 
-                      that simplify the use of digital currencies in investment and business contexts.
-                    </p>
-                    
-                    {/* Challenges section */}
-                    <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl p-8 border-l-4 border-red-500 mb-8 shadow-lg">
-                      <h3 className="text-2xl font-semibold mb-6 text-red-700 dark:text-red-400 flex items-center gap-3">
-                        <FaLightbulb className="text-yellow-500" />
-                        Industries Challenges Addressed
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-4">
-                          <h4 className="font-semibold text-red-600 dark:text-red-400 text-lg">Complex Integration:</h4>
-                          <ul className="space-y-2 text-gray-700 dark:text-gray-300">
-                            <li className="flex items-start gap-2">
-                              <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                              <span>The difficulty of integrating cryptocurrencies with investment</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                              <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                              <span>The difficulty of integrating cryptocurrencies into traditional financial systems</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                              <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                              <span>Make the secured cryptocurrency accessible to companies and investors</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                              <span className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></span>
-                              <span>Ensure security concerns, secure transactions and storage of digital assets</span>
-                            </li>
-                          </ul>
-                        </div>
-                        <div className="bg-white dark:bg-dark-800 rounded-lg p-6 shadow-md">
-                          <h4 className="font-semibold text-green-600 dark:text-green-400 text-lg mb-4 flex items-center gap-2">
-                            <FaRocket className="text-blue-500" />
-                            Pronova Solution
-                          </h4>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                            Pronova offers a multifaceted approach to integrating cryptocurrencies into the business and investment 
-                            sectors. Our platform is designed to provide users with the tools they need to manage, invest in and 
-                            transact cryptocurrencies effortlessly.
-                          </p>
-                        </div>
+                </div>
+                <SubHead>Future Infrastructure Roadmap</SubHead>
+                <Grid>
+                  <IconCard icon={FaLayerGroup} title="Layer 2 Integration">ZK-Rollup solutions evaluated as volumes scale — potentially 10–100× throughput at proportionally lower cost.</IconCard>
+                  <IconCard icon={FaNetworkWired} title="Cross-Chain Interoperability" accent="from-indigo-500 to-blue-500">Bridges enabling PRN across Ethereum, Polygon, Arbitrum, and other networks.</IconCard>
+                  <IconCard icon={FaMicrochip} title="Dedicated Blockchain" accent="from-violet-500 to-purple-500">Long-term evaluation of a Pronova-specific chain optimized for RWA transaction characteristics.</IconCard>
+                </Grid>
+              </Section>
+
+              {/* 09 */}
+              <Section id="governance" number="09" eyebrow="Compliance" title="Institutional Governance, Compliance & Legal">
+                <p>
+                  Pronova operates a dual-layer governance architecture combining on-chain decentralized governance with off-chain
+                  institutional governance across six incorporated entities.
+                </p>
+                <Grid cols="md:grid-cols-2">
+                  <IconCard icon={FaGavel} title="On-Chain Governance">Weighted voting anchored to staked PRN — scope includes token parameters, contract upgrades, feature activation, and treasury allocation. Critical decisions require supermajority plus institutional sign-off.</IconCard>
+                  <IconCard icon={FaBalanceScale} title="Off-Chain Governance" accent="from-indigo-500 to-blue-500">Board structures, fiduciary duties, and compliance programs, with dedicated financial oversight by CIM Financial Group (cimfingroup.com) — operational from launch.</IconCard>
+                </Grid>
+                <SubHead>Compliance Framework</SubHead>
+                <p>
+                  Pronova implements a comprehensive AML/KYC framework — document verification, biometric matching, PEP & sanctions
+                  screening, and ongoing transaction monitoring — consistent with FATF Recommendations, the UK's Money Laundering
+                  Regulations 2017, and US Bank Secrecy Act requirements. Data is processed in compliance with GDPR.
+                </p>
+                <SubHead>Legal Structure & Jurisdictional Strategy</SubHead>
+                <Table head={['Jurisdiction', 'Rationale']} rows={[
+                  ['Wyoming, USA', 'First US state with comprehensive blockchain legislation (Blockchain Extender Act, DAO LLC Act) — optimal for token issuers.'],
+                  ['Delaware, USA', 'Dominant US corporate jurisdiction with extensive governance precedent and institutional credibility.'],
+                  ['United Kingdom', 'Progressive post-Brexit framework (FSMA 2023) rewarding institutionally structured projects; positions for FCA engagement.'],
+                ]} />
+                <p className="text-sm text-gray-500 dark:text-gray-400">The ecosystem is designed to accommodate MiCA (EU), UK FCA frameworks, SEC/CFTC guidance, and FATF Travel Rule requirements.</p>
+              </Section>
+
+              {/* 10 */}
+              <Section id="insurance" number="10" eyebrow="Protection" title="Institutional Insurance & Risk Management">
+                <p>
+                  While most crypto projects treat insurance as a future aspiration, Pronova established concrete relationships with
+                  specialized institutional insurers prior to the pre-sale launch — verifiable rather than merely promised.
+                </p>
+                <Grid>
+                  <IconCard icon={FaShieldAlt} title="HCC">Technology-focused insurance infrastructure for digital asset operations, smart contract failures, oracle manipulation, and protocol-level events. (hccglobalcoverage.com)</IconCard>
+                  <IconCard icon={FaLock} title="Assurax Insurance" accent="from-teal-500 to-emerald-500">Cyber insurance and digital asset protection — hot wallet breaches, private key compromise, and third-party security failures. (assuraxinsurance.com)</IconCard>
+                  <IconCard icon={FaBalanceScale} title="HCC International" accent="from-indigo-500 to-blue-500">Broad institutional coverage backed by a globally recognized conglomerate (Tokio Marine Group) with demonstrable claims-paying capacity.</IconCard>
+                </Grid>
+                <div className={`rounded-2xl border p-6 my-6 flex items-center justify-center gap-8 flex-wrap ${darkMode ? 'bg-white border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                  <img src={hccLogo} alt="HCC" className="h-12 object-contain" />
+                  <img src={assuraxLogo} alt="Assurax" className="h-12 object-contain" />
+                  <img src={cimLogo} alt="CIM Financial Group" className="h-12 object-contain" />
+                </div>
+                <SubHead>Risk Management Framework</SubHead>
+                <div className="grid sm:grid-cols-2 gap-4 my-6">
+                  {RISK_CATS.map(([t, d], i) => (
+                    <div key={i} className={`rounded-2xl border p-5 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                      <div className="flex items-center gap-2 mb-1"><span className="text-primary-500 font-bold text-sm">{i + 1}.</span><span className="font-semibold text-gray-900 dark:text-white text-sm">{t}</span></div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{d}</p>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">No system can guarantee absolute protection against all cyberattacks — participants should conduct their own risk assessment.</p>
+              </Section>
+
+              {/* 11 */}
+              <Section id="ai" number="11" eyebrow="Intelligence" title="AI-Powered Smart Investment Infrastructure">
+                <p>
+                  The convergence of blockchain-native asset ownership with AI-powered investment intelligence creates capabilities
+                  neither technology achieves alone. AI is integrated across five domains, with outputs delivered to smart contracts
+                  through oracle integrations — enabling AI to directly influence protocol parameters such as dynamic collateral
+                  ratios based on real-time risk.
+                </p>
+                <Grid>
+                  {AI_DOMAINS.map(([t, d, Icon, accent], i) => <IconCard key={i} icon={Icon} title={t} accent={accent}>{d}</IconCard>)}
+                </Grid>
+              </Section>
+
+              {/* 12 */}
+              <Section id="revenue" number="12" eyebrow="Sustainability" title="Revenue Model & Financial Framework">
+                <p>The ecosystem generates revenue across multiple concurrent streams, building diversification at the design stage:</p>
+                <Table head={['Revenue Stream', 'Revenue Mechanism']} rows={REVENUE_STREAMS} />
+                <SubHead>Financial Forecast Framework</SubHead>
+                <p className="text-sm text-gray-500 dark:text-gray-400 -mt-2">Illustrative and based on modeled assumptions — not guarantees of financial performance.</p>
+                <Table head={['Metric', 'Conservative (Y1)', 'Base Case (Y2)', 'Optimistic (Y3)']} rows={FORECAST} />
+              </Section>
+
+              {/* 13 */}
+              <Section id="expansion" number="13" eyebrow="Growth" title="Global Expansion & Competitive Positioning">
+                <SubHead>Geographic Expansion Framework</SubHead>
+                <div className="space-y-3 my-6">
+                  {EXPANSION_PHASES.map(([phase, markets, rationale], i) => (
+                    <div key={i} className={`rounded-2xl border p-5 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <span className="font-semibold text-gray-900 dark:text-white text-sm">{phase}</span>
+                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary-500/15 text-primary-500 font-medium">{markets}</span>
                       </div>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{rationale}</p>
                     </div>
-                  </div>
-                </motion.div>
-              </div>
+                  ))}
+                </div>
+                <SubHead>Competitive Positioning</SubHead>
+                <Table head={['Category', 'Key Competitors', 'Pronova Advantage', 'Limitation']} rows={COMPETITIVE} />
+                <Callout icon={FaRocket} title="Utility Before Listing & Pre-Listing Exit">
+                  Pronova's 18+ partner companies publicly announce PRN acceptance on their official websites — independently
+                  verifiable before any investment decision. The Pre-Listing Exit Model further lets participants deploy PRN into
+                  tokenized real estate and realize returns through ecosystem channels before exchange listing.
+                </Callout>
+              </Section>
 
-              {/* Features & Support */}
-              <div id="features" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaChartLine className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Features & Support to Increase Demand
-                    </h2>
-                  </div>
-                  
-                  <div className="prose prose-xl max-w-none dark:prose-invert">
-                    <p className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300">
-                      Our cryptocurrency has been supported by several exceptional features to make the demand for the currency 
-                      large and its purchase is continuous, required, useful and profitable, and its circulation is continuous.
-                    </p>
-                    
-                    {/* Feature cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                      {[
-                        {
-                          icon: FaChartLine,
-                          title: 'Price Appreciation',
-                          description: 'Its price increases as a result of increased demand',
-                          color: 'blue',
-                          bgGradient: 'from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20'
-                        },
-                        {
-                          icon: FaStar,
-                          title: 'User Benefits',
-                          description: 'Holders benefit from discounts when used as payment method',
-                          color: 'green',
-                          bgGradient: 'from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20'
-                        },
-                        {
-                          icon: FaTrophy,
-                          title: 'Corporate Cashback',
-                          description: 'Companies receive cashback profits when accepting Pronova',
-                          color: 'purple',
-                          bgGradient: 'from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20'
-                        }
-                      ].map((feature, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                          className={`bg-gradient-to-br ${feature.bgGradient} rounded-2xl p-8 border border-${feature.color}-200 dark:border-${feature.color}-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}
-                        >
-                          <div className={`w-16 h-16 bg-${feature.color}-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg`}>
-                            <feature.icon className="text-white text-2xl" />
+              {/* 14 */}
+              <Section id="roadmap" number="14" eyebrow="Execution" title="Ecosystem Development Roadmap">
+                <div className="relative pl-8 md:pl-10">
+                  <div className="absolute left-[11px] md:left-[15px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-primary-500 via-secondary-500/50 to-transparent" />
+                  <div className="space-y-6">
+                    {ROADMAP.map((p, i) => (
+                      <Fade key={i} delay={i * 0.05}>
+                        <div className="relative">
+                          <div className={`absolute -left-8 md:-left-10 top-1 w-6 h-6 rounded-full flex items-center justify-center border-4 ${darkMode ? 'border-dark-900' : 'border-gray-50'} ${p.done ? 'bg-green-500' : 'bg-gradient-to-br from-primary-500 to-secondary-500'}`}>
+                            {p.done && <FaCheckCircle className="text-white" size={10} />}
                           </div>
-                          <h4 className={`text-xl font-semibold text-center mb-4 text-${feature.color}-700 dark:text-${feature.color}-400`}>
-                            {feature.title}
-                          </h4>
-                          <p className="text-center text-gray-700 dark:text-gray-300 leading-relaxed">
-                            {feature.description}
-                          </p>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* Highlighted feature */}
-                    <div className="bg-gradient-to-r from-primary-100 to-secondary-100 dark:from-primary-900/30 dark:to-secondary-900/30 rounded-2xl p-10 border border-primary-200 dark:border-gray-700 shadow-2xl">
-                      <div className="text-center">
-                        <div className="w-20 h-20 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-neon">
-                          <FaRocket className="text-white text-2xl" />
-                        </div>
-                        <h3 className="text-3xl font-bold mb-6 text-primary-700 dark:text-primary-400">
-                          From Pronova Website in 3 Minutes
-                        </h3>
-                        <p className="text-xl leading-relaxed mb-6 text-gray-700 dark:text-gray-300">
-                          The currency platform's website is effectively linked to investments available to 18 global companies 
-                          around the world for investment and payment in Pronova. Through the website, investors can pay, buy, 
-                          and invest in real estate, gold, bonds, stocks, and other investments or purchases within minutes.
-                        </p>
-                        <div className="bg-yellow-100 dark:bg-yellow-900/30 rounded-xl p-6 border-l-4 border-yellow-500 shadow-lg">
-                          <p className="text-center font-bold text-xl text-yellow-700 dark:text-yellow-400 flex items-center justify-center gap-3">
-                            <FaStar className="text-yellow-500" />
-                            Investors receive an immediate 10% discount when purchasing or paying in Pronova
-                            <FaStar className="text-yellow-500" />
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Basic Services */}
-              <div id="basic-services" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaGlobe className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Basic Services of Pronova
-                    </h2>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {[
-                      "Digital wallets: secure storage solutions for Pronova",
-                      "Investment in real estate, gold, stocks, insurance, bonds, trade, and others",
-                      "Buying and investing with major companies worldwide",
-                      "Partial investment in 12 investment activities around the world",
-                      "Currency Guarantee Investment in 12 Investment Activities",
-                      "Investment opportunities for companies through the application",
-                      "Investment opportunities for individuals under digital currencies",
-                      "Diversify investors' portfolios in cryptocurrencies",
-                      "Using profits to obtain investment opportunities insured by insurance policies",
-                      "Converting currencies into investment and converting profits into real estate assets",
-                      "Payment Cards: Physical and virtual cards for daily transactions",
-                      "Dedicated remittance system with instant, secure and low-cost transactions",
-                      "Everything in one platform for seamless experience",
-                      "Multi-signature and encrypted storage capabilities",
-                      "Asset tokenization platforms for financial solutions"
-                    ].map((service, index) => (
-                      <motion.div 
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.05 }}
-                        className="bg-white dark:bg-dark-900 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105 group"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                            <span className="text-white font-bold text-lg">{index + 1}</span>
-                          </div>
-                          <div>
-                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
-                              {service}
-                            </p>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Tokenomics */}
-              <div id="tokenomics" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaCoins className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Tokenomics
-                    </h2>
-                  </div>
-                  
-                  <div className="prose prose-xl max-w-none dark:prose-invert mb-12">
-                    <p className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300">
-                      Understanding the economic model of Pronova is critical for users and investors alike. Our tokens are 
-                      designed to ensure sustainability and maintain a balanced system.
-                    </p>
-                    
-                    {/* Token info cards */}
-                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-dark-900 dark:to-dark-800 rounded-2xl p-8 mb-12 border border-gray-200 dark:border-gray-700 shadow-xl">
-                      <h3 className="text-2xl font-semibold mb-8 text-gray-900 dark:text-white text-center">Token Information</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {[
-                          { label: 'Token Name', value: 'Pronova', icon: FaCoins },
-                          { label: 'Code', value: 'PRN', icon: FaFlag },
-                          { label: 'Blockchain', value: 'BNB Smart Chain (BSC)', icon: FaCog },
-                          { label: 'Total Supply', value: '1,000,000,000', icon: FaChartLine }
-                        ].map((info, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="text-center bg-white dark:bg-dark-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700"
-                          >
-                            <div className="w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-neon">
-                              <info.icon className="text-white" />
+                          <div className={`rounded-2xl border p-6 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                              <h4 className="font-heading font-bold text-gray-900 dark:text-white">{p.phase}</h4>
+                              <span className={`text-xs font-semibold px-3 py-1 rounded-full ${p.done ? 'bg-green-500/15 text-green-500' : 'bg-primary-500/15 text-primary-500'}`}>{p.when}</span>
                             </div>
-                            <p className="font-semibold text-primary-600 dark:text-primary-400 mb-2">{info.label}</p>
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white">{info.value}</p>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Charts */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark-900 dark:to-dark-800 p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
-                      <h3 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
-                        Token Distribution
-                      </h3>
-                      <TokenomicsChart className="h-80" />
-                    </div>
-                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark-900 dark:to-dark-800 p-8 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700">
-                      <h3 className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">
-                        Locked Tokens
-                      </h3>
-                      <LockedTokensChart className="h-80" />
-                    </div>
-                  </div>
-
-                  {/* Lock information */}
-                  <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-2xl p-8 border-l-4 border-yellow-500 mb-12 shadow-xl">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
-                        <FaShieldAlt className="text-white text-xl" />
-                      </div>
-                      <h3 className="text-2xl font-semibold text-yellow-700 dark:text-yellow-400">
-                        Important Lock Information
-                      </h3>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <p className="text-xl font-semibold text-yellow-600 dark:text-yellow-300 mb-2">
-                          🔒 45% of tokens will be locked and will unlock within 9 years
-                        </p>
-                        <p className="text-yellow-700 dark:text-yellow-300">
-                          2.5% will unlock every 6 months, ensuring long-term stability and commitment
-                        </p>
-                      </div>
-                      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-                        <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Benefits of Token Locking:</h4>
-                        <ul className="space-y-2 text-gray-700 dark:text-gray-300">
-                          <li>• Prevents market manipulation</li>
-                          <li>• Ensures long-term project commitment</li>
-                          <li>• Builds investor confidence</li>
-                          <li>• Supports price stability</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Utility section */}
-                  <div className="bg-white dark:bg-dark-900 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700">
-                    <h3 className="text-2xl font-semibold mb-8 text-gray-900 dark:text-white text-center">Utility for Pronova</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
-                        {[
-                          'Payments and Conversions',
-                          'Partial and total investment and financial payments',
-                          'Digital transactions with merchants and partners',
-                          'Investment products offered by CAPIMAX',
-                          'Guarantee for investment products subscription'
-                        ].map((utility, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.3, delay: index * 0.1 }}
-                            className="flex items-start gap-3 p-4 rounded-lg bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20"
-                          >
-                            <span className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
-                              {index + 1}
-                            </span>
-                            <span className="text-gray-700 dark:text-gray-300 font-medium">{utility}</span>
-                          </motion.div>
-                        ))}
-                      </div>
-                      <div className="space-y-4">
-                        {[
-                          'Transaction fees payment for platform services',
-                          'Storage to earn rewards and secure the network',
-                          'Expected impressive rise in cryptocurrency market',
-                          'Global profits through international company support',
-                          'Investment opportunities guarantee mechanism'
-                        ].map((utility, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: 20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.3, delay: index * 0.1 }}
-                            className="flex items-start gap-3 p-4 rounded-lg bg-gradient-to-r from-secondary-50 to-primary-50 dark:from-secondary-900/20 dark:to-primary-900/20"
-                          >
-                            <span className="w-8 h-8 bg-secondary-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
-                              {index + 6}
-                            </span>
-                            <span className="text-gray-700 dark:text-gray-300 font-medium">{utility}</span>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Enhanced Partners Section */}
-              <div id="partners" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaHandshake className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Our Partners
-                    </h2>
-                  </div>
-                  
-                  {/* Capimax Companies */}
-                  <div className="mb-16">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6 }}
-                      className="text-center mb-12"
-                    >
-                      <h3 className="text-3xl font-semibold mb-4 text-primary-700 dark:text-primary-400">
-                        🏢 Capimax Group Companies
-                      </h3>
-                      <p className="text-lg text-gray-600 dark:text-gray-400">
-                        The core companies driving Pronova's innovation and growth
-                      </p>
-                    </motion.div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                      {capiMaxCompanies.map((company, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                        >
-                          <PartnerCard
-                            name={company.name}
-                            logo={company.logo}
-                            website={company.website}
-                            delay={index * 0.1}
-                          />
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Strategic Partners */}
-                  <div className="mb-16">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6 }}
-                      className="text-center mb-12"
-                    >
-                      <h3 className="text-3xl font-semibold mb-4 text-green-700 dark:text-green-400">
-                        🤝 Strategic Partners
-                      </h3>
-                      <p className="text-lg text-gray-600 dark:text-gray-400">
-                        Leading companies in real estate, hospitality, and development
-                      </p>
-                    </motion.div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                      {partnerCompanies.map((company, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                        >
-                          <PartnerCard
-                            name={company.name}
-                            logo={company.logo}
-                            website={company.website}
-                            delay={index * 0.1}
-                          />
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Insurance Partners */}
-                  <div className="mb-16">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6 }}
-                      className="text-center mb-12"
-                    >
-                      <h3 className="text-3xl font-semibold mb-4 text-red-700 dark:text-red-400">
-                        🛡️ Insurance Partners
-                      </h3>
-                      <p className="text-lg text-gray-600 dark:text-gray-400">
-                        Providing comprehensive protection and risk management
-                      </p>
-                    </motion.div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      {insuranceCompanies.map((company, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                        >
-                          <PartnerCard
-                            name={company.name}
-                            logo={company.logo}
-                            website={company.website}
-                            delay={index * 0.1}
-                          />
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Financial Partners */}
-                  <div className="mb-12">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6 }}
-                      className="text-center mb-12"
-                    >
-                      <h3 className="text-3xl font-semibold mb-4 text-blue-700 dark:text-blue-400">
-                        💼 Financial Partners
-                      </h3>
-                      <p className="text-lg text-gray-600 dark:text-gray-400">
-                        Expert financial services and blockchain technology solutions
-                      </p>
-                    </motion.div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                      {financialCompanies.map((company, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                        >
-                          <PartnerCard
-                            name={company.name}
-                            logo={company.logo}
-                            website={company.website}
-                            delay={index * 0.1}
-                          />
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Partnership guarantee */}
-                  <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 shadow-xl">
-                    <div className="text-center">
-                      <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-neon">
-                        <FaShieldAlt className="text-white text-xl" />
-                      </div>
-                      <h3 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
-                        Partnership Guarantee
-                      </h3>
-                      <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
-                        All agreements are registered on the companies' official websites
-                      </p>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        The agreements have entered into force with the launch of investments within the currency's website or through their applications
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Technical Architecture */}
-              <div id="technical-architecture" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaCog className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Technical Architecture
-                    </h2>
-                  </div>
-                  
-                  <div className="prose prose-xl max-w-none dark:prose-invert mb-8">
-                    <p className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300">
-                      Pronova's infrastructure is designed to ensure scalability, security and interoperability providing 
-                      a strong foundation for all its services.
-                    </p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {[
-                      {
-                        title: 'Blockchain Technology',
-                        description: 'BNB Smart Chain (BSC) for smart contract capabilities, low fees, and security',
-                        icon: FaCog,
-                        color: 'blue'
-                      },
-                      {
-                        title: 'Consensus Mechanism',
-                        description: 'Proof of Stake for energy efficiency and scalability',
-                        icon: FaShieldAlt,
-                        color: 'green'
-                      },
-                      {
-                        title: 'Smart Contracts',
-                        description: 'Automated transactions with regular security audits',
-                        icon: FaFileContract,
-                        color: 'purple'
-                      },
-                      {
-                        title: 'Security Measures',
-                        description: 'Advanced encryption, multi-signature wallets, regular audits',
-                        icon: FaShieldAlt,
-                        color: 'red'
-                      },
-                      {
-                        title: 'Scalability',
-                        description: 'Layer 2 solutions for enhanced transaction speeds',
-                        icon: FaRocket,
-                        color: 'orange'
-                      },
-                      {
-                        title: 'Interoperability',
-                        description: 'Seamless interaction with other blockchain networks',
-                        icon: FaGlobe,
-                        color: 'teal'
-                      }
-                    ].map((tech, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className={`bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 hover:scale-105 group`}
-                      >
-                        <div className={`w-16 h-16 bg-gradient-to-r from-${tech.color}-500 to-${tech.color}-600 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                          <tech.icon className="text-white text-2xl" />
-                        </div>
-                        <h4 className={`text-xl font-semibold mb-4 text-${tech.color}-600 dark:text-${tech.color}-400 text-center`}>
-                          {tech.title}
-                        </h4>
-                        <p className="text-gray-700 dark:text-gray-300 text-center leading-relaxed">
-                          {tech.description}
-                        </p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Business Model */}
-              <div id="business-model" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaHandshake className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Business Model
-                    </h2>
-                  </div>
-                  
-                  <div className="prose prose-xl max-w-none dark:prose-invert mb-12">
-                    <p className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300">
-                      Pronova business model is designed to generate sustainable revenue while providing profits and value 
-                      to its users through a range of strategic services and partnerships.
-                    </p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-                    {/* Revenue Streams */}
-                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-700 shadow-xl">
-                      <h3 className="text-2xl font-semibold mb-6 text-green-700 dark:text-green-400 flex items-center gap-3">
-                        <FaChartLine className="text-emerald-500" />
-                        Revenue Streams
-                      </h3>
-                      <div className="space-y-4">
-                        {[
-                          'Collaboration with companies and financial institutions',
-                          'Investment service fees',
-                          'Partnership services for opportunities',
-                          'Partnerships with financial entities',
-                          'Transaction fees',
-                          'Integration services'
-                        ].map((stream, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.3, delay: index * 0.1 }}
-                            className="flex items-center gap-3 p-3 rounded-lg bg-white dark:bg-gray-800 shadow-md"
-                          >
-                            <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">•</span>
-                            <span className="text-gray-700 dark:text-gray-300">{stream}</span>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Target Markets */}
-                    <div className="space-y-8">
-                      <h3 className="text-2xl font-semibold text-gray-900 dark:text-white flex items-center gap-3">
-                        <FaUsers className="text-blue-500" />
-                        Target Markets
-                      </h3>
-                      <div className="space-y-6">
-                        {[
-                          {
-                            title: 'Companies',
-                            description: 'Providing financial solutions and tools to simplify operations',
-                            icon: FaHandshake,
-                            color: 'blue'
-                          },
-                          {
-                            title: 'Investors',
-                            description: 'Providing investment opportunities in digital assets and financial products',
-                            icon: FaChartLine,
-                            color: 'purple'
-                          },
-                          {
-                            title: 'Individuals',
-                            description: 'Enable daily transactions, personal investment, and portfolio diversification',
-                            icon: FaUsers,
-                            color: 'orange'
-                          }
-                        ].map((market, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: 20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className={`bg-gradient-to-r from-${market.color}-50 to-${market.color}-100 dark:from-${market.color}-900/20 dark:to-${market.color}-800/20 rounded-xl p-6 border border-${market.color}-200 dark:border-${market.color}-700 shadow-lg`}
-                          >
-                            <div className="flex items-center gap-4 mb-3">
-                              <div className={`w-10 h-10 bg-${market.color}-500 rounded-lg flex items-center justify-center`}>
-                                <market.icon className="text-white" />
-                              </div>
-                              <h4 className={`font-semibold text-${market.color}-700 dark:text-${market.color}-400 text-lg`}>
-                                {market.title}
-                              </h4>
-                            </div>
-                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                              {market.description}
-                            </p>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Use Cases */}
-              <div id="use-cases" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaUsers className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Use Cases
-                    </h2>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {[
-                      {
-                        title: 'Digital Wallets',
-                        description: 'Allowing investors to distribute their digital investments securely',
-                        icon: FaShieldAlt,
-                        gradient: 'from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20',
-                        border: 'border-indigo-200 dark:border-indigo-700',
-                        textColor: 'text-indigo-700 dark:text-indigo-400'
-                      },
-                      {
-                        title: 'Investment Portfolios',
-                        description: 'Diversify commercial, real estate and metals investments',
-                        icon: FaChartLine,
-                        gradient: 'from-teal-50 to-teal-100 dark:from-teal-900/20 dark:to-teal-800/20',
-                        border: 'border-teal-200 dark:border-teal-700',
-                        textColor: 'text-teal-700 dark:text-teal-400'
-                      },
-                      {
-                        title: 'E-commerce Payments',
-                        description: 'Facilitate purchases using PRONOVA through payment cards',
-                        icon: FaCoins,
-                        gradient: 'from-rose-50 to-rose-100 dark:from-rose-900/20 dark:to-rose-800/20',
-                        border: 'border-rose-200 dark:border-rose-700',
-                        textColor: 'text-rose-700 dark:text-rose-400'
-                      },
-                      {
-                        title: 'Global Remittances',
-                        description: 'Simplify international remittances with the lowest fees',
-                        icon: FaGlobe,
-                        gradient: 'from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20',
-                        border: 'border-amber-200 dark:border-amber-700',
-                        textColor: 'text-amber-700 dark:text-amber-400'
-                      }
-                    ].map((useCase, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className={`bg-gradient-to-br ${useCase.gradient} rounded-2xl p-8 shadow-lg border ${useCase.border} hover:shadow-xl transition-all duration-300 hover:scale-105`}
-                      >
-                        <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center mb-6 mx-auto shadow-neon">
-                          <useCase.icon className="text-white text-2xl" />
-                        </div>
-                        <h4 className={`text-xl font-semibold mb-4 ${useCase.textColor} text-center`}>
-                          {useCase.title}
-                        </h4>
-                        <p className="text-gray-700 dark:text-gray-300 text-center leading-relaxed">
-                          {useCase.description}
-                        </p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Risk Insurance */}
-              <div id="risk-insurance" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaShieldAlt className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Risk Insurance and Asset Protection
-                    </h2>
-                  </div>
-
-                  {/* Smart Contract Audit (SolidProof) */}
-                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-700 shadow-xl mb-10">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                          <FaShieldAlt className="text-white text-xl" />
-                        </div>
-                        <div>
-                          <h3 className="text-2xl font-semibold text-green-700 dark:text-green-400">Independent Security Audit</h3>
-                          <p className="text-gray-700 dark:text-gray-300">
-                            Pronova's smart contracts are audited by <strong>SolidProof</strong>, a leading blockchain security firm.
-                          </p>
-                        </div>
-                      </div>
-                      <a
-                        href="https://app.solidproof.io/projects/pronova"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors whitespace-nowrap"
-                      >
-                        View Audit Report <FaExternalLinkAlt size={14} />
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-2xl p-10 border border-red-200 dark:border-red-700 shadow-2xl">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                      {/* Insurance Partners */}
-                      <div>
-                        <div className="flex items-center gap-3 mb-8">
-                          <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
-                            <FaShieldAlt className="text-white text-xl" />
-                          </div>
-                          <h3 className="text-2xl font-semibold text-red-700 dark:text-red-400">
-                            Insurance Partners
-                          </h3>
-                        </div>
-                        <div className="space-y-6">
-                          {[
-                            { name: 'HCC International Insurance', country: 'USA-UK', logo: hccLogo },
-                            { name: 'Assurax Insurance', country: 'USA-UK', logo: assuraxLogo }
-                          ].map((partner, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, x: -20 }}
-                              whileInView={{ opacity: 1, x: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.5, delay: index * 0.1 }}
-                              className="flex items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md"
-                            >
-                              <img src={partner.logo} alt={partner.name} className="w-16 h-16 object-contain" />
-                              <div>
-                                <p className="font-semibold text-gray-900 dark:text-white">{partner.name}</p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">{partner.country}</p>
-                              </div>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      {/* Protection Coverage */}
-                      <div>
-                        <div className="flex items-center gap-3 mb-8">
-                          <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
-                            <FaShieldAlt className="text-white text-xl" />
-                          </div>
-                          <h3 className="text-2xl font-semibold text-orange-700 dark:text-orange-400">
-                            Protection Coverage
-                          </h3>
-                        </div>
-                        <div className="space-y-4">
-                          {[
-                            'Data breaches protection',
-                            'Cyber attacks coverage',
-                            'Cyber threats protection',
-                            'Business interruption coverage',
-                            'Legal and regulatory expenses'
-                          ].map((coverage, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, x: 20 }}
-                              whileInView={{ opacity: 1, x: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.3, delay: index * 0.1 }}
-                              className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-md"
-                            >
-                              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                              <span className="text-gray-700 dark:text-gray-300 font-medium">{coverage}</span>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-8 pt-8 border-t border-red-200 dark:border-red-700 text-center">
-                      <p className="text-red-700 dark:text-red-400 font-semibold text-lg mb-4">
-                        For detailed insurance documents, visit:
-                      </p>
-                      <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        <a href="https://www.hccinternationalinsurance.com" target="_blank" rel="noopener noreferrer" 
-                           className="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-red-600 dark:text-red-400 font-medium">
-                          <FaGlobe />
-                          www.hccinternationalinsurance.com
-                        </a>
-                        <a href="https://www.assurainsurance.com" target="_blank" rel="noopener noreferrer" 
-                           className="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-red-600 dark:text-red-400 font-medium">
-                          <FaGlobe />
-                          www.assurainsurance.com
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Roadmap */}
-              <div id="roadmap" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-violet-500 to-purple-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaRoad className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Pronova Roadmap
-                    </h2>
-                  </div>
-                  
-                  <div className="space-y-8">
-                    {[
-                      {
-                        period: 'Q2 2025 (April - June)',
-                        title: 'Development & Initial Launch 🚀',
-                        color: 'blue',
-                        items: [
-                          'Website Development Begins',
-                          'Smart Contract Deployment',
-                          'Community Building & Social Media Presence',
-                          'Private Sale & Early Investor Round'
-                        ]
-                      },
-                      {
-                        period: 'Q3 2025 (July - September)',
-                        title: 'Token Sale & DEX Listing 💰',
-                        color: 'green',
-                        items: [
-                          'Initial Smart Contract Audit',
-                          'Pre-Sale (ICO/IDO/IEO) Beginning',
-                          'DEX Listings (Uniswap, PancakeSwap)',
-                          'CEX Negotiations (KuCoin, Bitget, Gate.io)',
-                          'Final Smart Contract Audit',
-                          'Marketing & Partnerships Expansion'
-                        ]
-                      },
-                      {
-                        period: 'Q4 2025 (October - December)',
-                        title: 'Ecosystem Expansion & Adoption 🌎',
-                        color: 'purple',
-                        items: [
-                          'PRONOVA Wallet Launch (Beta)',
-                          'Payment Gateway Integration',
-                          'PRONOVA Rewards Program',
-                          'Merchant Adoption'
-                        ]
-                      },
-                      {
-                        period: 'Q1 2026 (January - March)',
-                        title: 'Utility & Real-World Use Cases 🚀',
-                        color: 'orange',
-                        items: [
-                          'E-commerce Platform Integration',
-                          'Real Estate & Gold Investment Use Cases',
-                          'Major Exchange Listings',
-                          'Partnership Expansion'
-                        ]
-                      },
-                      {
-                        period: 'Q2-Q4 2026',
-                        title: 'Global Expansion & AI Integration 🤖',
-                        color: 'teal',
-                        items: [
-                          'AI-Driven Investment Tools',
-                          'PRONOVA Pay (Payment Cards)',
-                          'Enterprise & Institutional Adoption',
-                          'Global Market Expansion'
-                        ]
-                      },
-                      {
-                        period: '2027',
-                        title: 'Mass Adoption & Long-Term Growth 🌍',
-                        color: 'amber',
-                        items: [
-                          'PRONOVA 2.0 Ecosystem Upgrade',
-                          'Global Financial Partnerships',
-                          'Dedicated Blockchain Development',
-                          'Top-Tier Digital Asset Status'
-                        ]
-                      }
-                    ].map((phase, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: index * 0.1 }}
-                        className={`bg-gradient-to-r from-${phase.color}-50 to-${phase.color}-100 dark:from-${phase.color}-900/20 dark:to-${phase.color}-800/20 rounded-2xl p-8 border border-${phase.color}-200 dark:border-${phase.color}-700 shadow-xl hover:shadow-2xl transition-all duration-300`}
-                      >
-                        <div className="flex items-center gap-4 mb-6">
-                          <div className={`w-12 h-12 bg-${phase.color}-500 rounded-full flex items-center justify-center text-white font-bold text-lg`}>
-                            {index + 1}
-                          </div>
-                          <div>
-                            <h3 className={`text-2xl font-bold text-${phase.color}-700 dark:text-${phase.color}-400`}>
-                              📅 {phase.period}
-                            </h3>
-                            <p className={`text-lg font-semibold text-${phase.color}-600 dark:text-${phase.color}-300`}>
-                              {phase.title}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {phase.items.map((item, itemIndex) => (
-                            <motion.div
-                              key={itemIndex}
-                              initial={{ opacity: 0, y: 10 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.3, delay: itemIndex * 0.1 }}
-                              className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-md"
-                            >
-                              <span className="text-green-500 font-bold">✔️</span>
-                              <span className="text-gray-700 dark:text-gray-300 font-medium">{item}</span>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Pre-sale Information */}
-              <div id="presale" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-green-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaChartLine className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Pronova Pre-sale
-                    </h2>
-                  </div>
-
-                  {/* Early Investor Advantage */}
-                  <div className="bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-900/20 dark:to-yellow-900/20 rounded-2xl p-8 border-l-4 border-amber-500 shadow-xl mb-10">
-                    <h3 className="text-2xl font-semibold mb-4 text-amber-700 dark:text-amber-400 flex items-center gap-2">
-                      <FaTrophy className="text-yellow-500" /> The Early Investor Advantage &amp; Safe Exit
-                    </h3>
-                    <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300 mb-4">
-                      The Pronova Pre-Sale is designed to give early investors a strategic edge: they receive PRN at a
-                      price below the platform reference price of <strong>$1.00 per token</strong> across Capimax's
-                      investment platforms — translating into an immediate advantage of up to <strong>~20%</strong> when
-                      the token is used directly to purchase income-generating assets.
-                    </p>
-                    <ul className="space-y-2 text-gray-700 dark:text-gray-300">
-                      <li>• <strong>Instant value:</strong> use PRN immediately on the platforms at the $1.00 reference price.</li>
-                      <li>• <strong>5% discount</strong> when paying with PRN across Capimax platforms.</li>
-                      <li>• <strong>Dual returns:</strong> immediate price advantage plus long-term yield from asset-backed investments.</li>
-                      <li>• <strong>Safe exit:</strong> convert into yield-bearing assets or fractional real estate, with exit available anytime — protecting capital and reducing market-volatility risk.</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-10 border border-green-200 dark:border-green-700 shadow-2xl">
-                    <div className="text-center mb-12">
-                      <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-neon">
-                        <FaChartLine className="text-white text-2xl" />
-                      </div>
-                      <h3 className="text-3xl font-bold mb-4 text-green-700 dark:text-green-400">
-                        📊 Pre-Sale Breakdown
-                      </h3>
-                    </div>
-                    
-                    {/* Key stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                      {[
-                        { label: 'Total Supply', value: '1,000,000,000', subtitle: 'PRN Tokens', icon: FaCoins },
-                        { label: 'Pre-Sale Allocation', value: '250,000,000', subtitle: '25% of total supply', icon: FaChartLine },
-                        { label: 'Duration', value: '90 days', subtitle: '3 phases × 30 days', icon: FaRoad },
-                        { label: 'Accepted Currencies', value: 'ETH, BNB', subtitle: 'USD, USDT', icon: FaGlobe }
-                      ].map((stat, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
-                          className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg border border-green-200 dark:border-gray-700 text-center"
-                        >
-                          <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-neon">
-                            <stat.icon className="text-white" />
-                          </div>
-                          <p className="font-semibold text-green-700 dark:text-green-400 mb-2">{stat.label}</p>
-                          <p className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{stat.value}</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{stat.subtitle}</p>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* Phases table */}
-                    <div className="overflow-x-auto mb-8">
-                      <table className="w-full bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-green-200 dark:border-gray-700">
-                        <thead className="bg-green-100 dark:bg-green-900/30">
-                          <tr>
-                            <th className="px-6 py-4 text-left font-semibold text-green-700 dark:text-green-400">Phase</th>
-                            <th className="px-6 py-4 text-left font-semibold text-green-700 dark:text-green-400">Duration</th>
-                            <th className="px-6 py-4 text-left font-semibold text-green-700 dark:text-green-400">Tokens for Sale</th>
-                            <th className="px-6 py-4 text-left font-semibold text-green-700 dark:text-green-400">Price per PRN</th>
-                            <th className="px-6 py-4 text-left font-semibold text-green-700 dark:text-green-400">Total Raised</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-green-200 dark:divide-gray-700">
-                          {[
-                            { phase: 'Phase 1', duration: '30 days', tokens: '100M PRN', price: '$0.8', total: '$80M', bgColor: 'bg-green-50 dark:bg-green-900/10' },
-                            { phase: 'Phase 2', duration: '30 days', tokens: '75M PRN', price: '$1.0', total: '$75M', bgColor: '' },
-                            { phase: 'Phase 3', duration: '30 days', tokens: '75M PRN', price: '$1.5', total: '$112.5M', bgColor: 'bg-green-50 dark:bg-green-900/10' },
-                            { phase: 'Total', duration: '90 days', tokens: '250M (25%)', price: '-', total: '$267.5M', bgColor: 'bg-green-100 dark:bg-green-900/20 font-bold' }
-                          ].map((row, index) => (
-                            <motion.tr
-                              key={index}
-                              initial={{ opacity: 0, x: -20 }}
-                              whileInView={{ opacity: 1, x: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.3, delay: index * 0.1 }}
-                              className={row.bgColor}
-                            >
-                              <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">{row.phase}</td>
-                              <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{row.duration}</td>
-                              <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{row.tokens}</td>
-                              <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{row.price}</td>
-                              <td className="px-6 py-4 font-semibold text-green-600 dark:text-green-400">{row.total}</td>
-                            </motion.tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-
-                    {/* Expected listing price */}
-                    <div className="text-center">
-                      <div className="bg-yellow-100 dark:bg-yellow-900/20 rounded-xl p-6 border-l-4 border-yellow-500 shadow-lg inline-block">
-                        <p className="text-xl font-bold text-yellow-700 dark:text-yellow-400 flex items-center justify-center gap-3">
-                          <FaStar className="text-yellow-500" />
-                          Expected Listing Price: $1.7 - $2.5
-                          <FaStar className="text-yellow-500" />
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Team & Consultants */}
-              <div id="team" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaUsers className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Team & Consultants
-                    </h2>
-                  </div>
-                  
-                  <div className="prose prose-xl max-w-none dark:prose-invert mb-12">
-                    <p className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300">
-                      CAPI Holding group and Partners boasts a team of experts and experienced professionals with extensive 
-                      experience in finance, blockchain technology, cyber insurance, cryptocurrency markets, business development, 
-                      financial market management, and multiple and diversified investments in many fields and several countries.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-                    {/* Core Team Structure */}
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-700 shadow-xl">
-                      <h3 className="text-2xl font-semibold mb-8 text-blue-700 dark:text-blue-400 flex items-center gap-3">
-                        <FaUsers className="text-indigo-500" />
-                        Core Team Structure
-                      </h3>
-                      <div className="space-y-6">
-                        {[
-                          {
-                            category: 'Management',
-                            items: ['CAPIMax Holdings UK', 'CAPIMax Investments UK', 'CAPIMax Financial Management']
-                          },
-                          {
-                            category: 'Insurance & Risk',
-                            items: ['HCC Insurance & Risk', 'Assurax Insurance & Risk', 'CIM Finance']
-                          },
-                          {
-                            category: 'Investments',
-                            items: ['Profitmax British Investments', 'CAPIMAX Investments USA', 'Advisory Board']
-                          }
-                        ].map((team, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md"
-                          >
-                            <h4 className="font-semibold text-blue-600 dark:text-blue-400 mb-3 text-lg">{team.category}</h4>
                             <ul className="space-y-2">
-                              {team.items.map((item, itemIndex) => (
-                                <li key={itemIndex} className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                                  <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                                  {item}
+                              {p.items.map((it, j) => (
+                                <li key={j} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
+                                  <FaCheckCircle className={`flex-shrink-0 mt-0.5 ${p.done ? 'text-green-500' : 'text-gray-300 dark:text-gray-600'}`} size={13} />
+                                  {it}
                                 </li>
                               ))}
                             </ul>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Governance Structure */}
-                    <div className="space-y-8">
-                      <div className="bg-purple-50 dark:bg-purple-900/20 rounded-2xl p-8 border border-purple-200 dark:border-purple-700 shadow-xl">
-                        <h3 className="text-2xl font-semibold mb-6 text-purple-700 dark:text-purple-400 flex items-center gap-3">
-                          <FaGavel className="text-purple-500" />
-                          Governance Structure
-                        </h3>
-                        <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
-                          Our team, companies, diversity and success are managed by teams, groups, companies and entities and are 
-                          not subject to one person, one property or one official, but there are multiple responsibilities, powers and control.
-                        </p>
-                        <div className="space-y-4">
-                          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
-                            <h4 className="font-semibold text-purple-600 dark:text-purple-400 mb-2">Supervisory Board</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              Capimax Financial and Risk Management, HCC Insurance & Risk, CIM Financial, Assurax Risk Assurance
-                            </p>
-                          </div>
-                          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
-                            <h4 className="font-semibold text-purple-600 dark:text-purple-400 mb-2">Advisory Board</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              HCC Insurance & Credit Risk, CAPIMax Risk Management, CIM Finance, CAPIMAX Investments USA
-                            </p>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Law & Compliance */}
-              <div id="legal" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-gray-600 to-gray-700 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaGavel className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Law & Compliance
-                    </h2>
-                  </div>
-                  
-                  <div className="prose prose-xl max-w-none dark:prose-invert mb-12">
-                    <p className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300">
-                      Founders is committed to operating within the legal frameworks of the countries in which it operates. 
-                      Ensuring compliance with regulatory standards is critical to building trust and maintaining the peace of the Pronova project.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    {/* Legal Structure */}
-                    <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-700 shadow-xl">
-                      <h3 className="text-2xl font-semibold mb-6 text-blue-700 dark:text-blue-400 flex items-center gap-3">
-                        <FaFileContract className="text-blue-500" />
-                        Legal Structure
-                      </h3>
-                      <p className="mb-6 text-gray-700 dark:text-gray-300">
-                        The Capimax Group is registered and licensed across the following countries:
-                      </p>
-                      <div className="grid grid-cols-1 gap-3">
-                        {[
-                          'Capimax investments UK',
-                          'Capimax Investments USA',
-                          'HCC Insurance & Risk',
-                          'CIM Finance',
-                          'Assurax Risk Assurance',
-                          'Profitmax British Investments'
-                        ].map((company, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.3, delay: index * 0.1 }}
-                            className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-md"
-                          >
-                            <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                              {index + 1}
-                            </span>
-                            <span className="text-gray-700 dark:text-gray-300">{company}</span>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Regulatory Compliance */}
-                    <div className="space-y-8">
-                      <div className="bg-green-50 dark:bg-green-900/20 rounded-2xl p-8 border border-green-200 dark:border-green-700 shadow-xl">
-                        <h3 className="text-2xl font-semibold mb-6 text-green-700 dark:text-green-400 flex items-center gap-3">
-                          <FaShieldAlt className="text-green-500" />
-                          Regulatory Compliance
-                        </h3>
-                        <div className="space-y-6">
-                          {[
-                            {
-                              title: 'KYC/AML Procedures',
-                              description: 'Implement Know Your Customer (KYC) and Anti-Money Laundering (AML) protocols to verify users identities and prevent illegal activities. The company has certificates in compliance.'
-                            },
-                            {
-                              title: 'Data Protection',
-                              description: 'Comply with data privacy laws such as the General Data Protection Regulation (GDPR) to protect user information.'
-                            },
-                            {
-                              title: 'Smart Contract Audits',
-                              description: 'Conduct regular secure audits to ensure compliance with industry standards and prevent security vulnerabilities.'
-                            }
-                          ].map((compliance, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, y: 20 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.5, delay: index * 0.1 }}
-                              className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md"
-                            >
-                              <h4 className="font-semibold text-green-600 dark:text-green-400 mb-3">{compliance.title}</h4>
-                              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{compliance.description}</p>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Risks & Challenges */}
-              <div id="risks" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center shadow-neon">
-                      <FaShieldAlt className="text-white text-xl" />
-                    </div>
-                    <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                      Risks & Challenges
-                    </h2>
-                  </div>
-                  
-                  <div className="prose prose-xl max-w-none dark:prose-invert mb-12">
-                    <p className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300">
-                      While Pronova offers great potential, it is essential to recognize and address the risks and challenges inherent in the project.
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-12">
-                    {[
-                      {
-                        title: 'Regulatory Uncertainty',
-                        description: 'The regulatory environment for cryptocurrencies is constantly evolving with different requirements across jurisdictions.',
-                        solutions: [
-                          'Proactive engagement with regulatory bodies',
-                          'Continuous monitoring of legal developments',
-                          'Legal compliance team',
-                          'Regular compliance audits'
-                        ],
-                        color: 'red'
-                      },
-                      {
-                        title: 'Market Volatility',
-                        description: 'Cryptocurrency markets are volatile which may affect business value and investor confidence.',
-                        solutions: [
-                          'Diversification of revenue sources',
-                          'Sustainable monitoring',
-                          'Linking to investment opportunities and assets',
-                          'Transparent community communication'
-                        ],
-                        color: 'orange'
-                      },
-                      {
-                        title: 'Security Threats',
-                        description: 'Risks of cyberattacks, hacking and other security breaches.',
-                        solutions: [
-                          'Advanced security measures implementation',
-                          'Regular security audits and checks',
-                          'User education on security best practices',
-                          'Insurance with HCC against cyber attacks'
-                        ],
-                        color: 'purple'
-                      }
-                    ].map((risk, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: index * 0.2 }}
-                        className={`bg-gradient-to-r from-${risk.color}-50 to-${risk.color}-100 dark:from-${risk.color}-900/20 dark:to-${risk.color}-800/20 rounded-2xl p-8 border border-${risk.color}-200 dark:border-${risk.color}-700 shadow-xl`}
-                      >
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                          <div>
-                            <div className="flex items-center gap-4 mb-6">
-                              <div className={`w-12 h-12 bg-${risk.color}-500 rounded-full flex items-center justify-center`}>
-                                <FaLightbulb className="text-white text-xl" />
-                              </div>
-                              <h3 className={`text-2xl font-semibold text-${risk.color}-700 dark:text-${risk.color}-400`}>
-                                {index + 1}. {risk.title}
-                              </h3>
-                            </div>
-                            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-                              <h4 className={`font-semibold text-${risk.color}-600 dark:text-${risk.color}-400 mb-3`}>Description</h4>
-                              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{risk.description}</p>
-                            </div>
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-4 mb-6">
-                              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-                                <FaRocket className="text-white text-xl" />
-                              </div>
-                              <h4 className="text-2xl font-semibold text-green-700 dark:text-green-400">Solutions</h4>
-                            </div>
-                            <div className="space-y-3">
-                              {risk.solutions.map((solution, solutionIndex) => (
-                                <motion.div
-                                  key={solutionIndex}
-                                  initial={{ opacity: 0, x: 20 }}
-                                  whileInView={{ opacity: 1, x: 0 }}
-                                  viewport={{ once: true }}
-                                  transition={{ duration: 0.3, delay: solutionIndex * 0.1 }}
-                                  className="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md"
-                                >
-                                  <span className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">✓</span>
-                                  <span className="text-gray-700 dark:text-gray-300 font-medium">{solution}</span>
-                                </motion.div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
+                      </Fade>
                     ))}
                   </div>
-                </motion.div>
-              </div>
+                </div>
+              </Section>
 
-              {/* Conclusion */}
-              <div id="conclusion" className="mb-20 scroll-mt-32">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/30 dark:to-secondary-900/30 rounded-2xl p-10 shadow-2xl border border-primary-200 dark:border-gray-700 relative overflow-hidden">
-                    {/* Background decoration */}
-                    <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-br from-secondary-500/20 to-primary-500/20 rounded-full blur-2xl"></div>
-                    
-                    <div className="relative z-10">
-                      <div className="flex items-center gap-4 mb-8">
-                        <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center shadow-neon">
-                          <FaFlag className="text-white text-2xl" />
-                        </div>
-                        <h2 className="text-4xl font-heading font-bold text-gray-900 dark:text-white">
-                          Conclusion
-                        </h2>
-                      </div>
-                      
-                      <div className="prose prose-xl max-w-none dark:prose-invert">
-                        <p className="text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300">
-                          Pronova represents a transformative step in integrating cryptocurrencies with traditional business and 
-                          investment practices. By offering a comprehensive range of innovative services, Pronova not only simplifies 
-                          the use of digital currencies but also enables users to leverage cutting-edge technologies to enhance their 
-                          financial management and investment opportunities.
-                        </p>
-                        
-                        <div className="bg-white dark:bg-gray-800 rounded-xl p-8 border-l-4 border-primary-600 shadow-lg mb-8">
-                          <h4 className="text-2xl font-semibold mb-6 text-primary-700 dark:text-primary-400 flex items-center gap-3">
-                            <FaTrophy className="text-yellow-500" />
-                            Key Takeaways
-                          </h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-4">
-                              {[
-                                'Backed by 18+ international companies',
-                                'Operating in 60+ business fields',
-                                'Comprehensive insurance coverage',
-                                'Immediate 10% user discounts'
-                              ].map((takeaway, index) => (
-                                <motion.div
-                                  key={index}
-                                  initial={{ opacity: 0, x: -20 }}
-                                  whileInView={{ opacity: 1, x: 0 }}
-                                  viewport={{ once: true }}
-                                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                                  className="flex items-center gap-3"
-                                >
-                                  <span className="text-green-500 text-xl">✅</span>
-                                  <span className="text-gray-700 dark:text-gray-300 font-medium">{takeaway}</span>
-                                </motion.div>
-                              ))}
-                            </div>
-                            <div className="space-y-4">
-                              {[
-                                'Multi-phase roadmap to 2027',
-                                'Strong regulatory compliance',
-                                'Professional team structure',
-                                'Real-world utility and adoption'
-                              ].map((takeaway, index) => (
-                                <motion.div
-                                  key={index}
-                                  initial={{ opacity: 0, x: 20 }}
-                                  whileInView={{ opacity: 1, x: 0 }}
-                                  viewport={{ once: true }}
-                                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                                  className="flex items-center gap-3"
-                                >
-                                  <span className="text-green-500 text-xl">✅</span>
-                                  <span className="text-gray-700 dark:text-gray-300 font-medium">{takeaway}</span>
-                                </motion.div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="text-center">
-                          <p className="text-2xl font-semibold text-primary-700 dark:text-primary-400 mb-4">
-                            🚀 Join the future of cryptocurrency investment with Pronova
-                          </p>
-                          <p className="text-lg text-gray-600 dark:text-gray-400">
-                            Where traditional business meets blockchain innovation.
-                          </p>
-                        </div>
-                      </div>
+              {/* 15 */}
+              <Section id="partnerships" number="15" eyebrow="Ecosystem" title="Partnerships, Platforms & Sector Integration">
+                <p>
+                  Pronova's partnership network is the most immediately verifiable element of its institutional credibility — a
+                  growing roster of companies across five strategic sectors that publicly accept or support PRN today.
+                </p>
+                <SubHead>Strategic Sectors</SubHead>
+                <div className="grid sm:grid-cols-2 gap-4 my-6">
+                  {SECTORS.map(([t, d], i) => (
+                    <div key={i} className={`rounded-2xl border p-5 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                      <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{t}</h4>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{d}</p>
                     </div>
-                  </div>
-                </motion.div>
-              </div>
+                  ))}
+                </div>
 
-              {/* Download Button at the bottom */}
-              <div className="mt-20 text-center">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <Button 
-                    variant="gradient"
-                    size="large"
-                    href="https://drive.google.com/file/d/1cslWhHupmJs8sPg8RLFnbjaavv7ljNvp/view"
-                    target="_blank"
-                    className="shadow-2xl hover:shadow-neon-strong transform hover:scale-105 transition-all duration-300 group"
-                  >
-                    <FaDownload className="mr-3 group-hover:animate-bounce" />
-                    <span>Download Complete Whitepaper</span>
-                  </Button>
-                </motion.div>
-              </div>
-            </motion.div>
+                <SubHead>Active Capimax Platforms Accepting PRN</SubHead>
+                <Grid cols="md:grid-cols-2">
+                  {PLATFORMS.map((p, i) => {
+                    const Icon = p.icon;
+                    return (
+                      <motion.a key={i} href={p.url} target="_blank" rel="noopener noreferrer" whileHover={{ y: -4 }}
+                        className={`group rounded-2xl border p-5 flex items-center gap-4 transition-colors ${darkMode ? 'bg-dark-800 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200/80 hover:border-primary-300 shadow-sm hover:shadow-lg'}`}>
+                        <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 text-white flex items-center justify-center"><Icon size={18} /></div>
+                        <div className="flex-grow min-w-0">
+                          <div className="font-semibold text-gray-900 dark:text-white">{p.name}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{p.desc}</div>
+                        </div>
+                        <FaExternalLinkAlt className="text-gray-400 group-hover:text-primary-500 flex-shrink-0" size={13} />
+                      </motion.a>
+                    );
+                  })}
+                </Grid>
+
+                <SubHead>International Companies Accepting PRN</SubHead>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {COMPANIES.map((c, i) => (
+                    <a key={i} href={c.url} target="_blank" rel="noopener noreferrer" className={`group flex items-start justify-between gap-3 p-4 rounded-xl border transition-colors ${darkMode ? 'bg-dark-800 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200/80 hover:border-primary-300 shadow-sm'}`}>
+                      <div className="min-w-0">
+                        <div className="font-semibold text-gray-900 dark:text-white text-sm">{c.name} <span className="text-xs font-normal text-primary-500">· {c.country}</span></div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 leading-snug mt-0.5">{c.role}</div>
+                      </div>
+                      <FaExternalLinkAlt className="text-gray-400 group-hover:text-primary-500 flex-shrink-0 mt-1" size={12} />
+                    </a>
+                  ))}
+                </div>
+                <div className={`rounded-2xl border p-6 mt-6 flex items-center justify-center gap-8 flex-wrap ${darkMode ? 'bg-white border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                  {[[capimaxGroupLogo, 'Capimax Group'], [eliteGateLogo, 'Elite Gate'], [primeInnLogo, 'Prime Inn']].map(([logo, name], i) => (
+                    <img key={i} src={logo} alt={name} className="h-11 object-contain" />
+                  ))}
+                </div>
+
+                <SubHead>Platform Ecosystem — Integrated Applications</SubHead>
+                <div className="grid sm:grid-cols-2 gap-4 my-6">
+                  {PLATFORM_APPS.map(([t, d], i) => (
+                    <div key={i} className={`rounded-2xl border p-5 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                      <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{t}</h4>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{d}</p>
+                    </div>
+                  ))}
+                </div>
+              </Section>
+
+              {/* 16 */}
+              <Section id="financing" number="16" eyebrow="Digital Finance" title="Financing, Lending & Digital Finance">
+                <div className={`rounded-2xl border p-6 mb-6 flex items-center gap-5 ${darkMode ? 'bg-dark-800 border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
+                  <div className={`flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center p-2 ${darkMode ? 'bg-white' : 'bg-gray-50 border border-gray-100'}`}>
+                    <img src={novaDigitalFinanceLogo} alt="Nova Digital Finance" className="max-h-full max-w-full object-contain" />
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <strong className="text-gray-900 dark:text-white">Nova Digital Finance</strong> (novadf.com) is a UK-incorporated
+                    platform and one of the first globally designed to provide financing and lending using PRN itself as the financial
+                    instrument. Within its framework, PRN functions across six distinct financial roles:
+                  </p>
+                </div>
+                <Table head={['PRN Financial Role', 'Description']} rows={NOVA_ROLES} />
+
+                <SubHead>The Multi-Arm Utility Model</SubHead>
+                <Table head={['Utility Arm', 'Primary Participants', 'PRN Demand Mechanism']} rows={MULTI_ARM} />
+
+                <SubHead>Cross-Border Digital Finance</SubHead>
+                <p>
+                  Traditional correspondent banking costs 3–7% in fees and 2–5 business days in settlement. PRN-based cross-border
+                  payments, where both parties operate within the ecosystem, achieve near-instant settlement at a fraction of the cost.
+                </p>
+
+                <SubHead>Incentive, Bonus & Discount Architecture</SubHead>
+                <Table head={['Incentive Type', 'Benefit']} rows={INCENTIVES} />
+
+                <SubHead>A Unified Global Blockchain Ecosystem</SubHead>
+                <Table head={['Capability', 'How Pronova Delivers It']} rows={UNIFIED} />
+                <Callout icon={FaHandHoldingUsd} href="https://novadf.com/" hrefLabel="Visit novadf.com">
+                  Users can obtain financing in PRN and directly deploy it to acquire real-world assets — a complete financing cycle
+                  operating within the blockchain ecosystem.
+                </Callout>
+              </Section>
+
+              {/* 17 */}
+              <Section id="media" number="17" eyebrow="Coverage" title="Media & Official Links">
+                <p>
+                  Pronova and its ecosystem have attracted attention from international media platforms and specialized publications
+                  focused on cryptocurrencies, blockchain, Real World Assets, fintech, and institutional investment — highlighting its
+                  integration of real estate, digital finance, fractional ownership, asset-backed liquidity, and token-native financing.
+                </p>
+                <SubHead>Featured In</SubHead>
+                <div className="grid sm:grid-cols-3 gap-4 my-6">
+                  {MEDIA.map((m, i) => (
+                    <a key={i} href={m.url} target="_blank" rel="noopener noreferrer" className={`group rounded-2xl border p-5 text-center transition-colors ${darkMode ? 'bg-dark-800 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200/80 hover:border-primary-300 shadow-sm'}`}>
+                      <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 text-white mb-3"><FaNewspaper size={16} /></div>
+                      <div className="font-semibold text-gray-900 dark:text-white text-sm">{m.name}</div>
+                      <div className="text-xs text-primary-500 inline-flex items-center gap-1 mt-1">Read coverage <FaExternalLinkAlt size={9} /></div>
+                    </a>
+                  ))}
+                </div>
+                <SubHead>Official Links & Resources</SubHead>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {OFFICIAL_LINKS.map(([name, desc, url], i) => (
+                    <a key={i} href={url} target="_blank" rel="noopener noreferrer" className={`group flex items-center justify-between gap-3 p-4 rounded-xl border transition-colors ${darkMode ? 'bg-dark-800 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200/80 hover:border-primary-300 shadow-sm'}`}>
+                      <div>
+                        <div className="font-semibold text-gray-900 dark:text-white text-sm">{name}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{desc}</div>
+                      </div>
+                      <FaExternalLinkAlt className="text-gray-400 group-hover:text-primary-500 flex-shrink-0" size={12} />
+                    </a>
+                  ))}
+                </div>
+              </Section>
+
+              {/* 18 */}
+              <Section id="conclusion" number="18" eyebrow="Closing" title="Conclusion">
+                <p>
+                  Pronova (PRN) represents a disciplined departure from the speculative token paradigm — an institutional ecosystem
+                  that is architecturally designed, legally incorporated, professionally insured, independently audited, and
+                  operationally deployed. What distinguishes Pronova is simple: everything described in this whitepaper exists today.
+                  The entities are incorporated, the audit is published, the insurance frameworks are established, the partner network
+                  is operational, and the real estate integrations are active.
+                </p>
+                <p>
+                  The digital asset sector is at an inflection point — the transition from speculative, retail-dominated markets to
+                  institutionally structured, utility-anchored ecosystems. Pronova is built for this inflection point: not catching up
+                  to it, but leading it.
+                </p>
+                <Callout icon={FaExclamationTriangle} title="Important Risk Notice" tone="amber">
+                  This whitepaper is for informational purposes only and does not constitute financial, investment, legal, or tax
+                  advice. Digital assets are highly volatile and you may lose all or a substantial portion of your capital. Read the
+                  full disclaimer and risk factors on the{' '}
+                  <a href="/legal" className="text-primary-500 hover:underline font-semibold">Legal</a> page before participating.
+                </Callout>
+              </Section>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Scroll to Top Button */}
-      {isScrollTopVisible && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          onClick={scrollToTop}
-          className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center shadow-2xl hover:shadow-neon-strong z-50 transition-all duration-300 hover:scale-110"
+      {showTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white shadow-lg shadow-primary-500/30 flex items-center justify-center hover:scale-110 transition-transform"
+          aria-label="Back to top"
         >
-          <FaArrowUp className="text-white text-lg" />
-        </motion.button>
+          <FaArrowUp />
+        </button>
       )}
-
-      {/* Custom scrollbar styles */}
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(156, 163, 175, 0.1);
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #5C27FE, #7C42FF);
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #4915d9, #6C36F5);
-        }
-      `}</style>
     </>
   );
 };

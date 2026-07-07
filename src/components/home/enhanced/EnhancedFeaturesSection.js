@@ -78,38 +78,38 @@ const EnhancedFeaturesSection = () => {
   const features = [
     {
       icon: <FaHandHoldingUsd size={28} />,
-      title: "Investment Discount",
-      description: "Up to 10% discount when using Pronova for payments and investments with our partner companies.",
+      title: "PRN Discounts",
+      description: "5–30% discounts when paying in PRN vs. fiat or other crypto across ecosystem platforms.",
       delay: 0.1
     },
     {
       icon: <FaMoneyBillWave size={28} />,
-      title: "Corporate Cashback",
-      description: "Companies accepting Pronova receive cashback, creating a win-win ecosystem for users and businesses.",
+      title: "PRN-Based Financing",
+      description: "Collateralized lending, real estate mortgages, and cross-border payments via Nova Digital Finance.",
       delay: 0.2
     },
     {
       icon: <FaExchangeAlt size={28} />,
-      title: "Direct Investment Integration",
-      description: "Invest in real estate, gold, stocks, insurance through our network of 18 global companies.",
+      title: "Real Asset Integration",
+      description: "Acquire real estate, fractional ownership, and tokenized RWA with PRN across 18+ partner companies.",
       delay: 0.3
     },
     {
       icon: <FaLock size={28} />,
       title: "Token Locking Mechanism",
-      description: "56% of tokens locked with a 7-year unlock schedule, ensuring long-term stability.",
+      description: "~45% of supply locked for periods extending up to 9 years, ensuring long-term stability.",
       delay: 0.2
     },
     {
       icon: <FaShieldAlt size={28} />,
-      title: "Risk Insurance",
-      description: "Protection against data breaches, cyber attacks, and other digital risks.",
+      title: "Audited & Insured",
+      description: "SolidProof-audited contracts with HCC and Assurax insurance frameworks in place before launch.",
       delay: 0.3
     },
     {
       icon: <FaGlobe size={28} />,
       title: "Global Partnership Network",
-      description: "Access to 18 international companies across real estate, gold, hotels, bonds, and more.",
+      description: "Access to 18+ international companies across real estate, blockchain, and digital finance.",
       delay: 0.4
     }
   ];

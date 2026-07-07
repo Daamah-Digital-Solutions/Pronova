@@ -24,7 +24,7 @@ const translations = {
     riskDisclosure: 'Risk Disclosure',
     contactUs: 'Contact Us',
     joinCommunity: 'Join Our Community',
-    copyright: '© 2025 Pronova. All rights reserved.',
+    copyright: '© 2026 Pronova Virtual Asset. All rights reserved.',
     disclaimer: 'Disclaimer: Cryptocurrency investments are subject to market risks. Always DYOR (Do Your Own Research).',
     subscribeTitle: 'Stay Updated',
     subscribeText: 'Get the latest news and updates about Pronova',
@@ -109,9 +109,10 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              {language === 'en'
-                ? 'Revolutionary cryptocurrency developed by Capimax Virtual Assets and Capimax Blockchain Company, in partnership with the Capimax Group, bridging traditional finance with blockchain technology.'
-                : 'عملة مشفرة ثورية طوّرتها Capimax Virtual Assets و Capimax Blockchain Company، بالشراكة مع مجموعة Capimax، تجمع بين التمويل التقليدي وتقنية البلوكتشين.'}
+              Pronova Virtual Asset, Wyoming USA, in partnership with 12 companies
+              from the Capimax Group ecosystem — an institutional utility-backed
+              digital asset ecosystem bridging real-world assets, real estate, and
+              blockchain finance.
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
               <a 

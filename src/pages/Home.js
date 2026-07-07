@@ -21,6 +21,7 @@ import UseCasesSection from '../components/home/UseCasesSection';
 import StakingSection from '../components/home/StakingSection';
 import SecurityTrustSection from '../components/home/SecurityTrustSection';
 import SmartContractSection from '../components/home/SmartContractSection';
+import NovaDigitalFinanceSection from '../components/home/NovaDigitalFinanceSection';
 
 const Home = () => {
   return (
@@ -149,6 +150,7 @@ const Home = () => {
       <DualNatureSection />
       <HolderBenefitsSection />
       <UseCasesSection />
+      <NovaDigitalFinanceSection />
       <StakingSection />
       <DemandCreationSection />
       <SecurityTrustSection />

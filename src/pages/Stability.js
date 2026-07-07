@@ -129,7 +129,7 @@ const Stability = () => {
     {
       icon: <FaBuilding size={28} />,
       title: "Institutional Backing",
-      description: "Managed by Capimax Virtual Assets and Capimax Blockchain Company, in partnership with the Capimax Group, with 7+ years experience.",
+      description: "Owned by Pronova Virtual Asset (Wyoming, USA) and operated through incorporated entities across the USA and UK, in partnership with the Capimax Group ecosystem.",
       color: "from-green-500 to-emerald-500",
       features: [
         "Professional management team",
@@ -284,7 +284,7 @@ const Stability = () => {
                       Unlike speculative cryptocurrencies that rely solely on market sentiment, Pronova was designed from the ground up with <strong className={darkMode ? 'text-white' : 'text-gray-900'}>institutional-grade stability mechanisms</strong>.
                     </p>
                     <p>
-                      Our founding institutions - Capimax Virtual Assets and Capimax Blockchain Company - added an <strong className={darkMode ? 'text-primary-400' : 'text-primary-600'}>institutional investment dimension</strong> to protect the currency, preserve its value, and ensure long-term stability.
+                      Our institutional foundation - Pronova Virtual Asset together with the Capimax Group ecosystem - adds an <strong className={darkMode ? 'text-primary-400' : 'text-primary-600'}>institutional investment dimension</strong> to protect the currency, preserve its value, and ensure long-term stability.
                     </p>
                     <p>
                       This unique approach creates a balance between <strong className={darkMode ? 'text-white' : 'text-gray-900'}>free market trading</strong> and <strong className={darkMode ? 'text-secondary-400' : 'text-secondary-600'}>institutional protection</strong>, offering the best of both worlds.
@@ -599,18 +599,18 @@ const Stability = () => {
             {[
               {
                 icon: <FaShieldAlt size={24} />,
-                title: "Supervisory Board",
-                description: "Composed of Capimax Financial, HCC Insurance, CIM Financial, and Assurax Risk, overseeing strategic decisions and risk management."
+                title: "Financial Oversight",
+                description: "CIM Financial Group provides institutional financial oversight, compliance assessment, and risk monitoring across the ecosystem."
               },
               {
                 icon: <FaUsers size={24} />,
-                title: "Advisory Board",
-                description: "Expert guidance from HCC Insurance, CAPIMax Risk Management, and CIM Finance for strategic planning and compliance."
+                title: "Insurance & Protection",
+                description: "HCC and Assurax Insurance provide technology, cyber, and digital asset coverage — established before the pre-sale launch."
               },
               {
                 icon: <FaBuilding size={24} />,
-                title: "Management Team",
-                description: "Led by CAPIMAX Holdings UK with support from international branches including CAPIMAX Investments USA and UAE."
+                title: "Corporate Governance",
+                description: "Six incorporated entities across the USA and UK, anchored by Pronova Virtual Asset (Wyoming) and the Capimax Group ecosystem."
               }
             ].map((board, index) => (
               <FadeInWhenVisible key={index} delay={0.1 * (index + 1)}>

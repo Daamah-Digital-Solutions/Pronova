@@ -72,23 +72,26 @@ const EnhancedTokenomicsSection = () => {
     'pink-500': '#ec4899',
     'pink-600': '#db2777',
     'teal-500': '#14b8a6',
-    'teal-600': '#0d9488'
+    'teal-600': '#0d9488',
+    'orange-500': '#f97316',
+    'orange-600': '#ea580c'
   };
   
   const getHexColor = (tailwindColor) => {
     return colorMap[tailwindColor] || '#3b82f6'; // default to blue if not found
   };
   
-  // Token distribution data from whitepaper
+  // Token distribution data from whitepaper (v2)
   const tokenDistribution = [
-    { label: 'Presale', percentage: 40, amount: '400M', color: 'from-blue-500 to-blue-600' },
+    { label: 'Pre-Sale', percentage: 25, amount: '250M', color: 'from-blue-500 to-blue-600' },
+    { label: 'Direct Asset Purchase', percentage: 15, amount: '150M', color: 'from-teal-500 to-teal-600' },
     { label: 'Partnerships', percentage: 15, amount: '150M', color: 'from-green-500 to-green-600' },
-    { label: 'Marketing & Development', percentage: 12, amount: '120M', color: 'from-purple-500 to-purple-600' },
     { label: 'Liquidity', percentage: 12, amount: '120M', color: 'from-yellow-500 to-yellow-600' },
+    { label: 'Marketing & Development', percentage: 12, amount: '120M', color: 'from-purple-500 to-purple-600' },
     { label: 'Founders', percentage: 7.5, amount: '75M', color: 'from-red-500 to-red-600' },
-    { label: 'Strategic Reserves', percentage: 6, amount: '60M', color: 'from-indigo-500 to-indigo-600' },
+    { label: 'Reserves', percentage: 6, amount: '60M', color: 'from-indigo-500 to-indigo-600' },
     { label: 'Community', percentage: 5, amount: '50M', color: 'from-pink-500 to-pink-600' },
-    { label: 'Team', percentage: 2.5, amount: '25M', color: 'from-teal-500 to-teal-600' }
+    { label: 'Team', percentage: 2.5, amount: '25M', color: 'from-orange-500 to-orange-600' }
   ];
   
   // Locked tokens data
@@ -190,8 +193,8 @@ const EnhancedTokenomicsSection = () => {
               transition={{ duration: 0.3 }}
             >
               <FaRocket className="text-3xl mb-3 opacity-80" />
-              <div className="text-3xl font-bold mb-1">40%</div>
-              <div className="text-green-100 text-sm">Presale Allocation</div>
+              <div className="text-3xl font-bold mb-1">25%</div>
+              <div className="text-green-100 text-sm">Pre-Sale Allocation</div>
             </motion.div>
             
             <motion.div 
@@ -422,7 +425,7 @@ const EnhancedTokenomicsSection = () => {
                         💳 <span className="ml-2">Payment & Transactions</span>
                       </h4>
                       <p className={darkMode ? 'text-blue-300' : 'text-blue-800'}>
-                        Use PRN for payments with 18 partner companies and receive up to 10% discounts on purchases.
+                        Use PRN for payments across 18+ partner companies and platforms, with 5–30% discounts vs. fiat or other crypto.
                       </p>
                     </motion.div>
                     
@@ -440,7 +443,7 @@ const EnhancedTokenomicsSection = () => {
                         🏠 <span className="ml-2">Investment Access</span>
                       </h4>
                       <p className={darkMode ? 'text-green-300' : 'text-green-800'}>
-                        Direct investment opportunities in real estate, gold, metals, and other assets through partner network.
+                        Acquire fractional real estate, tokenized RWA stakes, and investment portfolios directly with PRN across ecosystem platforms.
                       </p>
                     </motion.div>
                     
@@ -514,7 +517,7 @@ const EnhancedTokenomicsSection = () => {
                         🌐 <span className="ml-2">Global Ecosystem</span>
                       </h4>
                       <p className={darkMode ? 'text-indigo-300' : 'text-indigo-800'}>
-                        Integration with 18 global companies across finance, real estate, insurance, and trading sectors.
+                        Integration with 18+ global companies across real estate, blockchain, digital finance, and investment sectors.
                       </p>
                     </motion.div>
                   </div>

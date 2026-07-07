@@ -141,10 +141,10 @@ const EnhancedRoadmapItem = ({
 // Statistics Component
 const RoadmapStats = () => {
   const stats = [
-    { icon: FaRocket, label: 'Phases', value: '6', color: 'text-primary-600 dark:text-primary-400' },
-    { icon: FaCheck, label: 'Completed', value: '3', color: 'text-green-600 dark:text-green-400' },
+    { icon: FaRocket, label: 'Phases', value: '4', color: 'text-primary-600 dark:text-primary-400' },
+    { icon: FaCheck, label: 'Foundation', value: 'Done', color: 'text-green-600 dark:text-green-400' },
     { icon: FaClock, label: 'Active', value: '1', color: 'text-yellow-600 dark:text-yellow-400' },
-    { icon: FaChartLine, label: 'Progress', value: '75%', color: 'text-blue-600 dark:text-blue-400' }
+    { icon: FaChartLine, label: 'Phase 1', value: '85%', color: 'text-blue-600 dark:text-blue-400' }
   ];
 
   return (
@@ -268,32 +268,34 @@ const Roadmap = () => {
     setIsVisible(true);
   }, []);
 
-  // Updated roadmap data from whitepaper
+  // Roadmap data from whitepaper (v2)
   const roadmapItems = [
     {
-      title: "Q2 2025 - Development & Initial Launch",
-      date: "April - June 2025",
+      title: "Phase 1 — Foundation & Pre-Sale",
+      date: "Completed / In Progress",
       milestones: [
-        { text: "Website Development -- Launch of the official Pronova website with detailed whitepaper, tokenomics, and project vision", completed: true },
-        { text: "Smart Contract Deployment -- Developing and deploying the Pronova token on the BNB Smart Chain (BSC) network with a security-first approach", completed: true },
-        { text: "Community Building & Social Media Presence -- Launching Telegram, Twitter, and Discord channels for engagement", completed: true },
-        { text: "Private Sale & Early Investor Round -- Offering early investment opportunities to strategic partners and investors", completed: false }
+        { text: "Six incorporated entities across the USA & UK -- establishing institutional governance from day one", completed: true },
+        { text: "SolidProof security audit -- token, vesting, and pre-sale contracts audited and published", completed: true },
+        { text: "Institutional insurance frameworks -- HCC, Assurax, and HCC International arrangements in place", completed: true },
+        { text: "18+ partner company PRN acceptance announcements -- verifiable on official websites", completed: true },
+        { text: "CIM Financial Group oversight & real estate platform integrations activated", completed: true },
+        { text: "Pre-Sale Stage 1 launch -- 100M PRN @ $0.80", completed: false }
       ],
       isActive: true,
       isCompleted: false,
-      progress: 75,
+      progress: 85,
       icon: FaRocket
     },
     {
-      title: "Q3 2025 - Token Sale & DEX Listing",
-      date: "July - September 2025",
+      title: "Phase 2 — Ecosystem Activation",
+      date: "2026",
       milestones: [
-        { text: "Initial Smart Contract Audit -- Conducting an initial audit by CertiK, Hacken, SolidProof, or SlowMist to identify vulnerabilities", completed: false },
-        { text: "Beginning of the Pre-Sale (ICO/IDO/IEO) -- Conducting multi-stage fundraising", completed: false },
-        { text: "CEX & DEX Listings -- Listing on Uniswap, Pancake Swap to ensure liquidity", completed: false },
-        { text: "CEX Negotiations -- Starting talks with Kuching, bitget, Gate.io for early centralized exchange listing", completed: false },
-        { text: "Smart Contract Final Audit -- Conducting a second security audit after pre-sale completion", completed: false },
-        { text: "Marketing & Partnerships Expansion -- Influencer collaborations, PR campaigns, and strategic partnerships", completed: false }
+        { text: "Pre-Sale Stages 2 & 3 completion -- $1.00 and $1.50 stages", completed: false },
+        { text: "Staking protocol deployment -- time-locked staking with governance rights", completed: false },
+        { text: "Lending & collateral protocol launch -- PRN-collateralized facilities", completed: false },
+        { text: "First tokenized real estate properties listed on ecosystem platforms", completed: false },
+        { text: "AI investment analytics beta & Tier 2 CEX listings", completed: false },
+        { text: "GCC regional market launch", completed: false }
       ],
       isActive: false,
       isCompleted: false,
@@ -301,12 +303,14 @@ const Roadmap = () => {
       icon: FaChartLine
     },
     {
-      title: "Q4 2025 - Ecosystem Expansion & Adoption",
-      date: "October - December 2025",
+      title: "Phase 3 — Institutional Scale",
+      date: "2026 – 2027",
       milestones: [
-        { text: "Pronova Wallet Launch (Beta Version) -- Secure multi-chain wallet for holding and transacting Pronova tokens", completed: false },
-        { text: "Payment Gateway Integration -- Allowing merchants to accept Pronova for payments", completed: false },
-        { text: "Pronova Rewards Program -- Introducing cashback and loyalty incentives for holders", completed: false }
+        { text: "Tier 1 CEX listing campaign", completed: false },
+        { text: "100+ properties tokenized across the ecosystem", completed: false },
+        { text: "Institutional investment fund products launch", completed: false },
+        { text: "Cross-chain interoperability bridges & Layer 2 integration", completed: false },
+        { text: "Asia-Pacific market expansion", completed: false }
       ],
       isActive: false,
       isCompleted: false,
@@ -314,39 +318,13 @@ const Roadmap = () => {
       icon: FaGlobeAmericas
     },
     {
-      title: "Q1 2026 - Utility & Real-World Use Cases",
-      date: "January - March 2026",
+      title: "Phase 4 — Global Leadership",
+      date: "2027+",
       milestones: [
-        { text: "Integration with E-commerce Platforms -- Partnership with Shopify, WooCommerce for token payments", completed: false },
-        { text: "Real Estate & Gold Investment Use Cases -- Facilitating tokenized real estate and gold investments", completed: false },
-        { text: "Expansion into More Exchanges -- Listing on Binance, Coinbase, OKX, or Kraken (subject to market conditions)", completed: false }
-      ],
-      isActive: false,
-      isCompleted: false,
-      progress: 0,
-      icon: FaShieldAlt
-    },
-    {
-      title: "Q2-Q4 2026 - AI Integration & Enterprise Solutions",
-      date: "April - December 2026",
-      milestones: [
-        { text: "AI-Driven Investment Tools -- Implementing AI-based financial analysis & risk management tools for investors", completed: false },
-        { text: "Pronova Pay Launch -- Payment cards & virtual debit cards for real-world spending", completed: false },
-        { text: "Enterprise & Institutional Adoption -- Collaborating with large businesses and hedge funds for adoption", completed: false }
-      ],
-      isActive: false,
-      isCompleted: false,
-      progress: 0,
-      icon: FaCogs
-    },
-    {
-      title: "2027 - Mass Adoption & Long-Term Growth",
-      date: "January - December 2027",
-      milestones: [
-        { text: "Pronova 2.0 Ecosystem Upgrade -- Scalability improvements, Layer 2 solutions, and lower transaction fees", completed: false },
-        { text: "Global Financial Partnerships -- Expanding partnerships with banks, fintech startups, and governments", completed: false },
-        { text: "Pronova Blockchain Mainnet Development -- Transitioning from BNB Smart Chain (BSC) to a dedicated blockchain (if needed)", completed: false },
-        { text: "Sustainable Growth & Long-Term Vision -- Establishing Pronova as a top-tier digital asset for payments, trading, and investments", completed: false }
+        { text: "Dedicated Pronova blockchain infrastructure evaluation", completed: false },
+        { text: "Global top-tier exchange listings", completed: false },
+        { text: "Full cross-chain interoperability", completed: false },
+        { text: "Integration with traditional finance and institutional custodians", completed: false }
       ],
       isActive: false,
       isCompleted: false,

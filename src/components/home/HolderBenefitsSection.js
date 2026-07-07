@@ -60,10 +60,10 @@ const HolderBenefitsSection = () => {
     },
     {
       icon: <FaChartLine size={32} />,
-      title: "Investment Returns",
-      subtitle: "Profit from Opportunities",
-      description: "Benefit from investment returns across 30+ sectors including real estate, gold, metals, hotels, bonds, and insurance through our partner network.",
-      highlight: "30+ investment sectors",
+      title: "Real-World Utility",
+      subtitle: "Backed by Real Assets",
+      description: "Deploy PRN across real estate, fractional ownership, tokenized RWA, and PRN-based financing through our verified partner network.",
+      highlight: "Real estate & RWA",
       color: "from-blue-500 to-cyan-500",
       bgColor: "bg-blue-500/10 dark:bg-blue-500/20",
       delay: 0.2

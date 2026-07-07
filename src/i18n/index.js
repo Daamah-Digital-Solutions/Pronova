@@ -20,9 +20,12 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 import en from '../utils/translations/en';
-import ar from '../utils/translations/ar';
 
-export const SUPPORTED_LANGUAGES = ['en', 'ar'];
+// Arabic has been temporarily removed from the live site (the previous AR content
+// was incomplete). The multi-language infrastructure below is intentionally kept
+// generic: to add a language later, import its resource bundle, register it in
+// `resources`, and add its code to `SUPPORTED_LANGUAGES` — no other changes needed.
+export const SUPPORTED_LANGUAGES = ['en'];
 export const DEFAULT_LANGUAGE = 'en';
 
 // Read persisted language (falls back to default) without an extra dependency.
@@ -39,7 +42,6 @@ const getInitialLanguage = () => {
 i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
-    ar: { translation: ar },
   },
   lng: getInitialLanguage(),
   fallbackLng: DEFAULT_LANGUAGE,

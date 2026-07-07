@@ -10,29 +10,32 @@ const TokenomicsChart = ({ className = '' }) => {
   // Tokenomics data from the whitepaper
   const tokenomicsData = {
     labels: [
-      'Founders (7.5%)',
-      'Liquidity (12%)',
+      'Pre-Sale (25%)',
+      'Direct Asset Purchase (15%)',
       'Partnerships (15%)',
-      'Team (2.5%)',
-      'Presale (40%)',
+      'Liquidity (12%)',
+      'Marketing & Development (12%)',
+      'Founders (7.5%)',
+      'Reserves (6%)',
       'Community (5%)',
-      'Strategic Reserves (6%)',
-      'Marketing & Development (12%)'
+      'Team (2.5%)'
     ],
     datasets: [
       {
-        data: [7.5, 12, 15, 2.5, 40, 5, 6, 12],
+        data: [25, 15, 15, 12, 12, 7.5, 6, 5, 2.5],
         backgroundColor: [
-          '#2563eb', // Primary Blue
-          '#1e40af', // Dark Blue
-          '#7c3aed', // Purple
-          '#6d28d9', // Dark Purple
-          '#f59e0b', // Amber
-          '#10b981', // Emerald
-          '#3b82f6', // Light Blue
-          '#8b5cf6'  // Light Purple
+          '#2563eb', // Blue - Pre-Sale
+          '#14b8a6', // Teal - Direct Asset Purchase
+          '#7c3aed', // Purple - Partnerships
+          '#f59e0b', // Amber - Liquidity
+          '#8b5cf6', // Light Purple - Marketing & Dev
+          '#ef4444', // Red - Founders
+          '#6366f1', // Indigo - Reserves
+          '#10b981', // Emerald - Community
+          '#f97316'  // Orange - Team
         ],
         borderColor: [
+          '#ffffff',
           '#ffffff',
           '#ffffff',
           '#ffffff',

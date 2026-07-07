@@ -51,7 +51,7 @@ const WhatIsPronovaSection = () => {
     {
       icon: <FaBuilding size={24} />,
       title: "Institutional Foundation",
-      description: "Developed by Capimax Virtual Assets and Capimax Blockchain Company, in partnership with the global Capimax Group."
+      description: "Issued by Pronova Virtual Asset (Wyoming, USA) and operated through incorporated entities across the USA and UK, in partnership with the Capimax Group ecosystem."
     },
     {
       icon: <FaShieldAlt size={24} />,
@@ -61,12 +61,12 @@ const WhatIsPronovaSection = () => {
     {
       icon: <FaGlobe size={24} />,
       title: "Global Reach",
-      description: "Backed by 18+ international companies across UK, USA, and UAE, providing real-world investment opportunities."
+      description: "Backed by 18+ international companies across the USA, UK, and Europe, providing real-world investment and real estate opportunities."
     },
     {
       icon: <FaChartLine size={24} />,
-      title: "7+ Years Experience",
-      description: "Built on extensive experience in blockchain, fintech, and virtual assets management."
+      title: "Audited & Insured",
+      description: "Smart contracts independently audited by SolidProof, with institutional insurance frameworks (HCC, Assurax) in place before launch."
     }
   ];
 
@@ -93,15 +93,15 @@ const WhatIsPronovaSection = () => {
 
               <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                 <p>
-                  <strong className="text-gray-900 dark:text-white">Pronova (PRN)</strong> is a digital cryptocurrency founded and developed by a British-American global group of companies through <strong className="text-primary-600 dark:text-primary-400">Capimax Virtual Assets</strong> and <strong className="text-primary-600 dark:text-primary-400">Capimax Blockchain Company</strong>, in partnership with the global Capimax Group.
+                  <strong className="text-gray-900 dark:text-white">Pronova (PRN)</strong> is a next-generation institutional digital asset ecosystem, owned by <strong className="text-primary-600 dark:text-primary-400">Pronova Virtual Asset</strong> (registered in Wyoming, USA) and operated through a network of incorporated entities across the USA and UK, in partnership with 12 companies from the <strong className="text-primary-600 dark:text-primary-400">Capimax Group</strong> ecosystem.
                 </p>
 
                 <p>
-                  Unlike speculative tokens, Pronova was developed to be a <strong className="text-gray-900 dark:text-white">secure, stable, and valuable currency</strong> that combines everyday cryptocurrency utility with institutional protection that sets it apart from others.
+                  Unlike speculative tokens, PRN is engineered around <strong className="text-gray-900 dark:text-white">real operational utility</strong> — used today to acquire fractional real estate, access investment structures, pay platform fees, obtain PRN-based financing, and transact across a growing international network of partner companies, before exchange listing.
                 </p>
 
                 <p>
-                  With over <strong className="text-primary-600 dark:text-primary-400">7 years of experience</strong> in blockchain, fintech, and virtual assets, our group has created a currency designed for <strong className="text-gray-900 dark:text-white">real-world utility</strong> and <strong className="text-gray-900 dark:text-white">institutional stability</strong>.
+                  Backed by <strong className="text-primary-600 dark:text-primary-400">real-world assets</strong>, an independent <strong className="text-gray-900 dark:text-white">SolidProof</strong> smart-contract audit, and institutional insurance frameworks, Pronova is designed for <strong className="text-gray-900 dark:text-white">real-world utility</strong> and <strong className="text-gray-900 dark:text-white">institutional-grade governance</strong>.
                 </p>
 
                 {/* Official definition (client-approved) */}

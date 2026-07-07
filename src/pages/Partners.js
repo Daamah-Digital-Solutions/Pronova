@@ -9,26 +9,17 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import { Helmet } from 'react-helmet';
 
-// Import partner logos
+// Import partner logos (v2 corporate structure)
 import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-logo.png';
-import capiMaxHoldingsLogo from '../assets/images/logos for partner/CAPI Max Holdings UK.png';
-import capiMaxInvestmentsUSALogo from '../assets/images/logos for partner/CAPI Max Investments USA.png';
-import capiMaxInvestmentsUKLogo from '../assets/images/logos for partner/CAPI Max Investments UK.png';
-import capiMaxInvestmentsUAELogo from '../assets/images/logos for partner/CAPI Max Investments UAE.png';
-import capiMaxFinancialLogo from '../assets/images/logos for partner/CAPI Max Financial  uk.png';
 import hccLogo from '../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png';
 import cimLogo from '../assets/images/logos for partner/cim logo.png';
-import profitmaxLogo from '../assets/images/logos for partner/finalprofitmax-logo.svg';
-import tdhLogo from '../assets/images/logos for partner/tdh logo.png';
-import novaPropertyLogo from '../assets/images/logos for partner/nova property logo.png';
 import primeinnLogo from '../assets/images/logos for partner/primeinn logo.png';
-import capiMaxDevelopmentLogo from '../assets/images/logos for partner/CAPI Max development  UK.png';
-import capiMaxTradingLogo from '../assets/images/logos for partner/CAPI Max for general Trading  USA.png';
-import capiMaxMetalsLogo from '../assets/images/logos for partner/CAPI Max for Investment in precious metals and minerals  UK.png';
 import elitGatePropertiesLogo from '../assets/images/logos for partner/elitgate properties.png';
 import capiMaxVirtualAssetLogo from '../assets/images/logos for partner/capi max  Virtual Asset uk dark .png';
 import capiMaxFintechBlockchainLogo from '../assets/images/logos for partner/capi max  Fintech and Blockchain uk dark  copy.png';
+import novaDigitalFinanceLogo from '../assets/images/logos for partner/novadf-logo.png';
+import capiMaxTokenizationLogo from '../assets/images/logos for partner/capimax logos png/dark/capi max all versions logos-tokenization dark.png';
 
 // Animation Hook
 const FadeInWhenVisible = ({ children, delay = 0, direction = null }) => {
@@ -89,13 +80,19 @@ const PartnerCard = ({ partner, darkMode, delay = 0 }) => {
         <div className="p-6">
           {/* Logo Container */}
           <div className={`mb-4 rounded-xl shadow-inner p-6 flex items-center justify-center h-24 transition-all duration-300 group-hover:shadow-lg ${
-            darkMode ? 'bg-white/95' : 'bg-white'
+            partner.logo ? (darkMode ? 'bg-white/95' : 'bg-white') : 'bg-gradient-to-br from-primary-500 to-secondary-500'
           }`}>
-            <img
-              src={partner.logo}
-              alt={`${partner.name} logo`}
-              className="max-w-full max-h-full object-contain filter drop-shadow-md group-hover:drop-shadow-lg transition-all duration-300"
-            />
+            {partner.logo ? (
+              <img
+                src={partner.logo}
+                alt={`${partner.name} logo`}
+                className="max-w-full max-h-full object-contain filter drop-shadow-md group-hover:drop-shadow-lg transition-all duration-300"
+              />
+            ) : (
+              <span className="text-2xl font-heading font-bold text-white tracking-wide">
+                {partner.name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
+              </span>
+            )}
           </div>
 
           {/* Company Info */}
@@ -192,166 +189,138 @@ const SectorCard = ({ sector, darkMode, delay = 0 }) => {
 const Partners = () => {
   const { darkMode } = useTheme();
 
-  // All 18+ partner companies accepting Pronova
+  // Partner companies & platforms accepting / supporting PRN (v2)
   const partners = [
     {
       name: "Capimax Group",
       logo: capimaxGroupLogo,
-      description: "The global parent group behind Pronova, uniting Capimax's investment, fintech, and blockchain companies worldwide.",
+      description: "Strategic holding group of 12 companies — the operational backbone of the Pronova ecosystem.",
       sectors: ["Group", "Global"],
       website: "https://capimaxgroup.com/"
     },
     {
-      name: "Capimax Holdings UK",
-      logo: capiMaxHoldingsLogo,
-      description: "Parent company overseeing 12 global investment companies across diverse sectors.",
-      sectors: ["Investments", "Finance"],
-      website: "https://www.capimaxholding.com"
+      name: "Capimax Real Estate Technologies",
+      logo: capiMaxTokenizationLogo,
+      description: "Real estate tokenization and property technology arm powering on-chain RWA.",
+      sectors: ["Tokenization", "Real Estate"],
+      website: "https://capimaxrt.com/"
     },
     {
-      name: "Capimax Investments USA",
-      logo: capiMaxInvestmentsUSALogo,
-      description: "US investment division focusing on American markets and opportunities.",
-      sectors: ["Investments", "USA"],
-      website: "https://www.capimaxinvestments.com"
+      name: "Capimax Virtual Asset",
+      logo: capiMaxVirtualAssetLogo,
+      description: "UK-registered virtual asset service provider enabling European market access.",
+      sectors: ["Digital Assets", "UK"],
+      website: "https://capimaxgroup.com/"
     },
     {
-      name: "Capimax Investments UK",
-      logo: capiMaxInvestmentsUKLogo,
-      description: "UK investment arm specializing in European markets and growth.",
-      sectors: ["Investments", "UK"],
-      website: "https://www.capimaxinvestments.com"
+      name: "Capimax Blockchain",
+      logo: capiMaxFintechBlockchainLogo,
+      description: "Blockchain systems development and protocol governance for the ecosystem.",
+      sectors: ["Blockchain", "Fintech"],
+      website: "https://capimaxgroup.com/"
     },
     {
-      name: "Capimax Investments UAE",
-      logo: capiMaxInvestmentsUAELogo,
-      description: "Middle East investment hub for regional growth opportunities.",
-      sectors: ["Investments", "UAE"],
-      website: "https://www.capimaxinvestments.com"
+      name: "Nova Digital Finance",
+      logo: novaDigitalFinanceLogo,
+      description: "One of the first platforms globally to provide financing and lending using PRN itself.",
+      sectors: ["Finance", "Lending"],
+      website: "https://novadf.com/"
     },
     {
-      name: "Capimax Financial UK",
-      logo: capiMaxFinancialLogo,
-      description: "Financial management and capital markets expertise.",
-      sectors: ["Finance", "Risk"],
-      website: "https://www.capimaxinvestments.com"
+      name: "Westoria Capital",
+      logo: null,
+      description: "US-based capital and institutional investment platform accepting PRN.",
+      sectors: ["Investment", "USA"],
+      website: "https://westoriacapital.com/"
     },
     {
-      name: "HCC International Insurance",
-      logo: hccLogo,
-      description: "Cyber insurance specialist for blockchain and digital assets.",
-      sectors: ["Insurance", "Cyber"],
-      website: "https://www.hccinternationalinsurance.com"
+      name: "Crestmark Global",
+      logo: null,
+      description: "UK-domiciled global real estate and investment management platform.",
+      sectors: ["Real Estate", "UK"],
+      website: "https://crestmarkglobal.com/"
     },
     {
-      name: "Assurax Insurance",
-      logo: assuraxLogo,
-      description: "Credit risk management and comprehensive asset protection.",
-      sectors: ["Insurance", "Risk"],
-      website: "https://assuraxinsurance.com/"
+      name: "Valora Estates",
+      logo: null,
+      description: "Spanish real estate platform accepting PRN for European property acquisitions.",
+      sectors: ["Real Estate", "Spain"],
+      website: "https://valoraestatesglobal.com/"
     },
     {
-      name: "CIM Financial Group",
-      logo: cimLogo,
-      description: "Financial technology and virtual asset management solutions.",
-      sectors: ["Fintech", "Assets"],
-      website: "https://cimfinancialgroup.com/"
+      name: "Aethera Development",
+      logo: null,
+      description: "Greek property development firm accepting PRN for Mediterranean projects.",
+      sectors: ["Development", "Greece"],
+      website: "https://aetheradevelopment.com/"
     },
     {
-      name: "Profitmax British Investments",
-      logo: profitmaxLogo,
-      description: "High-growth investment opportunities and portfolio management.",
-      sectors: ["Investments", "UK"],
-      website: "https://profitmaxinvestment.co.uk/"
-    },
-    {
-      name: "Capimax Development UK",
-      logo: capiMaxDevelopmentLogo,
-      description: "Construction and real estate development across the UK.",
-      sectors: ["Real Estate", "Development"],
-      website: "https://www.capimaxdevelopment.com"
-    },
-    {
-      name: "TDH Developments",
-      logo: tdhLogo,
-      description: "Real estate development and investment solutions.",
-      sectors: ["Real Estate", "Development"],
-      website: "https://www.tdhdevelopments.com"
-    },
-    {
-      name: "Nova Property Management",
-      logo: novaPropertyLogo,
-      description: "Luxury and commercial property management specialists.",
-      sectors: ["Real Estate", "Property"],
-      website: "https://novapropertymanagment.com/"
+      name: "Verdea Estates",
+      logo: null,
+      description: "Caucasus & Eastern European real estate platform accepting PRN.",
+      sectors: ["Real Estate", "Georgia"],
+      website: "https://verdeaestates.com/"
     },
     {
       name: "Elite Gate Properties",
       logo: elitGatePropertiesLogo,
-      description: "Premium real estate and property services.",
+      description: "UK luxury and premium real estate agency accepting PRN.",
       sectors: ["Real Estate", "Luxury"],
       website: "https://elitegateproperties.com/"
     },
     {
       name: "Prime Inn Hotels",
       logo: primeinnLogo,
-      description: "Hotel chain with exclusive investment opportunities.",
+      description: "International hospitality and hotel investment platform accepting PRN.",
       sectors: ["Hotels", "Hospitality"],
       website: "https://priminnhotels.com/"
     },
     {
-      name: "Capimax General Trading USA",
-      logo: capiMaxTradingLogo,
-      description: "International trading and commercial operations.",
-      sectors: ["Trading", "Commerce"],
-      website: "https://www.capimaxtrading.com"
+      name: "CIM Financial Group",
+      logo: cimLogo,
+      description: "Compliance, intelligence & risk monitoring — institutional financial oversight.",
+      sectors: ["Oversight", "Compliance"],
+      website: "https://cimfingroup.com/"
     },
     {
-      name: "Capimax Precious Metals UK",
-      logo: capiMaxMetalsLogo,
-      description: "Investment in gold, silver, and precious minerals.",
-      sectors: ["Metals", "Gold"],
-      website: "https://www.capimaxmetals.com"
+      name: "HCC",
+      logo: hccLogo,
+      description: "Technology and digital asset insurance infrastructure for the ecosystem.",
+      sectors: ["Insurance", "Technology"],
+      website: "https://hccglobalcoverage.com/"
     },
     {
-      name: "Capimax Virtual Asset UK",
-      logo: capiMaxVirtualAssetLogo,
-      description: "Virtual asset management and digital currency services.",
-      sectors: ["Digital Assets", "Crypto"],
-      website: "https://www.capimaxvirtualasset.com"
-    },
-    {
-      name: "Capimax Fintech & Blockchain",
-      logo: capiMaxFintechBlockchainLogo,
-      description: "Blockchain technology and fintech innovation solutions.",
-      sectors: ["Blockchain", "Fintech"],
-      website: "https://www.capimaxfintech.com"
+      name: "Assurax Insurance",
+      logo: assuraxLogo,
+      description: "Cyber insurance and digital asset protection coverage.",
+      sectors: ["Insurance", "Cyber"],
+      website: "https://assuraxinsurance.com/"
     }
   ];
 
   // Investment sectors available through partners
   const sectors = [
-    { name: "Real Estate", icon: <FaBuilding size={24} />, description: "Property investments and development", color: "from-blue-500 to-cyan-500" },
-    { name: "Gold & Metals", icon: <FaGem size={24} />, description: "Precious metals and minerals", color: "from-yellow-500 to-amber-500" },
-    { name: "Hotels", icon: <FaHotel size={24} />, description: "Hospitality investments", color: "from-purple-500 to-pink-500" },
-    { name: "Oil & Energy", icon: <FaChartLine size={24} />, description: "Energy sector investments", color: "from-green-500 to-emerald-500" },
-    { name: "Bonds", icon: <FaCoins size={24} />, description: "Fixed income securities", color: "from-red-500 to-orange-500" },
+    { name: "Real Estate", icon: <FaBuilding size={24} />, description: "Property acquisition & tokenization", color: "from-blue-500 to-cyan-500" },
+    { name: "Fractional Ownership", icon: <FaGem size={24} />, description: "Tokenized RWA property stakes", color: "from-yellow-500 to-amber-500" },
+    { name: "Hospitality", icon: <FaHotel size={24} />, description: "Hotel & hospitality investment", color: "from-purple-500 to-pink-500" },
+    { name: "Financing & Lending", icon: <FaChartLine size={24} />, description: "PRN-based loans via Nova Digital Finance", color: "from-green-500 to-emerald-500" },
+    { name: "Digital Finance", icon: <FaCoins size={24} />, description: "Cross-border payments & settlement", color: "from-red-500 to-orange-500" },
     { name: "Insurance", icon: <FaShieldAlt size={24} />, description: "Risk protection services", color: "from-indigo-500 to-violet-500" }
   ];
 
   // Benefits of using Pronova with partners
   const benefits = [
-    { icon: <FaPercent size={20} />, title: "Up to 5% Purchase Discount", description: "Save on products and services when paying with PRN" },
-    { icon: <FaCoins size={20} />, title: "Up to 4% Fee Exemption", description: "Reduced or zero fees on investment platforms" },
-    { icon: <FaHandshake size={20} />, title: "Partner Cashback", description: "Companies receive cashback, creating sustainable demand" },
-    { icon: <FaGlobe size={20} />, title: "Global Access", description: "Use PRN across 18+ companies in 3 countries" }
+    { icon: <FaPercent size={20} />, title: "5–30% PRN Discounts", description: "Save on platform fees and services when paying with PRN" },
+    { icon: <FaCoins size={20} />, title: "Utility Before Listing", description: "Use PRN across real platforms today, before exchange listing" },
+    { icon: <FaHandshake size={20} />, title: "Verifiable Partners", description: "Every partner publicly announces PRN support on its official website" },
+    { icon: <FaGlobe size={20} />, title: "Global Access", description: "Use PRN across 18+ companies in the USA, UK, and Europe" }
   ];
 
   return (
     <>
       <Helmet>
         <title>Partners - Companies Accepting Pronova | PRN</title>
-        <meta name="description" content="Discover 18+ global companies accepting Pronova (PRN) as payment. Get up to 10% discounts across real estate, gold, hotels, insurance, and more investment sectors." />
+        <meta name="description" content="Discover 18+ global companies and platforms accepting Pronova (PRN). Get 5–30% discounts across real estate, tokenized RWA, financing, hospitality, and insurance — before exchange listing." />
       </Helmet>
 
       {/* Hero Section */}
@@ -394,16 +363,16 @@ const Partners = () => {
                 darkMode ? 'text-gray-300' : 'text-gray-600'
               }`}>
                 Use your PRN tokens across <span className="font-semibold text-primary-600 dark:text-primary-400">18+ global companies</span> and enjoy
-                <span className="font-semibold text-secondary-600 dark:text-secondary-400"> up to 10% discounts</span> on investments, services, and products.
+                <span className="font-semibold text-secondary-600 dark:text-secondary-400"> 5–30% discounts</span> on platform fees, real estate, and financing — before exchange listing.
               </p>
 
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
                 {[
                   { number: "18+", label: "Companies" },
-                  { number: "30+", label: "Sectors" },
-                  { number: "10%", label: "Max Discount" },
-                  { number: "3", label: "Countries" }
+                  { number: "6", label: "Countries" },
+                  { number: "5–30%", label: "PRN Discounts" },
+                  { number: "4", label: "Capimax Platforms" }
                 ].map((stat, index) => (
                   <div key={index} className={`p-4 rounded-xl backdrop-blur-sm border ${
                     darkMode

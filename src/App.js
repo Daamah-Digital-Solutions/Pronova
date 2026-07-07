@@ -14,6 +14,7 @@ import Invest from './pages/Invest';
 import SimplePresale from './pages/SimplePresale';
 import Whitepaper from './pages/Whitepaper';
 import Roadmap from './pages/Roadmap';
+import News from './pages/News';
 import Team from './pages/Team';
 import Partners from './pages/Partners';
 import Stability from './pages/Stability';
@@ -46,6 +47,7 @@ function App() {
           <Route path="/presale" element={<SimplePresale />} />
           <Route path="/whitepaper" element={<Whitepaper />} />
           <Route path="/roadmap" element={<Roadmap />} />
+          <Route path="/news" element={<News />} />
           <Route path="/team" element={<Team />} />
           <Route path="/partners" element={<Partners />} />
           <Route path="/stability" element={<Stability />} />

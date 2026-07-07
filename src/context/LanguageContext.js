@@ -41,8 +41,13 @@ export const LanguageProvider = ({ children }) => {
     }
   }, []);
 
+  // Cycle through the currently supported languages. With a single active
+  // language this is a no-op; it becomes meaningful again once more languages
+  // are registered in `SUPPORTED_LANGUAGES`.
   const toggleLanguage = useCallback(() => {
-    i18n.changeLanguage(i18n.language === 'en' ? 'ar' : 'en');
+    const idx = SUPPORTED_LANGUAGES.indexOf(i18n.language);
+    const next = SUPPORTED_LANGUAGES[(idx + 1) % SUPPORTED_LANGUAGES.length];
+    i18n.changeLanguage(next);
   }, []);
 
   return (
