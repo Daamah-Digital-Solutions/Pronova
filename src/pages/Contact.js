@@ -159,7 +159,7 @@ const Contact = () => {
     {
       city: 'United Kingdom',
       country: 'United Kingdom',
-      address: 'Capimax Virtual Asset · Capimax Blockchain · Nova Digital Finance\nRegistered in the United Kingdom',
+      address: 'Capimax Virtual Asset · Capimax Technologies · Nova Digital Finance\nRegistered in the United Kingdom',
       timezone: 'GMT',
       flag: '🇬🇧'
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { FaTwitter, FaTelegram, FaDiscord, FaGithub, FaMedium, FaLinkedin, FaReddit, FaTiktok, FaInstagram } from 'react-icons/fa';
+import { FaTwitter, FaTelegram, FaDiscord, FaGithub, FaMedium, FaLinkedin, FaReddit, FaTiktok, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 import Button from '../ui/Button';
 
 // Translation data
@@ -114,6 +114,22 @@ const Footer = () => {
               digital asset ecosystem bridging real-world assets, real estate, and
               blockchain finance.
             </p>
+
+            {/* Contact details (client request: clear contact info + phone numbers) */}
+            <div className="space-y-2 mb-2">
+              <a href="mailto:support@pronova.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <FaEnvelope size={14} className="text-primary-500 flex-shrink-0" />
+                support@pronova.com
+              </a>
+              <a href="tel:+442079460958" className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <FaPhone size={14} className="text-primary-500 flex-shrink-0" />
+                +44 20 7946 0958 <span className="text-gray-400 text-sm">(UK)</span>
+              </a>
+              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                <FaMapMarkerAlt size={14} className="text-primary-500 flex-shrink-0" />
+                Wyoming, USA · London, UK
+              </div>
+            </div>
             <div className="flex flex-wrap gap-3 mt-6">
               <a 
                 href="https://x.com/pronovacryptocu" 

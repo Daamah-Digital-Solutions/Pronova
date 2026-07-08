@@ -299,7 +299,7 @@ const Team = () => {
       delay: 0.3
     },
     {
-      name: "Capimax Blockchain",
+      name: "Capimax Technologies",
       role: "Strategic Partner — UK",
       description: "Financial technology and blockchain systems development; technical infrastructure management and protocol governance.",
       icon: <FaCog />,

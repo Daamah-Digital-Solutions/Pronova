@@ -13,7 +13,7 @@ const translations = {
     new: 'NEW',
     tokenization: {
       headline: 'Unlock New Value: Asset Tokenization is Here',
-      description: 'Announcing a powerful new utility for your Pronova. In partnership with Capimax Tokenization, you can now use your holdings to tokenize real-world assets.',
+      description: 'Announcing a powerful new utility for your Pronova. In partnership with Capimax RT, you can now use your holdings to tokenize real-world assets.',
       cta: 'Explore Tokenization',
       category: 'Utility Launch'
     },
@@ -100,7 +100,7 @@ const EnhancedLatestNewsSection = () => {
       headline: t.tokenization.headline,
       description: t.tokenization.description,
       cta: t.tokenization.cta,
-      link: '#',
+      link: '/news',
       icon: <FaCoins className="w-6 h-6" />,
       gradient: 'from-purple-600 to-indigo-600',
       bgGradient: 'from-purple-50 to-indigo-50',
@@ -113,7 +113,7 @@ const EnhancedLatestNewsSection = () => {
       headline: t.loans.headline,
       description: t.loans.description,
       cta: t.loans.cta,
-      link: '#',
+      link: '/news',
       icon: <FaHandHoldingUsd className="w-6 h-6" />,
       gradient: 'from-emerald-600 to-teal-600',
       bgGradient: 'from-emerald-50 to-teal-50',

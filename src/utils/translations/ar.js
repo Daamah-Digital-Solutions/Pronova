@@ -152,7 +152,7 @@ const ar = {
   'team.advisory': 'المجلس الاستشاري',
   'team.advisory.text': 'يشمل شركة HCC للتأمين ومخاطر الائتمان وشركة CAPIMax لإدارة المخاطر وCIM للتمويل.',
   'team.management': 'فريق الإدارة',
-  'team.management.text': 'بقيادة CAPIMAX Holdings UK بدعم من الفروع الدولية بما في ذلك CAPIMAX Investments United States.',
+  'team.management.text': 'مملوكة لشركة Pronova Virtual Asset (وايومنغ، الولايات المتحدة) وتُدار بالشراكة مع منظومة Capimax Group.',
   'team.partners': 'الشركاء الاستراتيجيون',
   'team.partners.subtitle': 'الشركات والمنظمات التي تدعم وتتعاون مع برونوفا',
   'team.benefits': 'فوائد الشراكة',

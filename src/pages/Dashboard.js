@@ -78,11 +78,11 @@ const Dashboard = () => {
   // External platform links (UI-only, no backend integration)
   const investmentPlatforms = [
     {
-      name: "Capimax Investment Panel",
-      description: "Access institutional-grade investment opportunities across real estate, commodities, and tech startups.",
-      url: "https://panel.capimaxinvestment.com/",
+      name: "Capimax BRX",
+      description: "Blockchain real estate exchange — institutional-grade access to digitized property assets and ownership.",
+      url: "https://capimaxbrx.com/",
       icon: "📊",
-      features: ["Portfolio Management", "Investment Tracking", "Secure Transactions"],
+      features: ["Real Estate Exchange", "Digitized Property", "Secure Transactions"],
       color: "from-violet-600 to-purple-600"
     },
     {

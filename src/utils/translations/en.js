@@ -152,7 +152,7 @@ const en = {
   'team.advisory': 'Advisory Board',
   'team.advisory.text': 'Includes HCC Insurance & Credit Risk Company, CAPIMax Risk Management Company, and CIM Finance.',
   'team.management': 'Management Team',
-  'team.management.text': 'Led by CAPIMAX Holdings UK with support from international branches including CAPIMAX Investments United States.',
+  'team.management.text': 'Owned by Pronova Virtual Asset (Wyoming, USA) and operated in partnership with the Capimax Group ecosystem.',
   'team.partners': 'Strategic Partners',
   'team.partners.subtitle': 'The companies and organizations that support and collaborate with Pronova',
   'team.benefits': 'Partnership Benefits',

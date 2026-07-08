@@ -9,34 +9,28 @@ import { useTheme } from '../../context/ThemeContext';
  */
 const PLATFORMS = [
   {
-    name: 'CapiMax RT',
-    desc: 'Tokenized real estate',
-    url: 'https://capimaxrt.com',
-    icon: FaBuilding,
-  },
-  {
-    name: 'CapiMax Tokenization',
-    desc: 'Real-estate asset tokenization',
-    url: 'https://capimaxtokenization.store',
+    name: 'Capimax RT',
+    desc: 'Tokenized real estate trading & marketplace',
+    url: 'https://capimaxrt.com/',
     icon: FaCubes,
   },
   {
-    name: 'CapiMax PropShare',
-    desc: 'Fractional real-estate investment',
-    url: 'https://capimaxpropshare.shop',
+    name: 'Capimax BRX',
+    desc: 'Blockchain real estate exchange',
+    url: 'https://capimaxbrx.com/',
+    icon: FaBuilding,
+  },
+  {
+    name: 'Capimax ProShare',
+    desc: 'Fractional property ownership',
+    url: 'https://capimaxpropshare.com/',
     icon: FaChartPie,
   },
   {
-    name: 'CapiMax Investment',
-    desc: 'Fractional investment in diverse assets',
-    url: 'https://capimaxinvestment.com',
+    name: 'Capimax ASseT',
+    desc: 'Digital asset & RWA management',
+    url: 'https://capimaxasset.com/',
     icon: FaCoins,
-  },
-  {
-    name: 'CapiMax One App',
-    desc: 'Unified investment management app',
-    url: null,
-    icon: FaMobileAlt,
   },
 ];
 
