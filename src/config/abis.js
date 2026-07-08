@@ -76,8 +76,10 @@ export const PRONOVA_PRESALE_ABI = [
   "function buyWithUSDT(uint256 amount, address referrer, uint256 minTokensExpected, bytes32 nonce)",
   "function claimTokens()",
 
-  // Price Functions
-  "function getCurrentPrices() view returns (uint256, uint256, bool, bool)",
+  // Price Functions — the deployed contract settles purchases at these fallback oracle
+  // prices (6-decimal USD) and exposes them as public getters. It has NO getCurrentPrices().
+  "function bnbToUsdPrice() view returns (uint256)",
+  "function ethToUsdPrice() view returns (uint256)",
   "function getExpectedListingPrice() view returns (uint256, uint256)",
 
   // Analytics

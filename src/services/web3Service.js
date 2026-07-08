@@ -324,14 +324,20 @@ class Web3Service {
   async getCurrentPrices() {
     try {
       if (!this.contracts.pronovaPresale) throw new Error('Presale contract not initialized');
-      
-      const [ethPrice, bnbPrice, ethChainlinkActive, bnbChainlinkActive] = await this.contracts.pronovaPresale.getCurrentPrices();
-      
+
+      // The deployed presale settles purchases at its on-chain fallback oracle prices
+      // (6-decimal USD), exposed as public getters. Read those so the UI's crypto/token
+      // math matches on-chain settlement exactly. (There is no getCurrentPrices() on-chain.)
+      const [bnbPrice, ethPrice] = await Promise.all([
+        this.contracts.pronovaPresale.bnbToUsdPrice(),
+        this.contracts.pronovaPresale.ethToUsdPrice(),
+      ]);
+
       return {
         eth: ethers.utils.formatUnits(ethPrice, 6),
         bnb: ethers.utils.formatUnits(bnbPrice, 6),
-        ethChainlinkActive,
-        bnbChainlinkActive
+        ethChainlinkActive: false,
+        bnbChainlinkActive: false
       };
     } catch (error) {
       console.error('Error getting current prices:', error);

@@ -32,6 +32,10 @@ const SimplePresale = () => {
   const [success, setSuccess] = useState('');
   const [bnbPrice, setBnbPrice] = useState(0);
 
+  // Minimum purchase mirrors the active network's on-chain phase minimum:
+  // BSC Testnet / local settle at a $1 minimum for easy testing; BSC Mainnet uses $100.
+  const minUsd = chainId === 56 ? 100 : 1;
+
   // Load BNB price
   useEffect(() => {
     const loadPrices = async () => {
@@ -48,7 +52,7 @@ const SimplePresale = () => {
 
   // Calculate BNB and PRN amounts when USD amount changes
   useEffect(() => {
-    if (!usdAmount || parseFloat(usdAmount) < 100) {
+    if (!usdAmount || parseFloat(usdAmount) < minUsd) {
       setBnbNeeded('0');
       setPrnTokens('0');
       return;
@@ -78,8 +82,8 @@ const SimplePresale = () => {
     }
 
     const usd = parseFloat(usdAmount);
-    if (isNaN(usd) || usd < 100) {
-      setError('Minimum purchase is $100 USD');
+    if (isNaN(usd) || usd < minUsd) {
+      setError(`Minimum purchase is $${minUsd} USD`);
       return;
     }
 
@@ -365,8 +369,8 @@ const SimplePresale = () => {
                   </div>
                   <input
                     type="number"
-                    min="100"
-                    step="10"
+                    min={minUsd}
+                    step="1"
                     value={usdAmount}
                     onChange={(e) => setUsdAmount(e.target.value)}
                     className={`w-full rounded-xl pl-12 pr-4 py-4 text-lg font-semibold placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all ${
@@ -378,7 +382,7 @@ const SimplePresale = () => {
                     disabled={isProcessing}
                   />
                 </div>
-                <p className="text-sm text-gray-500 mt-2">Minimum: $100 USD</p>
+                <p className="text-sm text-gray-500 mt-2">{`Minimum: $${minUsd} USD`}</p>
               </div>
 
               {/* Calculation Display */}
@@ -411,7 +415,7 @@ const SimplePresale = () => {
                 size="large"
                 fullWidth
                 onClick={handleBuyNow}
-                disabled={isProcessing || parseFloat(usdAmount) < 100}
+                disabled={isProcessing || parseFloat(usdAmount) < minUsd}
               >
                 {isProcessing ? (
                   <>
