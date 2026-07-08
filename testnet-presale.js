@@ -19,7 +19,7 @@ const fs = require('fs');
 const path = require('path');
 const { ethers } = require('ethers');
 
-const PRESALE = '0x1AE86fB64059723a9e8c3C975D3095Aa5dca05Ba';
+const PRESALE = '0xD8D6C2B54Eceb4aCcf8370ef060764214f1947a8';
 const DEPLOYER = '0xdCca72A15AA9E04cF13eda5a5369E4FE9e770573'; // admin (for read-only status)
 const ZERO = '0x0000000000000000000000000000000000000000';
 const RPCS = [
