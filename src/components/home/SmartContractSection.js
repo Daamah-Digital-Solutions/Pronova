@@ -8,19 +8,20 @@ import { CONTRACTS } from '../../config/contracts';
  * On-chain transparency section (client request C3).
  * Shows Network, contract addresses, BSCScan verification links, and ABI access.
  *
- * Addresses + chain are read from environment variables, falling back to the
- * live BSC Testnet deployment in src/config/contracts.js. Updating the .env (or
- * the config) with the final BSC Mainnet addresses propagates here automatically.
+ * Addresses + network are read from the single source of truth in
+ * src/config/contracts.js (the same map the buy flow uses via getContractAddress),
+ * so the displayed addresses always match the contracts users actually transact
+ * with. Chain is selected by REACT_APP_CHAIN_ID (defaults to 97 / BSC Testnet).
  */
 const CHAIN_ID = parseInt(process.env.REACT_APP_CHAIN_ID || '97', 10);
 const IS_MAINNET = CHAIN_ID === 56;
 const NETWORK = IS_MAINNET ? CONTRACTS.NETWORKS.BSC : CONTRACTS.NETWORKS.BSC_TESTNET;
-const FALLBACK = IS_MAINNET ? CONTRACTS.ADDRESSES.BSC : CONTRACTS.ADDRESSES.BSC_TESTNET;
+const ADDRESSES = IS_MAINNET ? CONTRACTS.ADDRESSES.BSC : CONTRACTS.ADDRESSES.BSC_TESTNET;
 
 const CONTRACT_LIST = [
-  { label: 'PRN Token', address: process.env.REACT_APP_TOKEN_CONTRACT_ADDRESS || FALLBACK.PRONOVA_TOKEN },
-  { label: 'Presale', address: process.env.REACT_APP_PRESALE_CONTRACT_ADDRESS || FALLBACK.PRONOVA_PRESALE },
-  { label: 'Vesting', address: process.env.REACT_APP_VESTING_CONTRACT_ADDRESS || FALLBACK.PRONOVA_VESTING },
+  { label: 'PRN Token', address: ADDRESSES.PRONOVA_TOKEN },
+  { label: 'Presale', address: ADDRESSES.PRONOVA_PRESALE },
+  { label: 'Vesting', address: ADDRESSES.PRONOVA_VESTING },
 ];
 
 const isRealAddress = (addr) => typeof addr === 'string' && /^0x[a-fA-F0-9]{40}$/.test(addr);

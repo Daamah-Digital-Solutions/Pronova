@@ -1,10 +1,10 @@
-name: Deploy to Production
+name: Deploy to Production (legacy Vercel — DISABLED)
 
+# The live site is deployed to the Hostinger VPS via .github/workflows/vps-deploy.yml
+# (Docker rebuild over SSH). This Vercel pipeline is retained for reference only and
+# no longer runs automatically — trigger it manually if a Vercel deploy is ever needed.
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   test:
