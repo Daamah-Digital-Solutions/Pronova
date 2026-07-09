@@ -93,8 +93,8 @@ const Contact = () => {
     {
       icon: FaPhone,
       title: 'Phone Support',
-      primary: '+44 20 7946 0958',
-      secondary: 'UK Office - Business hours GMT',
+      primary: '+44 7577 367756 (UK)',
+      secondary: '+1 205-350-8864 (US) · Business hours',
       gradient: 'from-green-500 to-emerald-500'
     },
     {

@@ -121,9 +121,13 @@ const Footer = () => {
                 <FaEnvelope size={14} className="text-primary-500 flex-shrink-0" />
                 support@pronova.com
               </a>
-              <a href="tel:+442079460958" className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+              <a href="tel:+447577367756" className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                 <FaPhone size={14} className="text-primary-500 flex-shrink-0" />
-                +44 20 7946 0958 <span className="text-gray-400 text-sm">(UK)</span>
+                +44 7577 367756 <span className="text-gray-400 text-sm">(UK)</span>
+              </a>
+              <a href="tel:+12053508864" className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <FaPhone size={14} className="text-primary-500 flex-shrink-0" />
+                +1 205-350-8864 <span className="text-gray-400 text-sm">(US)</span>
               </a>
               <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                 <FaMapMarkerAlt size={14} className="text-primary-500 flex-shrink-0" />
