@@ -7,6 +7,7 @@ import { useLanguage } from './context/LanguageContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/ui/ScrollToTop';
+import ChatbotWidget from './components/ui/ChatbotWidget';
 
 // Pages
 import Home from './pages/Home';
@@ -61,6 +62,7 @@ function App() {
       </main>
       {!isCongratsPage && <Footer />}
       <ScrollToTop />
+      <ChatbotWidget />
     </div>
   );
 }

@@ -41,7 +41,7 @@ const ScrollToTop = () => {
           }}
           whileTap={{ scale: 0.95 }}
           onClick={scrollToTop}
-          className={`fixed bottom-8 right-8 z-50 p-4 bg-gradient-to-br from-primary-600 to-primary-500 text-white rounded-2xl shadow-2xl hover:shadow-neon transition-all duration-300 group backdrop-blur-sm border ${
+          className={`fixed bottom-28 right-8 z-50 p-4 bg-gradient-to-br from-primary-600 to-primary-500 text-white rounded-2xl shadow-2xl hover:shadow-neon transition-all duration-300 group backdrop-blur-sm border ${
             darkMode 
               ? 'border-primary-500/30 hover:border-primary-400/50' 
               : 'border-primary-400/20 hover:border-primary-500/40'
