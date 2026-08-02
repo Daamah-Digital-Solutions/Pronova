@@ -1,22 +1,33 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaShieldAlt, FaUserShield } from 'react-icons/fa';
+import { FaShieldAlt, FaExternalLinkAlt, FaCheckCircle } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
-import hccLogo from '../../assets/images/logos for partner/hcc logo.png';
-import assuraxLogo from '../../assets/images/logos for partner/assurax logo-01.png';
-import auditShield from '../../assets/images/logos for partner/logo_shield_trustnet.svg';
+import { INSTITUTIONAL_PARTNERS } from '../../config/partners';
 
 /**
- * Security, Audit & Cyber-Insurance trust section (client requests A2 + A2b).
+ * Security, Audit, Insurance, Financial & Legal trust section (client requests
+ * A3 / WP hero). Every institutional partner the client listed — SolidProof &
+ * Proof Anchor (audit), CIM Global Financial (financial), CoverTech / HCC /
+ * Assurax (insurance), and LexCrest Legal — is rendered as a linked card with
+ * its official website (and Proof Anchor's on-chain verification link).
  *
- * The cyber-insurance partners (HCC, Assurax) are live. The smart-contract audit
- * card is wired but intentionally shows a "report coming" state until the client
- * provides the SolidProof report link and seal/logo — swap AUDIT.reportUrl/logo in.
+ * Certificate / partnership-page screenshots will be added beside each card
+ * once the client supplies them; logos default to a styled initials badge.
  */
-const AUDIT = {
-  auditor: 'SolidProof',
-  reportUrl: 'https://app.solidproof.io/projects/pronova',
+const categoryStyles = {
+  'Smart Contract Audit': 'bg-primary-500/15 text-primary-500',
+  'Financial Partner': 'bg-blue-500/15 text-blue-500',
+  'Insurance Partner': 'bg-emerald-500/15 text-emerald-500',
+  'Legal Partner': 'bg-amber-500/15 text-amber-500',
 };
+
+const initials = (name) =>
+  name
+    .split(' ')
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase();
 
 const SecurityTrustSection = () => {
   const { darkMode } = useTheme();
@@ -26,85 +37,74 @@ const SecurityTrustSection = () => {
       <div className="container-custom relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-600/15 text-primary-500 text-sm font-semibold mb-4">
-            <FaShieldAlt /> Security &amp; Trust
+            <FaShieldAlt /> Security, Audit &amp; Compliance
           </div>
           <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-gray-900 dark:text-white">
-            Audited &amp; <span className="gradient-text">Cyber-Insured</span>
+            Audited, Insured &amp; <span className="gradient-text">Institutionally Backed</span>
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Pronova is built on independently audited smart contracts and backed by cyber-insurance coverage
-            from globally recognized providers — protecting both the token and the platform.
+            Pronova is built on independently audited smart contracts and backed by cyber-insurance, financial oversight,
+            and legal counsel from recognized institutional partners — verifiable, not merely promised.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {/* Audit card */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className={`rounded-2xl p-7 border ${darkMode ? 'bg-dark-900/60 border-primary-600/20' : 'bg-white border-gray-200'}`}
-          >
-            <div className="flex items-center gap-4 mb-4">
-              <div className={`flex items-center justify-center h-16 w-16 rounded-xl p-2 flex-shrink-0 ${darkMode ? 'bg-white' : 'bg-gray-50 border border-gray-200'}`}>
-                <img src={auditShield} alt={`${AUDIT.auditor} audit seal`} className="max-h-12 w-auto object-contain" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {INSTITUTIONAL_PARTNERS.map((p, i) => (
+            <motion.a
+              key={p.name}
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: i * 0.05 }}
+              className={`group flex flex-col rounded-2xl p-6 border transition-all duration-300 ${
+                darkMode
+                  ? 'bg-dark-900/60 border-primary-600/20 hover:border-primary-500/50'
+                  : 'bg-white border-gray-200 hover:border-primary-400/60 hover:shadow-lg'
+              }`}
+            >
+              <div className="flex items-center gap-4 mb-4">
+                <div
+                  className={`flex items-center justify-center h-16 w-16 rounded-xl p-2 flex-shrink-0 ${
+                    p.logo
+                      ? darkMode
+                        ? 'bg-white'
+                        : 'bg-gray-50 border border-gray-200'
+                      : 'bg-gradient-to-br from-primary-500 to-secondary-500'
+                  }`}
+                >
+                  {p.logo ? (
+                    <img src={p.logo} alt={`${p.name} logo`} className="max-h-12 w-auto object-contain" />
+                  ) : (
+                    <span className="text-lg font-heading font-bold text-white tracking-wide">{initials(p.name)}</span>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-heading font-semibold text-lg text-gray-900 dark:text-white leading-tight">{p.name}</h3>
+                  <span
+                    className={`inline-block mt-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                      categoryStyles[p.category] || 'bg-primary-500/15 text-primary-500'
+                    }`}
+                  >
+                    {p.category}
+                  </span>
+                </div>
               </div>
-              <div>
-                <h3 className="font-heading font-semibold text-lg text-gray-900 dark:text-white">Smart Contract Audit</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Audited by {AUDIT.auditor}</p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 flex-grow">{p.description}</p>
+              <div className="flex items-center gap-4 flex-wrap">
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500 group-hover:gap-3 transition-all">
+                  Visit official site <FaExternalLinkAlt size={11} />
+                </span>
+                {p.verifyUrl && (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-500">
+                    <FaCheckCircle size={12} /> On-chain verified
+                  </span>
+                )}
               </div>
-            </div>
-            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5">
-              Pronova’s smart contracts have undergone an independent security audit by {AUDIT.auditor}, a
-              leading blockchain security firm, to ensure they are safe, reliable, and free of critical issues.
-            </p>
-            {AUDIT.reportUrl ? (
-              <a
-                href={AUDIT.reportUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors"
-              >
-                View Audit Report
-              </a>
-            ) : (
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/15 text-amber-500 text-sm font-medium">
-                Audit report link coming soon
-              </span>
-            )}
-          </motion.div>
-
-          {/* Cyber insurance card */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.08 }}
-            className={`rounded-2xl p-7 border ${darkMode ? 'bg-dark-900/60 border-primary-600/20' : 'bg-white border-gray-200'}`}
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-primary-600/15 text-primary-500 flex items-center justify-center">
-                <FaUserShield size={22} />
-              </div>
-              <div>
-                <h3 className="font-heading font-semibold text-lg text-gray-900 dark:text-white">Cyber Insurance</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Coverage by HCC &amp; Assurax</p>
-              </div>
-            </div>
-            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5">
-              The token and platform are protected by cyber-insurance coverage from our contracted providers,
-              adding an institutional layer of protection for the Pronova ecosystem.
-            </p>
-            <div className="flex items-center gap-6 flex-wrap">
-              <div className={`flex items-center justify-center h-16 px-5 rounded-xl ${darkMode ? 'bg-white' : 'bg-gray-50 border border-gray-200'}`}>
-                <img src={hccLogo} alt="HCC Insurance" className="max-h-10 w-auto object-contain" />
-              </div>
-              <div className={`flex items-center justify-center h-16 px-5 rounded-xl ${darkMode ? 'bg-white' : 'bg-gray-50 border border-gray-200'}`}>
-                <img src={assuraxLogo} alt="Assurax Insurance" className="max-h-10 w-auto object-contain" />
-              </div>
-            </div>
-          </motion.div>
+            </motion.a>
+          ))}
         </div>
       </div>
     </section>

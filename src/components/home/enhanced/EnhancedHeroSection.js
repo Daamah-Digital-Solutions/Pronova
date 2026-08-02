@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaArrowRight, FaFileAlt } from 'react-icons/fa';
+import { FaArrowRight, FaFileAlt, FaDownload } from 'react-icons/fa';
 import { useTheme } from '../../../context/ThemeContext';
 import Button from '../../ui/Button';
 import pronovaCoinLogo from '../../../assets/images/logos for partner/pronova coin.png';
@@ -29,6 +29,27 @@ const AnimatedShape = ({ className, delay = 0, duration = 20, darkMode }) => (
 
 const EnhancedHeroSection = () => {
   const { darkMode } = useTheme();
+
+  // Download the whitepaper PDF (client request: clear download on the home page).
+  // Downloads public/Pronova-Whitepaper.pdf when present; otherwise sends the user
+  // to the full whitepaper page, which offers a print-to-PDF fallback.
+  const downloadWhitepaper = () => {
+    const pdfUrl = `${process.env.PUBLIC_URL || ''}/Pronova-Whitepaper.pdf`;
+    fetch(pdfUrl, { method: 'HEAD' })
+      .then((res) => {
+        if (res.ok && (res.headers.get('content-type') || '').includes('pdf')) {
+          const a = document.createElement('a');
+          a.href = pdfUrl;
+          a.download = 'Pronova-Whitepaper.pdf';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        } else {
+          window.location.href = '/whitepaper';
+        }
+      })
+      .catch(() => { window.location.href = '/whitepaper'; });
+  };
 
   return (
     <section className={`relative min-h-screen flex items-center pt-32 pb-24 overflow-hidden ${
@@ -96,7 +117,7 @@ const EnhancedHeroSection = () => {
                   <FaArrowRight className="ml-2" />
                 </Button>
                 
-                <Button 
+                <Button
                   variant="outline"
                   size="large"
                   to="/whitepaper"
@@ -104,6 +125,16 @@ const EnhancedHeroSection = () => {
                 >
                   <FaFileAlt className="mr-2" />
                   <span>Whitepaper</span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="large"
+                  onClick={downloadWhitepaper}
+                  className="w-full sm:w-auto"
+                >
+                  <FaDownload className="mr-2" />
+                  <span>Download PDF</span>
                 </Button>
               </div>
             </motion.div>

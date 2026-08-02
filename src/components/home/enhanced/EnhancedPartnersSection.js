@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaBuilding, FaHandshake, FaStar, FaUsers } from 'react-icons/fa';
+import { FaBuilding, FaHandshake, FaStar, FaUsers, FaShieldAlt, FaExternalLinkAlt } from 'react-icons/fa';
+import { CAPIMAX_ECOSYSTEM, FINANCIAL_PARTNERS, INSURANCE_PARTNERS, LEGAL_PARTNERS, AUDIT_PARTNERS } from '../../../config/partners';
 
 // Import partner logos (v2 corporate structure)
 import hccLogo from '../../../assets/images/logos for partner/hcc logo.png';
@@ -107,42 +108,57 @@ const FeaturedPartnerCard = ({ name, logo, description, delay = 0 }) => {
 };
 
 // Supporting Partner Card Component (Smaller and more compact)
-const SupportingPartnerCard = ({ name, logo, description, delay = 0 }) => {
+const SupportingPartnerCard = ({ name, logo, description, website, delay = 0 }) => {
+  const inner = (
+    <div className="group h-full bg-white/80 dark:bg-dark-900/80 backdrop-blur-sm rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:scale-105 border border-gray-200/50 dark:border-primary-600/20 hover:border-primary-300/60 dark:hover:border-primary-500/40">
+      {/* Logo Container - Compact */}
+      <div className={`mb-4 rounded-lg shadow-inner p-3 flex items-center justify-center h-16 group-hover:shadow-md transition-all duration-300 ${
+        logo ? 'bg-white dark:bg-gray-100' : 'bg-gradient-to-br from-primary-500 to-secondary-500'
+      }`}>
+        {logo ? (
+          <img
+            src={logo}
+            alt={`${name} logo`}
+            className="max-w-full max-h-full object-contain filter drop-shadow-sm"
+          />
+        ) : (
+          <span className="text-lg font-heading font-bold text-white tracking-wide">
+            {name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
+          </span>
+        )}
+      </div>
+
+      {/* Company Info - Compact */}
+      <div className="text-center">
+        <h4 className="text-sm font-heading font-bold mb-2 text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-2">
+          {name}
+        </h4>
+        <p className="text-gray-600 dark:text-gray-300 text-xs leading-relaxed line-clamp-2">
+          {description}
+        </p>
+        {website && (
+          <span className="inline-flex items-center gap-1 mt-2 text-xs font-semibold text-primary-600 dark:text-primary-400">
+            Visit <FaExternalLinkAlt size={9} />
+          </span>
+        )}
+      </div>
+
+      {/* Subtle Hover Effect */}
+      <div className="mt-3 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="w-6 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full"></div>
+      </div>
+    </div>
+  );
+
   return (
     <FadeInWhenVisible delay={delay}>
-      <div className="group bg-white/80 dark:bg-dark-900/80 backdrop-blur-sm rounded-xl p-4 transition-all duration-300 hover:shadow-lg hover:scale-105 border border-gray-200/50 dark:border-primary-600/20 hover:border-primary-300/60 dark:hover:border-primary-500/40">
-        {/* Logo Container - Compact */}
-        <div className={`mb-4 rounded-lg shadow-inner p-3 flex items-center justify-center h-16 group-hover:shadow-md transition-all duration-300 ${
-          logo ? 'bg-white dark:bg-gray-100' : 'bg-gradient-to-br from-primary-500 to-secondary-500'
-        }`}>
-          {logo ? (
-            <img
-              src={logo}
-              alt={`${name} logo`}
-              className="max-w-full max-h-full object-contain filter drop-shadow-sm"
-            />
-          ) : (
-            <span className="text-lg font-heading font-bold text-white tracking-wide">
-              {name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()}
-            </span>
-          )}
-        </div>
-
-        {/* Company Info - Compact */}
-        <div className="text-center">
-          <h4 className="text-sm font-heading font-bold mb-2 text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-2">
-            {name}
-          </h4>
-          <p className="text-gray-600 dark:text-gray-300 text-xs leading-relaxed line-clamp-2">
-            {description}
-          </p>
-        </div>
-
-        {/* Subtle Hover Effect */}
-        <div className="mt-3 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="w-6 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full"></div>
-        </div>
-      </div>
+      {website ? (
+        <a href={website} target="_blank" rel="noopener noreferrer" className="block h-full">
+          {inner}
+        </a>
+      ) : (
+        inner
+      )}
     </FadeInWhenVisible>
   );
 };
@@ -170,100 +186,155 @@ const EnhancedPartnersSection = () => {
     }
   ];
 
-  // Supporting Companies organized by category (v2)
+  // Supporting Companies organized by category (v2 + client final-edits v3)
   const supportingCompanies = [
     {
       category: "Capimax Ecosystem",
       icon: <FaBuilding size={20} />,
       companies: [
         {
+          name: CAPIMAX_ECOSYSTEM.name,
+          logo: CAPIMAX_ECOSYSTEM.logo,
+          description: "The digital gateway uniting all Capimax platforms, partners, services & news",
+          website: CAPIMAX_ECOSYSTEM.url,
+          delay: 0.36
+        },
+        {
           name: "Capimax Group",
           logo: capimaxGroupLogo,
           description: "Strategic holding group of 12 companies — the operational backbone of the ecosystem",
+          website: "https://capimaxgroup.com/",
           delay: 0.38
         },
         {
           name: "Capimax Real Estate Technologies",
           logo: capiMaxTokenizationLogo,
           description: "Real estate tokenization and property technology arm",
+          website: "https://capimaxrt.com/",
           delay: 0.42
         },
         {
           name: "Capimax Asset Structure",
           logo: null,
           description: "Asset structuring and digital asset management",
+          website: "https://capimaxasset.com/",
           delay: 0.46
+        }
+      ]
+    },
+    {
+      category: "Institutional, Audit & Legal Partners",
+      icon: <FaShieldAlt size={20} />,
+      companies: [
+        {
+          name: FINANCIAL_PARTNERS[0].name,
+          logo: FINANCIAL_PARTNERS[0].logo,
+          description: "Financial studies, document custody, accounting & financial audit oversight",
+          website: FINANCIAL_PARTNERS[0].url,
+          delay: 0.48
+        },
+        {
+          name: INSURANCE_PARTNERS[0].name, // CoverTech Insurance
+          logo: INSURANCE_PARTNERS[0].logo,
+          description: "Full cyber-insurance coverage protecting the token, platform & digital assets",
+          website: INSURANCE_PARTNERS[0].url,
+          delay: 0.5
+        },
+        {
+          name: AUDIT_PARTNERS[1].name, // Proof Anchor
+          logo: AUDIT_PARTNERS[1].logo,
+          description: "Independent smart-contract & project audit with on-chain verification",
+          website: AUDIT_PARTNERS[1].url,
+          delay: 0.52
+        },
+        {
+          name: LEGAL_PARTNERS[0].name, // LexCrest Legal
+          logo: LEGAL_PARTNERS[0].logo,
+          description: "Legal counsel & regulatory structuring across US and UK jurisdictions",
+          website: LEGAL_PARTNERS[0].url,
+          delay: 0.54
         }
       ]
     },
     {
       category: "Real Estate Partners",
       icon: <FaHandshake size={20} />,
+      note: "All of these companies have publicly announced — via their own official websites — their acceptance of Pronova (PRN) as a means of payment and investment within their services and platforms.",
       companies: [
         {
           name: "Westoria Capital",
           logo: null,
           description: "US capital and institutional investment platform accepting PRN",
-          delay: 0.5
+          website: "https://westoriacapital.com/",
+          delay: 0.56
         },
         {
           name: "Crestmark Global",
           logo: null,
           description: "UK global real estate and investment management",
-          delay: 0.54
+          website: "https://crestmarkglobal.com/",
+          delay: 0.6
         },
         {
           name: "Valora Estates",
           logo: null,
           description: "Spanish real estate platform accepting PRN",
-          delay: 0.58
+          website: "https://valoraestatesglobal.com/",
+          delay: 0.64
         },
         {
           name: "Aethera Development",
           logo: null,
           description: "Greek property development accepting PRN",
-          delay: 0.62
+          website: "https://aetheradevelopment.com/",
+          delay: 0.68
         },
         {
           name: "Verdea Estates",
           logo: null,
           description: "Eastern European real estate accepting PRN",
-          delay: 0.66
+          website: "https://verdeaestates.com/",
+          delay: 0.72
         },
         {
           name: "Elite Gate Properties",
           logo: elitGatePropertiesLogo,
           description: "UK luxury and premium real estate agency accepting PRN",
-          delay: 0.7
+          website: "https://elitegateproperties.com/",
+          delay: 0.76
         },
         {
           name: "Prime Inn Hotels",
           logo: primeinnLogo,
           description: "International hospitality and hotel investment accepting PRN",
-          delay: 0.74
+          website: "https://priminnhotels.com/",
+          delay: 0.8
         }
       ]
     },
     {
-      category: "Supporting Entities",
+      category: "Insurance & Oversight",
       icon: <FaStar size={20} />,
       companies: [
         {
           name: "CIM Financial Group",
           logo: cimLogo,
           description: "Compliance, intelligence & risk monitoring — institutional oversight",
-          delay: 0.78
+          website: "https://cimfingroup.com/",
+          delay: 0.82
         },
         {
           name: "HCC",
           logo: hccLogo,
           description: "Technology & digital asset insurance infrastructure",
-          delay: 0.82
+          website: "https://hccglobalcoverage.com/",
+          delay: 0.84
         },
         {
           name: "Assurax Insurance",
           logo: assuraxLogo,
           description: "Cyber insurance and digital asset protection",
+          website: "https://assuraxinsurance.com/",
           delay: 0.86
         }
       ]
@@ -338,6 +409,12 @@ const EnhancedPartnersSection = () => {
                   <h4 className="text-2xl font-heading font-bold text-gray-800 dark:text-gray-200">{category.category}</h4>
                   <div className="ml-6 flex-grow h-px bg-gradient-to-r from-gray-400/40 via-gray-500/30 to-transparent"></div>
                 </div>
+                {category.note && (
+                  <div className="mb-8 -mt-4 flex items-start gap-3 rounded-xl border border-green-500/20 bg-green-500/[0.06] p-4">
+                    <FaHandshake className="flex-shrink-0 mt-0.5 text-green-500" size={18} />
+                    <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{category.note}</p>
+                  </div>
+                )}
               </FadeInWhenVisible>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -347,6 +424,7 @@ const EnhancedPartnersSection = () => {
                     name={company.name}
                     logo={company.logo}
                     description={company.description}
+                    website={company.website}
                     delay={company.delay}
                   />
                 ))}

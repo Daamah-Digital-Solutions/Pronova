@@ -8,6 +8,7 @@ import {
 } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
 import { Helmet } from 'react-helmet';
+import { CAPIMAX_ECOSYSTEM } from '../config/partners';
 
 // Import partner logos (v2 corporate structure)
 import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-logo.png';
@@ -308,6 +309,14 @@ const Partners = () => {
     { name: "Insurance", icon: <FaShieldAlt size={24} />, description: "Risk protection services", color: "from-indigo-500 to-violet-500" }
   ];
 
+  // Capimax power platforms — ordered strongest-first, tokenization (BRX) first
+  const platforms = [
+    { name: 'Capimax BRX', url: 'https://capimaxbrx.com/', description: 'Blockchain real estate exchange & tokenization — institutional-grade access to digitized property.', icon: <FaBuilding size={22} /> },
+    { name: 'Capimax ProShare', url: 'https://capimaxpropshare.com/', description: 'Fractional property ownership marketplace — stake acquisition & yield receipt in PRN.', icon: <FaGem size={22} /> },
+    { name: 'Capimax RT', url: 'https://capimaxrt.com/', description: 'Tokenized real estate trading & digital real estate asset marketplace.', icon: <FaCoins size={22} /> },
+    { name: 'Capimax ASseT', url: 'https://capimaxasset.com/', description: 'Digital asset & RWA management — connecting capital to property investment.', icon: <FaChartLine size={22} /> },
+  ];
+
   // Benefits of using Pronova with partners
   const benefits = [
     { icon: <FaPercent size={20} />, title: "5–30% PRN Discounts", description: "Save on platform fees and services when paying with PRN" },
@@ -359,12 +368,28 @@ const Partners = () => {
               </h1>
 
               {/* Subtitle */}
-              <p className={`text-lg md:text-xl mb-12 max-w-3xl mx-auto leading-relaxed ${
+              <p className={`text-lg md:text-xl mb-6 max-w-3xl mx-auto leading-relaxed ${
                 darkMode ? 'text-gray-300' : 'text-gray-600'
               }`}>
                 Use your PRN tokens across <span className="font-semibold text-primary-600 dark:text-primary-400">18+ global companies</span> and enjoy
                 <span className="font-semibold text-secondary-600 dark:text-secondary-400"> 5–30% discounts</span> on platform fees, real estate, and financing — before exchange listing.
               </p>
+
+              {/* Client statements (final-edits IV) */}
+              <div className={`max-w-3xl mx-auto mb-12 space-y-3 text-base md:text-lg leading-relaxed ${
+                darkMode ? 'text-gray-300' : 'text-gray-700'
+              }`}>
+                <p>
+                  All platforms and companies within the ecosystem have officially announced — on their own websites — their
+                  acceptance of <span className="font-semibold text-primary-600 dark:text-primary-400">Pronova (PRN)</span> as a
+                  means of payment, and PRN is already listed among their accepted payment options.
+                </p>
+                <p>
+                  Pronova is among the <span className="font-semibold text-secondary-600 dark:text-secondary-400">first cryptocurrencies
+                  that can actually be used during the Pre-Sale</span> and immediately afterward — without waiting for an exchange
+                  listing — thanks to its fully integrated ecosystem.
+                </p>
+              </div>
 
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
@@ -483,9 +508,90 @@ const Partners = () => {
         </div>
       </section>
 
+      {/* Power Platforms (client final-edits IV: ecosystem first, BRX first, Visit Platform) */}
+      <section className={`relative py-20 ${
+        darkMode ? 'bg-dark-800' : 'bg-gray-50'
+      }`}>
+        <div className="container-custom">
+          <FadeInWhenVisible>
+            <div className="text-center mb-12">
+              <h2 className={`text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-4 ${
+                darkMode ? 'text-white' : 'text-gray-900'
+              }`}>
+                The <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">Power Platforms</span>
+              </h2>
+              <p className={`text-lg max-w-3xl mx-auto ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Live, licensed platforms where PRN is an accepted means of payment — use it today, before exchange listing.
+              </p>
+            </div>
+          </FadeInWhenVisible>
+
+          {/* Capimax Ecosystem — featured first */}
+          <FadeInWhenVisible>
+            <a
+              href={CAPIMAX_ECOSYSTEM.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`group block max-w-5xl mx-auto mb-8 rounded-2xl p-7 border transition-all duration-300 ${
+                darkMode
+                  ? 'bg-gradient-to-br from-dark-900/80 to-primary-900/20 border-primary-600/30 hover:border-primary-500/60'
+                  : 'bg-gradient-to-br from-primary-50/70 to-white border-primary-200/60 hover:border-primary-400/70 hover:shadow-lg'
+              }`}
+            >
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                <div className={`flex items-center justify-center h-20 w-20 rounded-2xl p-3 flex-shrink-0 ${darkMode ? 'bg-white' : 'bg-white border border-gray-200'}`}>
+                  <img src={CAPIMAX_ECOSYSTEM.logo} alt="Capimax Ecosystem logo" className="max-h-full w-auto object-contain" />
+                </div>
+                <div className="flex-grow text-center sm:text-left">
+                  <h3 className={`font-heading font-bold text-2xl mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{CAPIMAX_ECOSYSTEM.name}</h3>
+                  <p className={`text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{CAPIMAX_ECOSYSTEM.description}</p>
+                  <span className="text-xs text-primary-500 font-medium">capimax.io · capimax.us</span>
+                </div>
+                <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold group-hover:bg-primary-700 transition-colors flex-shrink-0">
+                  Visit <FaExternalLinkAlt size={13} />
+                </span>
+              </div>
+            </a>
+          </FadeInWhenVisible>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {platforms.map((p, index) => (
+              <FadeInWhenVisible key={p.name} delay={0.05 * (index + 1)}>
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group flex flex-col h-full rounded-2xl p-6 border transition-all duration-300 ${
+                    darkMode
+                      ? 'bg-dark-900/70 border-primary-600/20 hover:border-primary-500/50'
+                      : 'bg-white border-gray-200/60 hover:border-primary-400/60 hover:shadow-lg'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 text-white flex items-center justify-center">
+                      {p.icon}
+                    </div>
+                    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
+                      darkMode ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-green-100 text-green-700 border border-green-200'
+                    }`}>
+                      <FaCheck size={10} /> Accepts PRN
+                    </span>
+                  </div>
+                  <h3 className={`font-heading font-bold text-xl mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{p.name}</h3>
+                  <p className={`text-sm flex-grow ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{p.description}</p>
+                  <span className="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-primary-500 group-hover:gap-3 transition-all">
+                    Visit Platform <FaExternalLinkAlt size={12} />
+                  </span>
+                </a>
+              </FadeInWhenVisible>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* All Partners Grid */}
       <section className={`relative py-24 ${
-        darkMode ? 'bg-dark-800' : 'bg-gray-50'
+        darkMode ? 'bg-dark-900' : 'bg-white'
       }`}>
         {/* Background decoration */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden">

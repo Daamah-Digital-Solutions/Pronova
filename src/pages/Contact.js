@@ -79,29 +79,29 @@ const Contact = () => {
     {
       icon: FaEnvelope,
       title: 'Email Support',
-      primary: 'support@pronova.com',
+      primary: 'support@pronovacrypto.com',
       secondary: 'General inquiries and customer support',
       gradient: 'from-blue-500 to-cyan-500'
     },
     {
       icon: FaBuilding,
       title: 'Business Inquiries',
-      primary: 'partnerships@pronova.com',
+      primary: 'partnerships@pronovacrypto.com',
       secondary: 'Partnership and business development',
       gradient: 'from-purple-500 to-pink-500'
     },
     {
       icon: FaPhone,
       title: 'Phone Support',
-      primary: '+44 7577 367756 (UK)',
-      secondary: '+1 205-350-8864 (US) · Business hours',
+      primary: '+1 205-350-8864 (US)',
+      secondary: '+44 7577 367756 (UK) · Business hours',
       gradient: 'from-green-500 to-emerald-500'
     },
     {
       icon: FaMapMarkerAlt,
-      title: 'Global Presence',
-      primary: 'London, UK | New York, USA | Dubai, UAE',
-      secondary: 'Multiple office locations worldwide',
+      title: 'Registered Offices',
+      primary: 'Wyoming & Delaware, USA · London, UK',
+      secondary: 'Incorporated across the USA and United Kingdom',
       gradient: 'from-orange-500 to-red-500'
     }
   ];
@@ -145,21 +145,21 @@ const Contact = () => {
     {
       city: 'Wyoming',
       country: 'United States',
-      address: 'Pronova Virtual Asset\nRegistered in Wyoming, USA',
+      address: 'Pronova Virtual Asset LLC\nRegistered in the State of Wyoming, USA\n+1 205-350-8864 · support@pronovacrypto.com',
       timezone: 'MST',
       flag: '🇺🇸'
     },
     {
       city: 'Delaware',
       country: 'United States',
-      address: 'Capimax Group Holding\nRegistered in Delaware, USA',
+      address: 'Capimax Group Holding LLC\nRegistered in the State of Delaware, USA',
       timezone: 'EST',
       flag: '🇺🇸'
     },
     {
-      city: 'United Kingdom',
+      city: 'London',
       country: 'United Kingdom',
-      address: 'Capimax Virtual Asset · Capimax Technologies · Nova Digital Finance\nRegistered in the United Kingdom',
+      address: 'Capimax Technologies Ltd · Capimax Virtual Asset · Nova Digital Finance\nRegistered in London, United Kingdom\n+44 7577 367756 · support@pronovacrypto.com',
       timezone: 'GMT',
       flag: '🇬🇧'
     }
@@ -668,7 +668,7 @@ const Contact = () => {
               <Button 
                 size="large"
                 variant="white"
-                href="mailto:partnerships@pronova.com"
+                href="mailto:partnerships@pronovacrypto.com"
                 className="bg-white text-primary-700 hover:bg-gray-100 font-bold group"
               >
                 <FaHandshake className="group-hover:rotate-12 transition-transform" />

@@ -25,6 +25,11 @@ const translations = {
     contactUs: 'Contact Us',
     joinCommunity: 'Join Our Community',
     copyright: '© 2026 Pronova Virtual Asset. All rights reserved.',
+    about: 'Pronova (PRN) is a next-generation global digital asset combining blockchain innovation with real-world utility. Designed for trading, payments, tokenized real-world assets (RWA), digital finance, and institutional investment, PRN connects cryptocurrency markets with practical economic applications through an expanding international network of platforms, businesses, and strategic partners.',
+    usOffice: 'United States',
+    usAddress: 'Pronova Virtual Asset LLC — Registered in Wyoming, USA\nCapimax Group Holding LLC — Delaware, USA',
+    ukOffice: 'United Kingdom',
+    ukAddress: 'Capimax Technologies Ltd — London, United Kingdom',
     disclaimer: 'Disclaimer: Cryptocurrency investments are subject to market risks. Always DYOR (Do Your Own Research).',
     subscribeTitle: 'Stay Updated',
     subscribeText: 'Get the latest news and updates about Pronova',
@@ -49,7 +54,12 @@ const translations = {
     riskDisclosure: 'إفصاح المخاطر',
     contactUs: 'اتصل بنا',
     joinCommunity: 'انضم إلى مجتمعنا',
-    copyright: '© 2025 برونوفا. جميع الحقوق محفوظة.',
+    copyright: '© 2026 برونوفا. جميع الحقوق محفوظة.',
+    about: 'برونوفا (PRN) عملة رقمية عالمية من الجيل الجديد تجمع بين ابتكار البلوكشين والاستخدام الواقعي. مصمّمة للتداول والمدفوعات وترميز الأصول الواقعية (RWA) والتمويل الرقمي والاستثمار المؤسسي، تربط PRN أسواق العملات المشفرة بالتطبيقات الاقتصادية العملية عبر شبكة دولية متنامية من المنصات والشركات والشركاء الاستراتيجيين.',
+    usOffice: 'الولايات المتحدة',
+    usAddress: 'Pronova Virtual Asset LLC — مسجّلة في وايومنغ، الولايات المتحدة\nCapimax Group Holding LLC — ديلاوير، الولايات المتحدة',
+    ukOffice: 'المملكة المتحدة',
+    ukAddress: 'Capimax Technologies Ltd — لندن، المملكة المتحدة',
     disclaimer: 'إخلاء المسؤولية: استثمارات العملات المشفرة عرضة لمخاطر السوق. قم دائمًا بإجراء البحث الخاص بك.',
     subscribeTitle: 'ابق على اطلاع',
     subscribeText: 'احصل على آخر الأخبار والتحديثات حول برونوفا',
@@ -109,17 +119,14 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Pronova Virtual Asset, Wyoming USA, in partnership with 12 companies
-              from the Capimax Group ecosystem — an institutional utility-backed
-              digital asset ecosystem bridging real-world assets, real estate, and
-              blockchain finance.
+              {t.about}
             </p>
 
             {/* Contact details (client request: clear contact info + phone numbers) */}
             <div className="space-y-2 mb-2">
-              <a href="mailto:support@pronova.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+              <a href="mailto:support@pronovacrypto.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                 <FaEnvelope size={14} className="text-primary-500 flex-shrink-0" />
-                support@pronova.com
+                support@pronovacrypto.com
               </a>
               <a href="tel:+447577367756" className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                 <FaPhone size={14} className="text-primary-500 flex-shrink-0" />
@@ -129,9 +136,14 @@ const Footer = () => {
                 <FaPhone size={14} className="text-primary-500 flex-shrink-0" />
                 +1 205-350-8864 <span className="text-gray-400 text-sm">(US)</span>
               </a>
-              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                <FaMapMarkerAlt size={14} className="text-primary-500 flex-shrink-0" />
-                Wyoming, USA · London, UK
+              <div className="flex items-start gap-2 text-gray-600 dark:text-gray-300">
+                <FaMapMarkerAlt size={14} className="text-primary-500 flex-shrink-0 mt-1" />
+                <span>
+                  <span className="block font-semibold text-gray-700 dark:text-gray-200">{t.usOffice}</span>
+                  <span className="block text-sm whitespace-pre-line">{t.usAddress}</span>
+                  <span className="block font-semibold text-gray-700 dark:text-gray-200 mt-2">{t.ukOffice}</span>
+                  <span className="block text-sm whitespace-pre-line">{t.ukAddress}</span>
+                </span>
               </div>
             </div>
             <div className="flex flex-wrap gap-3 mt-6">
@@ -238,9 +250,9 @@ const Footer = () => {
             <h3 className="text-lg font-heading font-semibold mb-4 text-gray-900 dark:text-white">{t.resources}</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#documentation" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <Link to="/whitepaper" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                   {t.documentation}
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#tokenomics" className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">

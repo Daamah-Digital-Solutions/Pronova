@@ -16,6 +16,7 @@ import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png'
 import cimLogo from '../assets/images/logos for partner/cim logo.png';
 import primeinnLogo from '../assets/images/logos for partner/primeinn logo.png';
 import elitGatePropertiesLogo from '../assets/images/logos for partner/elitgate properties.png';
+import { CAPIMAX_ECOSYSTEM, FINANCIAL_PARTNERS, INSURANCE_PARTNERS, LEGAL_PARTNERS, AUDIT_PARTNERS } from '../config/partners';
 
 // Enhanced Animation Hook
 const FadeInWhenVisible = ({ children, delay = 0, direction = null }) => {
@@ -263,6 +264,15 @@ const Team = () => {
       delay: 0.1
     },
     {
+      name: CAPIMAX_ECOSYSTEM.name,
+      role: "Ecosystem Gateway",
+      description: "The digital gateway uniting all Capimax platforms, partnerships, services, news, and updates — the integrated home of the ecosystem (capimax.io · capimax.us).",
+      icon: <FaGlobe />,
+      logo: CAPIMAX_ECOSYSTEM.logo,
+      website: CAPIMAX_ECOSYSTEM.url,
+      delay: 0.13
+    },
+    {
       name: "Capimax Group Holding",
       role: "Strategic Partner — USA",
       description: "Strategic holding group of 12 companies across real estate, blockchain, digital finance, and institutional investment — the operational backbone of the ecosystem.",
@@ -318,8 +328,43 @@ const Team = () => {
     }
   ];
   
-  // Partner data organized by categories (v2)
+  // Partner data organized by categories (v2 + client final-edits v3)
   const partnerCategories = [
+    {
+      category: "Audit, Financial & Legal Partners",
+      icon: <FaShieldAlt size={24} />,
+      description: "Institutional audit, financial oversight, and legal partners underpinning the ecosystem",
+      partners: [
+        {
+          name: FINANCIAL_PARTNERS[0].name, // CIM Global Financial
+          logo: FINANCIAL_PARTNERS[0].logo,
+          description: FINANCIAL_PARTNERS[0].description,
+          website: FINANCIAL_PARTNERS[0].url,
+          delay: 0.1
+        },
+        {
+          name: INSURANCE_PARTNERS[0].name, // CoverTech Insurance
+          logo: INSURANCE_PARTNERS[0].logo,
+          description: INSURANCE_PARTNERS[0].description,
+          website: INSURANCE_PARTNERS[0].url,
+          delay: 0.15
+        },
+        {
+          name: AUDIT_PARTNERS[1].name, // Proof Anchor
+          logo: AUDIT_PARTNERS[1].logo,
+          description: AUDIT_PARTNERS[1].description,
+          website: AUDIT_PARTNERS[1].url,
+          delay: 0.2
+        },
+        {
+          name: LEGAL_PARTNERS[0].name, // LexCrest Legal
+          logo: LEGAL_PARTNERS[0].logo,
+          description: LEGAL_PARTNERS[0].description,
+          website: LEGAL_PARTNERS[0].url,
+          delay: 0.25
+        }
+      ]
+    },
     {
       category: "Real Estate Partners",
       icon: <FaBuilding size={24} />,

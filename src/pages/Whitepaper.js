@@ -25,6 +25,8 @@ import cimLogo from '../assets/images/logos for partner/cim logo.png';
 import eliteGateLogo from '../assets/images/logos for partner/elitgate properties.png';
 import primeInnLogo from '../assets/images/logos for partner/primeinn logo.png';
 import pronovaLogo from '../assets/images/logos for partner/pronova coin.png';
+import { INSTITUTIONAL_PARTNERS, CAPIMAX_ECOSYSTEM } from '../config/partners';
+import { FaDownload } from 'react-icons/fa';
 
 const AUDIT_URL = 'https://app.solidproof.io/projects/pronova';
 
@@ -318,11 +320,15 @@ const MEDIA = [
 
 const OFFICIAL_LINKS = [
   ['Smart Contract Audit', 'Published via SolidProof', AUDIT_URL],
+  ['Proof Anchor', 'Smart-contract audit & on-chain verification', 'https://www.proofanchor.io/verify?q=PA-VERIFY-2026-000095'],
+  ['Capimax Ecosystem', 'The digital gateway of the ecosystem', CAPIMAX_ECOSYSTEM.url],
   ['Nova Digital Finance', 'PRN-based financing platform', 'https://novadf.com/'],
   ['Capimax Group', 'Ecosystem holding group', 'https://capimaxgroup.com/'],
+  ['CoverTech Insurance', 'Full cyber-insurance coverage', 'https://www.covertechinsurance.com/pronova-virtual-assets'],
   ['HCC Insurance', 'Technology & digital asset coverage', 'https://hccglobalcoverage.com/'],
   ['Assurax Insurance', 'Cyber & digital asset protection', 'https://assuraxinsurance.com/'],
-  ['CIM Financial Group', 'Financial oversight', 'https://cimfingroup.com/'],
+  ['CIM Global Financial', 'Financial oversight & audit', 'https://www.cimglobalfinancial.com/strategic-partnership'],
+  ['LexCrest Legal', 'Legal & regulatory structuring', 'https://www.lexcrestlegal.com'],
 ];
 
 // ---------- Presentational helpers ----------
@@ -484,6 +490,28 @@ const Whitepaper = () => {
 
   const scrollTo = (id) => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); };
 
+  // Download the full whitepaper PDF (client request). If a packaged PDF exists
+  // at public/Pronova-Whitepaper.pdf it is downloaded directly; until the client
+  // supplies that file, this falls back to the browser's print-to-PDF dialog so
+  // the button is always functional.
+  const downloadPdf = () => {
+    const pdfUrl = `${process.env.PUBLIC_URL || ''}/Pronova-Whitepaper.pdf`;
+    fetch(pdfUrl, { method: 'HEAD' })
+      .then((res) => {
+        if (res.ok && (res.headers.get('content-type') || '').includes('pdf')) {
+          const a = document.createElement('a');
+          a.href = pdfUrl;
+          a.download = 'Pronova-Whitepaper.pdf';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        } else {
+          window.print();
+        }
+      })
+      .catch(() => window.print());
+  };
+
   return (
     <>
       <Helmet>
@@ -524,9 +552,10 @@ const Whitepaper = () => {
               <div className="flex flex-wrap gap-2.5 mt-8">
                 {[
                   { icon: FaShieldAlt, label: 'SolidProof Audited' },
+                  { icon: FaCheckCircle, label: 'Proof Anchor Verified' },
                   { icon: FaBalanceScale, label: '6 Incorporated Entities' },
                   { icon: FaLayerGroup, label: 'BNB Smart Chain' },
-                  { icon: FaLock, label: 'Insured Pre-Launch' },
+                  { icon: FaLock, label: 'CoverTech Cyber-Insured' },
                 ].map((c, i) => {
                   const Icon = c.icon;
                   return (
@@ -538,7 +567,10 @@ const Whitepaper = () => {
               </div>
 
               <div className="flex flex-wrap gap-3 mt-8">
-                <a href={AUDIT_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-semibold shadow-lg shadow-primary-500/25 hover:scale-105 transition-transform">
+                <button onClick={downloadPdf} className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-semibold shadow-lg shadow-primary-500/25 hover:scale-105 transition-transform">
+                  Download Whitepaper (PDF) <FaDownload size={13} />
+                </button>
+                <a href={AUDIT_URL} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 px-7 py-3.5 rounded-full border-2 font-semibold transition-colors ${darkMode ? 'border-slate-600 text-slate-200 hover:bg-slate-800/50' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
                   View SolidProof Audit <FaExternalLinkAlt size={13} />
                 </a>
                 <button onClick={() => scrollTo('tokenomics')} className={`inline-flex items-center gap-2 px-7 py-3.5 rounded-full border-2 font-semibold transition-colors ${darkMode ? 'border-slate-600 text-slate-200 hover:bg-slate-800/50' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}>
@@ -915,15 +947,17 @@ const Whitepaper = () => {
                   While most crypto projects treat insurance as a future aspiration, Pronova established concrete relationships with
                   specialized institutional insurers prior to the pre-sale launch — verifiable rather than merely promised.
                 </p>
-                <Grid>
+                <Grid cols="md:grid-cols-2 lg:grid-cols-4">
+                  <IconCard icon={FaShieldAlt} title="CoverTech Insurance" accent="from-emerald-500 to-teal-500">Full cyber-insurance coverage protecting the Pronova token, platform, and digital assets. (covertechinsurance.com)</IconCard>
                   <IconCard icon={FaShieldAlt} title="HCC">Technology-focused insurance infrastructure for digital asset operations, smart contract failures, oracle manipulation, and protocol-level events. (hccglobalcoverage.com)</IconCard>
                   <IconCard icon={FaLock} title="Assurax Insurance" accent="from-teal-500 to-emerald-500">Cyber insurance and digital asset protection — hot wallet breaches, private key compromise, and third-party security failures. (assuraxinsurance.com)</IconCard>
-                  <IconCard icon={FaBalanceScale} title="HCC International" accent="from-indigo-500 to-blue-500">Broad institutional coverage backed by a globally recognized conglomerate (Tokio Marine Group) with demonstrable claims-paying capacity.</IconCard>
+                  <IconCard icon={FaBalanceScale} title="HCC International" accent="from-indigo-500 to-blue-500">Broad institutional coverage with demonstrable claims-paying capacity for large-scale digital asset operations.</IconCard>
                 </Grid>
                 <div className={`rounded-2xl border p-6 my-6 flex items-center justify-center gap-8 flex-wrap ${darkMode ? 'bg-white border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
-                  <img src={hccLogo} alt="HCC" className="h-12 object-contain" />
-                  <img src={assuraxLogo} alt="Assurax" className="h-12 object-contain" />
-                  <img src={cimLogo} alt="CIM Financial Group" className="h-12 object-contain" />
+                  <a href="https://www.covertechinsurance.com/pronova-virtual-assets" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-gray-500 hover:text-primary-600 transition-colors">CoverTech Insurance</a>
+                  <a href="https://hccglobalcoverage.com/" target="_blank" rel="noopener noreferrer"><img src={hccLogo} alt="HCC" className="h-12 object-contain" /></a>
+                  <a href="https://assuraxinsurance.com/" target="_blank" rel="noopener noreferrer"><img src={assuraxLogo} alt="Assurax" className="h-12 object-contain" /></a>
+                  <a href="https://www.cimglobalfinancial.com/strategic-partnership" target="_blank" rel="noopener noreferrer"><img src={cimLogo} alt="CIM Global Financial" className="h-12 object-contain" /></a>
                 </div>
                 <SubHead>Risk Management Framework</SubHead>
                 <div className="grid sm:grid-cols-2 gap-4 my-6">
@@ -1063,6 +1097,24 @@ const Whitepaper = () => {
                 <div className={`rounded-2xl border p-6 mt-6 flex items-center justify-center gap-8 flex-wrap ${darkMode ? 'bg-white border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
                   {[[capimaxGroupLogo, 'Capimax Group'], [eliteGateLogo, 'Elite Gate'], [primeInnLogo, 'Prime Inn']].map(([logo, name], i) => (
                     <img key={i} src={logo} alt={name} className="h-11 object-contain" />
+                  ))}
+                </div>
+
+                <SubHead>Official Institutional Partners</SubHead>
+                <p>Audit, financial, insurance, and legal partners underpinning the ecosystem — each independently verifiable via its official website.</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 my-6">
+                  {INSTITUTIONAL_PARTNERS.map((p, i) => (
+                    <a key={i} href={p.url} target="_blank" rel="noopener noreferrer" className={`group flex flex-col items-center text-center gap-2 p-4 rounded-xl border transition-colors ${darkMode ? 'bg-dark-800 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200/80 hover:border-primary-300 shadow-sm'}`}>
+                      <div className={`flex items-center justify-center h-14 w-14 rounded-xl p-2 ${p.logo ? (darkMode ? 'bg-white' : 'bg-gray-50 border border-gray-100') : 'bg-gradient-to-br from-primary-500 to-secondary-500'}`}>
+                        {p.logo ? (
+                          <img src={p.logo} alt={p.name} className="max-h-full max-w-full object-contain" />
+                        ) : (
+                          <span className="text-sm font-heading font-bold text-white">{p.name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div className="font-semibold text-gray-900 dark:text-white text-xs leading-tight">{p.name}</div>
+                      <div className="text-[0.65rem] text-primary-500 font-medium">{p.category}</div>
+                    </a>
                   ))}
                 </div>
 

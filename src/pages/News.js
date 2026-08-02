@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
 import { useTheme } from '../context/ThemeContext';
-import { FaExternalLinkAlt, FaNewspaper, FaShieldAlt, FaHandshake, FaBullhorn, FaRegClock } from 'react-icons/fa';
+import { FaExternalLinkAlt, FaNewspaper, FaShieldAlt, FaHandshake, FaBullhorn, FaRegClock, FaBalanceScale, FaSearchDollar, FaGavel } from 'react-icons/fa';
 
 const FadeInWhenVisible = ({ children, delay = 0 }) => {
   const [ref, setRef] = React.useState(null);
@@ -79,6 +79,38 @@ const UPDATES = [
     linkLabel: 'Join pre-sale',
     internal: true,
   },
+  {
+    icon: FaSearchDollar,
+    tag: 'Audit',
+    title: 'Proof Anchor — Smart-Contract Audit & On-Chain Verification',
+    desc: 'Proof Anchor completed an independent smart-contract and project audit of Pronova, with results verifiable on-chain (ref. PA-VERIFY-2026-000095).',
+    link: 'https://www.proofanchor.io/verify?q=PA-VERIFY-2026-000095',
+    linkLabel: 'Verify audit',
+  },
+  {
+    icon: FaBalanceScale,
+    tag: 'Financial',
+    title: 'CIM Global Financial — Strategic Financial Partnership',
+    desc: 'CIM Global Financial provides institutional financial studies, document custody, accounting, and financial-audit oversight for the Pronova ecosystem.',
+    link: 'https://www.cimglobalfinancial.com/strategic-partnership',
+    linkLabel: 'View partnership',
+  },
+  {
+    icon: FaShieldAlt,
+    tag: 'Insurance',
+    title: 'CoverTech Insurance — Cyber Coverage for Pronova',
+    desc: 'CoverTech Insurance provides full cyber-insurance coverage protecting the Pronova token, platform, and digital assets.',
+    link: 'https://www.covertechinsurance.com/pronova-virtual-assets',
+    linkLabel: 'View coverage',
+  },
+  {
+    icon: FaGavel,
+    tag: 'Legal',
+    title: 'LexCrest Legal — Legal & Regulatory Structuring',
+    desc: 'LexCrest Legal provides legal counsel and regulatory structuring for the Pronova ecosystem across its US and UK jurisdictions.',
+    link: 'https://www.lexcrestlegal.com',
+    linkLabel: 'Learn more',
+  },
 ];
 
 const News = () => {
@@ -103,8 +135,10 @@ const News = () => {
               Pronova in the <span className="gradient-text">Press</span>
             </h1>
             <p className={`text-lg ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Press coverage, partnership announcements, and official updates from the Pronova ecosystem —
-              featured across international media platforms focused on blockchain, RWA, and institutional finance.
+              Numerous international newspapers and specialized outlets covering cryptocurrency, blockchain, digital assets,
+              and the economy have taken an interest in Pronova — publishing articles and reports on its ecosystem,
+              institutional structure, real-world use cases, technical architecture, partnerships, and future vision.
+              Below are the latest press features, partnership announcements, and official updates from across the ecosystem.
             </p>
           </FadeInWhenVisible>
         </div>
