@@ -16,6 +16,11 @@ import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png'
 import cimLogo from '../assets/images/logos for partner/cim logo.png';
 import primeinnLogo from '../assets/images/logos for partner/primeinn logo.png';
 import elitGatePropertiesLogo from '../assets/images/logos for partner/elitgate properties.png';
+import westoriaLogo from '../assets/images/logos for partner/westoria-capital.png';
+import crestmarkLogo from '../assets/images/logos for partner/crestmark-global.png';
+import valoraLogo from '../assets/images/logos for partner/valora-estates.png';
+import aetheraLogo from '../assets/images/logos for partner/aethera-development.png';
+import verdeaLogo from '../assets/images/logos for partner/verdea-estates.png';
 import { CAPIMAX_ECOSYSTEM, FINANCIAL_PARTNERS, INSURANCE_PARTNERS, LEGAL_PARTNERS, AUDIT_PARTNERS } from '../config/partners';
 
 // Enhanced Animation Hook
@@ -372,35 +377,35 @@ const Team = () => {
       partners: [
         {
           name: "Westoria Capital",
-          logo: null,
+          logo: westoriaLogo,
           description: "US-based capital and institutional investment platform accepting PRN.",
           website: "https://westoriacapital.com/",
           delay: 0.1
         },
         {
           name: "Crestmark Global",
-          logo: null,
+          logo: crestmarkLogo,
           description: "UK-domiciled global real estate and investment management platform.",
           website: "https://crestmarkglobal.com/",
           delay: 0.15
         },
         {
           name: "Valora Estates",
-          logo: null,
+          logo: valoraLogo,
           description: "Spanish real estate platform for European property acquisitions in PRN.",
           website: "https://valoraestatesglobal.com/",
           delay: 0.2
         },
         {
           name: "Aethera Development",
-          logo: null,
+          logo: aetheraLogo,
           description: "Greek property development firm accepting PRN for Mediterranean projects.",
           website: "https://aetheradevelopment.com/",
           delay: 0.25
         },
         {
           name: "Verdea Estates",
-          logo: null,
+          logo: verdeaLogo,
           description: "Caucasus & Eastern European real estate platform accepting PRN.",
           website: "https://verdeaestates.com/",
           delay: 0.3

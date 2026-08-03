@@ -21,6 +21,11 @@ import capiMaxVirtualAssetLogo from '../assets/images/logos for partner/capi max
 import capiMaxFintechBlockchainLogo from '../assets/images/logos for partner/capi max  Fintech and Blockchain uk dark  copy.png';
 import novaDigitalFinanceLogo from '../assets/images/logos for partner/novadf-logo.png';
 import capiMaxTokenizationLogo from '../assets/images/logos for partner/capimax logos png/dark/capi max all versions logos-tokenization dark.png';
+import westoriaLogo from '../assets/images/logos for partner/westoria-capital.png';
+import crestmarkLogo from '../assets/images/logos for partner/crestmark-global.png';
+import valoraLogo from '../assets/images/logos for partner/valora-estates.png';
+import aetheraLogo from '../assets/images/logos for partner/aethera-development.png';
+import verdeaLogo from '../assets/images/logos for partner/verdea-estates.png';
 
 // Animation Hook
 const FadeInWhenVisible = ({ children, delay = 0, direction = null }) => {
@@ -229,35 +234,35 @@ const Partners = () => {
     },
     {
       name: "Westoria Capital",
-      logo: null,
+      logo: westoriaLogo,
       description: "US-based capital and institutional investment platform accepting PRN.",
       sectors: ["Investment", "USA"],
       website: "https://westoriacapital.com/"
     },
     {
       name: "Crestmark Global",
-      logo: null,
+      logo: crestmarkLogo,
       description: "UK-domiciled global real estate and investment management platform.",
       sectors: ["Real Estate", "UK"],
       website: "https://crestmarkglobal.com/"
     },
     {
       name: "Valora Estates",
-      logo: null,
+      logo: valoraLogo,
       description: "Spanish real estate platform accepting PRN for European property acquisitions.",
       sectors: ["Real Estate", "Spain"],
       website: "https://valoraestatesglobal.com/"
     },
     {
       name: "Aethera Development",
-      logo: null,
+      logo: aetheraLogo,
       description: "Greek property development firm accepting PRN for Mediterranean projects.",
       sectors: ["Development", "Greece"],
       website: "https://aetheradevelopment.com/"
     },
     {
       name: "Verdea Estates",
-      logo: null,
+      logo: verdeaLogo,
       description: "Caucasus & Eastern European real estate platform accepting PRN.",
       sectors: ["Real Estate", "Georgia"],
       website: "https://verdeaestates.com/"
