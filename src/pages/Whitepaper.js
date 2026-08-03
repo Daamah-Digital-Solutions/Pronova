@@ -346,7 +346,7 @@ const Fade = ({ children, delay = 0, className = '' }) => (
 );
 
 const Section = ({ id, number, eyebrow, title, children }) => (
-  <section id={id} className="scroll-mt-28 mb-20 md:mb-28">
+  <section id={id} className="wp-section scroll-mt-28 mb-20 md:mb-28">
     <Fade>
       <div className="flex items-center gap-4 mb-6">
         <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-600 to-secondary-500 text-white flex items-center justify-center font-heading font-bold text-xl shadow-lg shadow-primary-500/25">
@@ -488,6 +488,32 @@ const Whitepaper = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Force a clean light theme while printing (button or Ctrl/Cmd+P), then
+  // restore the user's theme — so the exported PDF is always professional.
+  useEffect(() => {
+    const appEl = document.querySelector('.App');
+    let restoredDark = false;
+    const onBeforePrint = () => {
+      if (appEl && appEl.classList.contains('dark')) {
+        appEl.classList.remove('dark');
+        restoredDark = true;
+      }
+    };
+    const onAfterPrint = () => {
+      if (restoredDark && appEl) {
+        appEl.classList.add('dark');
+        restoredDark = false;
+      }
+    };
+    window.addEventListener('beforeprint', onBeforePrint);
+    window.addEventListener('afterprint', onAfterPrint);
+    return () => {
+      window.removeEventListener('beforeprint', onBeforePrint);
+      window.removeEventListener('afterprint', onAfterPrint);
+      onAfterPrint();
+    };
+  }, []);
+
   const scrollTo = (id) => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }); };
 
   // Download the full whitepaper PDF (client request). If a packaged PDF exists
@@ -520,12 +546,12 @@ const Whitepaper = () => {
       </Helmet>
 
       {/* Reading progress bar */}
-      <div className="fixed top-0 left-0 right-0 h-1 z-50 bg-transparent">
+      <div className="wp-progress fixed top-0 left-0 right-0 h-1 z-50 bg-transparent">
         <div className="h-full bg-gradient-to-r from-primary-500 to-secondary-500 origin-left transition-transform duration-150" style={{ transform: `scaleX(${progress})` }} />
       </div>
 
       {/* Hero */}
-      <section className={`relative pt-32 pb-20 overflow-hidden ${darkMode ? 'bg-dark-900' : 'bg-white'}`}>
+      <section className={`wp-hero relative pt-32 pb-20 overflow-hidden ${darkMode ? 'bg-dark-900' : 'bg-white'}`}>
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[-10%] left-[10%] w-[420px] h-[420px] rounded-full bg-primary-600/20 blur-[120px]" />
           <div className="absolute top-[20%] right-[5%] w-[380px] h-[380px] rounded-full bg-secondary-500/20 blur-[120px]" />
@@ -566,7 +592,7 @@ const Whitepaper = () => {
                 })}
               </div>
 
-              <div className="flex flex-wrap gap-3 mt-8">
+              <div className="wp-actions flex flex-wrap gap-3 mt-8">
                 <button onClick={downloadPdf} className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white font-semibold shadow-lg shadow-primary-500/25 hover:scale-105 transition-transform">
                   Download Whitepaper (PDF) <FaDownload size={13} />
                 </button>
@@ -602,9 +628,9 @@ const Whitepaper = () => {
       {/* Body */}
       <div className={`${darkMode ? 'bg-dark-900' : 'bg-gray-50'}`}>
         <div className="container-custom py-16">
-          <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-14">
+          <div className="wp-grid lg:grid lg:grid-cols-[260px_1fr] lg:gap-14">
             {/* Sidebar TOC */}
-            <aside className="hidden lg:block">
+            <aside className="wp-toc hidden lg:block">
               <div className="sticky top-28">
                 <div className="text-[0.7rem] uppercase tracking-[0.2em] text-gray-400 mb-4 font-semibold px-3">Contents</div>
                 <nav className="space-y-0.5">
@@ -632,7 +658,36 @@ const Whitepaper = () => {
             </aside>
 
             {/* Content */}
-            <div className="min-w-0">
+            <div className="wp-body min-w-0">
+              {/* Print-only cover page (client request: professional PDF export) */}
+              <div className="wp-print-cover">
+                <div style={{ textAlign: 'center', paddingTop: '20mm' }}>
+                  <img src={pronovaLogo} alt="Pronova" style={{ height: '90px', margin: '0 auto 18px', objectFit: 'contain' }} />
+                  <h1 style={{ fontSize: '34pt', fontWeight: 800, color: '#111827', margin: '0 0 6px' }}>Pronova (PRN)</h1>
+                  <div style={{ fontSize: '13pt', color: '#4c1d95', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                    Official Whitepaper · Institutional Edition — v1.0
+                  </div>
+                  <div style={{ width: '60mm', height: '2px', background: 'linear-gradient(to right, #7c3aed, #a78bfa)', margin: '16px auto 22px' }} />
+                  <p style={{ fontSize: '12pt', color: '#374151', maxWidth: '150mm', margin: '0 auto 26px', lineHeight: 1.6 }}>
+                    An institutional, global, utility-backed digital asset ecosystem — bridging blockchain with real-world
+                    investment, real estate, tokenized assets, and institutional finance on BNB Smart Chain.
+                  </p>
+                  <table style={{ margin: '0 auto', fontSize: '10.5pt', color: '#374151', borderCollapse: 'collapse' }}>
+                    <tbody>
+                      {TOKEN_METRICS.map((m, i) => (
+                        <tr key={i}>
+                          <td style={{ textAlign: 'right', padding: '4px 12px', color: '#6b7280' }}>{m.label}</td>
+                          <td style={{ textAlign: 'left', padding: '4px 12px', fontWeight: 700, color: '#111827' }}>{m.value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div style={{ marginTop: '28px', fontSize: '11pt', color: '#4c1d95', fontWeight: 600 }}>pronovacrypto.com</div>
+                  <div style={{ marginTop: '4px', fontSize: '9pt', color: '#9ca3af' }}>
+                    Issued by Pronova Virtual Asset (Wyoming, USA) · Operated across the USA &amp; UK with the Capimax Group ecosystem
+                  </div>
+                </div>
+              </div>
               {/* 01 */}
               <Section id="executive-summary" number="01" eyebrow="Overview" title="Executive Summary">
                 <p>
@@ -1223,7 +1278,7 @@ const Whitepaper = () => {
       {showTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white shadow-lg shadow-primary-500/30 flex items-center justify-center hover:scale-110 transition-transform"
+          className="wp-backtop fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white shadow-lg shadow-primary-500/30 flex items-center justify-center hover:scale-110 transition-transform"
           aria-label="Back to top"
         >
           <FaArrowUp />

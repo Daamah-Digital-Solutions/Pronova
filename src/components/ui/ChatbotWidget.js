@@ -120,7 +120,7 @@ const ChatbotWidget = () => {
         onClick={() => setIsOpen((v) => !v)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-6 right-6 z-[9998] w-14 h-14 rounded-full bg-gradient-to-br from-primary-600 to-primary-500 text-white shadow-2xl hover:shadow-neon flex items-center justify-center border border-primary-400/30"
+        className="no-print fixed bottom-6 right-6 z-[9998] w-14 h-14 rounded-full bg-gradient-to-br from-primary-600 to-primary-500 text-white shadow-2xl hover:shadow-neon flex items-center justify-center border border-primary-400/30"
         aria-label={isOpen ? 'Close chat' : 'Open chat with the Pronova assistant'}
       >
         <AnimatePresence mode="wait" initial={false}>
@@ -147,7 +147,7 @@ const ChatbotWidget = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.96 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className={`fixed z-[9999] flex flex-col overflow-hidden shadow-2xl border
+            className={`no-print fixed z-[9999] flex flex-col overflow-hidden shadow-2xl border
               bottom-0 right-0 w-full h-[85vh] rounded-t-2xl
               sm:bottom-24 sm:right-6 sm:w-[380px] sm:h-[560px] sm:max-h-[75vh] sm:rounded-2xl
               ${darkMode ? 'bg-dark-900 border-primary-600/30' : 'bg-white border-gray-200'}`}

@@ -1121,3 +1121,67 @@ a:active::after {
 .light .bg-secondary-500\/10.rounded-full {
   background: rgba(222, 199, 255, 0.04);
 }
+/* ============================================================
+   Professional PDF / Print export — Whitepaper (client request)
+   The "Download Whitepaper (PDF)" button (and Ctrl/Cmd+P) render
+   the full page as a clean, paginated, light-themed document.
+   ============================================================ */
+@media print {
+  /* Honor colors so logos, badges and accents print correctly */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html, body, .App, main { background: #ffffff !important; }
+
+  /* Hide site chrome and screen-only controls */
+  nav,
+  footer,
+  .no-print,
+  .wp-progress,
+  .wp-toc,
+  .wp-actions,
+  .wp-backtop { display: none !important; }
+
+  /* Remove decorative blurred background blobs */
+  .blur-2xl, .blur-3xl,
+  .blur-\[80px\], .blur-\[100px\], .blur-\[120px\] { display: none !important; }
+
+  /* Full-width content (drop the sticky table-of-contents column) */
+  .wp-grid { display: block !important; }
+  .wp-body { min-width: 0 !important; }
+
+  /* Trim the oversized hero for print */
+  .wp-hero { padding-top: 6mm !important; padding-bottom: 4mm !important; }
+
+  /* Page geometry & base text */
+  @page { size: A4; margin: 15mm 14mm; }
+  body { font-size: 10.5pt; line-height: 1.5; color: #1f2937 !important; }
+
+  /* Solidify gradient-clipped headings so they never print blank */
+  .gradient-text,
+  [class*="bg-clip-text"] {
+    -webkit-text-fill-color: #4c1d95 !important;
+    color: #4c1d95 !important;
+    background: none !important;
+  }
+
+  /* Keep cards, tables and images from splitting across pages */
+  table, thead, tr, img,
+  .wp-body .rounded-2xl,
+  .wp-body .rounded-xl { break-inside: avoid; page-break-inside: avoid; }
+
+  /* Each numbered section starts on a fresh page */
+  .wp-section { break-before: page; page-break-before: always; }
+  .wp-section:first-of-type { break-before: auto; page-break-before: auto; }
+
+  h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
+  a { text-decoration: none !important; color: inherit !important; }
+
+  /* Print-only cover page */
+  .wp-print-cover { display: block !important; break-after: page; page-break-after: always; }
+}
+
+/* Cover is hidden on screen */
+.wp-print-cover { display: none; }
