@@ -13,6 +13,7 @@ import brxShot from '../assets/images/platforms/capimax-brx.jpg';
 import propshareShot from '../assets/images/platforms/capimax-propshare.jpg';
 import rtShot from '../assets/images/platforms/capimax-rt.jpg';
 import oneShot from '../assets/images/platforms/capimax-one.jpg';
+import assetShot from '../assets/images/platforms/capimax-asset.jpg';
 
 // Import partner logos (v2 corporate structure)
 import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-logo.png';
@@ -323,7 +324,7 @@ const Partners = () => {
     { name: 'Capimax BRX', url: 'https://capimaxbrx.com/', description: 'Blockchain real estate exchange & tokenization — institutional-grade access to digitized property.', icon: <FaBuilding size={22} />, shot: brxShot },
     { name: 'Capimax ProShare', url: 'https://capimaxpropshare.com/', description: 'Fractional property ownership marketplace — stake acquisition & yield receipt in PRN.', icon: <FaGem size={22} />, shot: propshareShot },
     { name: 'Capimax RT', url: 'https://capimaxrt.com/', description: 'Tokenized real estate trading & digital real estate asset marketplace.', icon: <FaCoins size={22} />, shot: rtShot },
-    { name: 'Capimax ASseT', url: 'https://capimaxasset.com/', description: 'Digital asset & RWA management — connecting capital to property investment.', icon: <FaChartLine size={22} />, shot: null },
+    { name: 'Capimax ASseT', url: 'https://capimaxasset.com/', description: 'Digital asset & RWA management — connecting capital to property investment.', icon: <FaChartLine size={22} />, shot: assetShot },
   ];
 
   // Benefits of using Pronova with partners
