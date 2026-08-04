@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../../../context/ThemeContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { FaArrowRight, FaCoins, FaHandHoldingUsd, FaNewspaper, FaClock } from 'react-icons/fa';
+import gbjournalFeature from '../../../assets/images/press/gbjournal-feature.jpg';
+import domynexPresale from '../../../assets/images/press/domynex-presale.jpg';
 
 // Translation data
 const translations = {
@@ -101,6 +103,7 @@ const EnhancedLatestNewsSection = () => {
       description: t.tokenization.description,
       cta: t.tokenization.cta,
       link: '/news',
+      img: gbjournalFeature,
       icon: <FaCoins className="w-6 h-6" />,
       gradient: 'from-purple-600 to-indigo-600',
       bgGradient: 'from-purple-50 to-indigo-50',
@@ -114,6 +117,7 @@ const EnhancedLatestNewsSection = () => {
       description: t.loans.description,
       cta: t.loans.cta,
       link: '/news',
+      img: domynexPresale,
       icon: <FaHandHoldingUsd className="w-6 h-6" />,
       gradient: 'from-emerald-600 to-teal-600',
       bgGradient: 'from-emerald-50 to-teal-50',
@@ -183,6 +187,11 @@ const EnhancedLatestNewsSection = () => {
                   ? 'bg-dark-900/60 border-primary-600/20 hover:border-primary-500/40 hover:shadow-primary-500/20'
                   : 'bg-white/60 border-gray-200/40 hover:border-primary-300/60 hover:shadow-primary-300/20'
               }`}>
+                {/* Real article screenshot */}
+                <div className="relative z-10 aspect-[16/9] overflow-hidden border-b border-gray-200/60 dark:border-primary-600/20 bg-gray-100 dark:bg-dark-900">
+                  <img src={item.img} alt={item.headline} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                </div>
+
                 {/* Background Gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${
                   darkMode ? item.darkBgGradient : item.bgGradient

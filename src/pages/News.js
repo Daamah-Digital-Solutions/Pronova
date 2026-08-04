@@ -4,6 +4,14 @@ import { Helmet } from 'react-helmet';
 import { useTheme } from '../context/ThemeContext';
 import { FaExternalLinkAlt, FaNewspaper, FaShieldAlt, FaHandshake, FaBullhorn, FaRegClock, FaBalanceScale, FaSearchDollar, FaGavel } from 'react-icons/fa';
 
+// Real press-coverage screenshots (client-supplied)
+import gbjournalFeature from '../assets/images/press/gbjournal-feature.jpg';
+import gbjournalHome from '../assets/images/press/gbjournal-home.jpg';
+import domynexTop20 from '../assets/images/press/domynex-top20.jpg';
+import domynexPresale from '../assets/images/press/domynex-presale.jpg';
+import econixFeature from '../assets/images/press/econix-feature.jpg';
+import priminnLaunch from '../assets/images/press/priminn-launch.jpg';
+
 const FadeInWhenVisible = ({ children, delay = 0 }) => {
   const [ref, setRef] = React.useState(null);
   const [inView, setInView] = React.useState(false);
@@ -36,11 +44,14 @@ const FadeInWhenVisible = ({ children, delay = 0 }) => {
   );
 };
 
-// Media platforms that have covered the Pronova ecosystem
-const MEDIA = [
-  { name: 'GB Journal', url: 'https://www.gbjournal.world/', desc: 'International business & financial technology coverage.' },
-  { name: 'Domynex Global', url: 'https://domynexglobal.com/', desc: 'Digital economy, blockchain, and RWA reporting.' },
-  { name: 'Econix Global', url: 'https://econixglobal.com/', desc: 'Cryptocurrency and institutional investment analysis.' },
+// Published press coverage of Pronova — real article screenshots
+const PRESS = [
+  { outlet: 'Global Business Journal', img: gbjournalFeature, title: 'Pronova: a utility-first digital asset ecosystem moving into broader global markets', url: 'https://www.gbjournal.world/' },
+  { outlet: 'Domynex Global', img: domynexPresale, title: 'Pronova (PRN) Sets July 15 Presale as Institutional Demand Builds', url: 'https://domynexglobal.com/' },
+  { outlet: 'Econix Global', img: econixFeature, title: 'Pronova ($PRN) — a utility cryptocurrency for the real economy', url: 'https://econixglobal.com/' },
+  { outlet: 'Domynex Global', img: domynexTop20, title: 'Could Pronova Become One of the Top 20 Emerging Cryptocurrencies?', url: 'https://domynexglobal.com/' },
+  { outlet: 'Global Business Journal', img: gbjournalHome, title: 'Pronova (PRN) Presale Announcement — Global Business Journal', url: 'https://www.gbjournal.world/' },
+  { outlet: 'Prime Inn × Capimax', img: priminnLaunch, title: 'PrimInn and Capimax Launch Pronova (PRN)', url: 'https://priminnhotels.com/' },
 ];
 
 // Official ecosystem updates (verifiable milestones)
@@ -152,25 +163,30 @@ const News = () => {
               Featured In
             </h2>
           </FadeInWhenVisible>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {MEDIA.map((m, i) => (
-              <FadeInWhenVisible key={i} delay={i * 0.1}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {PRESS.map((m, i) => (
+              <FadeInWhenVisible key={i} delay={(i % 3) * 0.1}>
                 <a
                   href={m.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group block h-full p-8 rounded-2xl border text-center transition-all duration-300 hover:scale-[1.03] ${
-                    darkMode ? 'bg-dark-800/70 border-primary-600/20 hover:border-primary-500/50' : 'bg-gray-50 border-gray-200/60 hover:border-primary-300/70 hover:shadow-xl'
+                  className={`group flex flex-col h-full rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.02] ${
+                    darkMode ? 'bg-dark-800/70 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200/60 hover:border-primary-300/70 hover:shadow-xl'
                   }`}
                 >
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 text-white mb-4">
-                    <FaNewspaper size={22} />
+                  {/* Real article screenshot */}
+                  <div className="relative aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-dark-900 border-b border-gray-200/60 dark:border-primary-600/20">
+                    <img src={m.img} alt={`${m.outlet} — ${m.title}`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                   </div>
-                  <h3 className={`text-xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{m.name}</h3>
-                  <p className={`text-sm mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{m.desc}</p>
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500">
-                    Read coverage <FaExternalLinkAlt size={12} />
-                  </span>
+                  <div className="flex flex-col flex-grow p-5">
+                    <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary-500 mb-2">
+                      <FaNewspaper size={12} /> {m.outlet}
+                    </div>
+                    <h3 className={`text-base font-bold leading-snug mb-3 flex-grow ${darkMode ? 'text-white' : 'text-gray-900'}`}>{m.title}</h3>
+                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary-500 group-hover:gap-3 transition-all">
+                      Read coverage <FaExternalLinkAlt size={11} />
+                    </span>
+                  </div>
                 </a>
               </FadeInWhenVisible>
             ))}

@@ -3,6 +3,10 @@ import { motion } from 'framer-motion';
 import { FaShieldAlt, FaExternalLinkAlt, FaCheckCircle } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
 import { INSTITUTIONAL_PARTNERS } from '../../config/partners';
+import covertechCert from '../../assets/images/certificates/covertech-cert.jpg';
+import cimCert from '../../assets/images/certificates/cim-cert.jpg';
+import proofanchorCert from '../../assets/images/certificates/proofanchor-cert.jpg';
+import solidproofPage from '../../assets/images/certificates/solidproof-page.jpg';
 
 /**
  * Security, Audit, Insurance, Financial & Legal trust section (client requests
@@ -28,6 +32,14 @@ const initials = (name) =>
     .map((w) => w[0])
     .join('')
     .toUpperCase();
+
+// Verifiable certificates & pages (real screenshots) — click to open full size.
+const CERTS = [
+  { title: 'CoverTech Insurance', label: 'Strategic Partnership Certificate', img: covertechCert },
+  { title: 'CIM Global Financial', label: 'Strategic Partnership Certificate', img: cimCert },
+  { title: 'Proof Anchor', label: 'Smart Contract Audit Certificate', img: proofanchorCert },
+  { title: 'SolidProof', label: 'TrustNet Audit Listing', img: solidproofPage },
+];
 
 const SecurityTrustSection = () => {
   const { darkMode } = useTheme();
@@ -105,6 +117,35 @@ const SecurityTrustSection = () => {
               </div>
             </motion.a>
           ))}
+        </div>
+
+        {/* Verifiable certificates & pages (real screenshots) */}
+        <div className="max-w-6xl mx-auto mt-14">
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-heading font-bold text-gray-900 dark:text-white">Verification &amp; Certificates</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Official partnership and audit documents — click any to view the full page.</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {CERTS.map((c) => (
+              <a
+                key={c.title}
+                href={c.img}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`group block rounded-xl overflow-hidden border transition-all duration-300 ${
+                  darkMode ? 'bg-dark-900/60 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200 hover:border-primary-400/60 hover:shadow-lg'
+                }`}
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-dark-900">
+                  <img src={c.img} alt={`${c.title} — ${c.label}`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                </div>
+                <div className="p-3">
+                  <div className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">{c.title}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{c.label}</div>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>

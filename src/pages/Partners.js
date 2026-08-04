@@ -9,6 +9,10 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import { Helmet } from 'react-helmet';
 import { CAPIMAX_ECOSYSTEM } from '../config/partners';
+import brxShot from '../assets/images/platforms/capimax-brx.jpg';
+import propshareShot from '../assets/images/platforms/capimax-propshare.jpg';
+import rtShot from '../assets/images/platforms/capimax-rt.jpg';
+import oneShot from '../assets/images/platforms/capimax-one.jpg';
 
 // Import partner logos (v2 corporate structure)
 import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-logo.png';
@@ -316,10 +320,10 @@ const Partners = () => {
 
   // Capimax power platforms — ordered strongest-first, tokenization (BRX) first
   const platforms = [
-    { name: 'Capimax BRX', url: 'https://capimaxbrx.com/', description: 'Blockchain real estate exchange & tokenization — institutional-grade access to digitized property.', icon: <FaBuilding size={22} /> },
-    { name: 'Capimax ProShare', url: 'https://capimaxpropshare.com/', description: 'Fractional property ownership marketplace — stake acquisition & yield receipt in PRN.', icon: <FaGem size={22} /> },
-    { name: 'Capimax RT', url: 'https://capimaxrt.com/', description: 'Tokenized real estate trading & digital real estate asset marketplace.', icon: <FaCoins size={22} /> },
-    { name: 'Capimax ASseT', url: 'https://capimaxasset.com/', description: 'Digital asset & RWA management — connecting capital to property investment.', icon: <FaChartLine size={22} /> },
+    { name: 'Capimax BRX', url: 'https://capimaxbrx.com/', description: 'Blockchain real estate exchange & tokenization — institutional-grade access to digitized property.', icon: <FaBuilding size={22} />, shot: brxShot },
+    { name: 'Capimax ProShare', url: 'https://capimaxpropshare.com/', description: 'Fractional property ownership marketplace — stake acquisition & yield receipt in PRN.', icon: <FaGem size={22} />, shot: propshareShot },
+    { name: 'Capimax RT', url: 'https://capimaxrt.com/', description: 'Tokenized real estate trading & digital real estate asset marketplace.', icon: <FaCoins size={22} />, shot: rtShot },
+    { name: 'Capimax ASseT', url: 'https://capimaxasset.com/', description: 'Digital asset & RWA management — connecting capital to property investment.', icon: <FaChartLine size={22} />, shot: null },
   ];
 
   // Benefits of using Pronova with partners
@@ -543,14 +547,18 @@ const Partners = () => {
                   : 'bg-gradient-to-br from-primary-50/70 to-white border-primary-200/60 hover:border-primary-400/70 hover:shadow-lg'
               }`}
             >
-              <div className="flex flex-col sm:flex-row items-center gap-6">
+              <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className={`flex items-center justify-center h-20 w-20 rounded-2xl p-3 flex-shrink-0 ${darkMode ? 'bg-white' : 'bg-white border border-gray-200'}`}>
                   <img src={CAPIMAX_ECOSYSTEM.logo} alt="Capimax Ecosystem logo" className="max-h-full w-auto object-contain" />
                 </div>
-                <div className="flex-grow text-center sm:text-left">
+                <div className="flex-grow text-center md:text-left">
                   <h3 className={`font-heading font-bold text-2xl mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{CAPIMAX_ECOSYSTEM.name}</h3>
                   <p className={`text-base ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{CAPIMAX_ECOSYSTEM.description}</p>
                   <span className="text-xs text-primary-500 font-medium">capimax.io · capimax.us</span>
+                </div>
+                {/* Real ecosystem screenshot */}
+                <div className="w-full md:w-64 flex-shrink-0 rounded-xl overflow-hidden border border-gray-200/60 dark:border-primary-600/20 shadow-sm">
+                  <img src={oneShot} alt="Capimax ONE ecosystem — Pronova Crypto" className="w-full h-auto object-cover object-top" loading="lazy" />
                 </div>
                 <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold group-hover:bg-primary-700 transition-colors flex-shrink-0">
                   Visit <FaExternalLinkAlt size={13} />
@@ -566,27 +574,42 @@ const Partners = () => {
                   href={p.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group flex flex-col h-full rounded-2xl p-6 border transition-all duration-300 ${
+                  className={`group flex flex-col h-full rounded-2xl overflow-hidden border transition-all duration-300 ${
                     darkMode
                       ? 'bg-dark-900/70 border-primary-600/20 hover:border-primary-500/50'
                       : 'bg-white border-gray-200/60 hover:border-primary-400/60 hover:shadow-lg'
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 text-white flex items-center justify-center">
+                  {/* Real platform screenshot showing PRN accepted */}
+                  {p.shot ? (
+                    <div className="relative aspect-[16/9] overflow-hidden border-b border-gray-200/60 dark:border-primary-600/20 bg-gray-100 dark:bg-dark-900">
+                      <img src={p.shot} alt={`${p.name} — Pronova accepted`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                      <span className="absolute top-2 right-2 inline-flex items-center gap-1 text-[0.65rem] font-semibold px-2 py-0.5 rounded-full bg-green-600 text-white shadow">
+                        <FaCheck size={9} /> Accepts PRN
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="aspect-[16/9] flex items-center justify-center border-b border-gray-200/60 dark:border-primary-600/20 bg-gradient-to-br from-primary-500 to-secondary-500 text-white">
                       {p.icon}
                     </div>
-                    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
-                      darkMode ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-green-100 text-green-700 border border-green-200'
-                    }`}>
-                      <FaCheck size={10} /> Accepts PRN
+                  )}
+                  <div className="flex flex-col flex-grow p-5">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-secondary-500 text-white flex items-center justify-center">
+                        {p.icon}
+                      </div>
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
+                        darkMode ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-green-100 text-green-700 border border-green-200'
+                      }`}>
+                        <FaCheck size={10} /> Accepts PRN
+                      </span>
+                    </div>
+                    <h3 className={`font-heading font-bold text-xl mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{p.name}</h3>
+                    <p className={`text-sm flex-grow ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{p.description}</p>
+                    <span className="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-primary-500 group-hover:gap-3 transition-all">
+                      Visit Platform <FaExternalLinkAlt size={12} />
                     </span>
                   </div>
-                  <h3 className={`font-heading font-bold text-xl mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{p.name}</h3>
-                  <p className={`text-sm flex-grow ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{p.description}</p>
-                  <span className="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-primary-500 group-hover:gap-3 transition-all">
-                    Visit Platform <FaExternalLinkAlt size={12} />
-                  </span>
                 </a>
               </FadeInWhenVisible>
             ))}
