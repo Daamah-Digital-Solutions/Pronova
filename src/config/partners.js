@@ -10,11 +10,14 @@
 // renders a styled initials badge as a graceful fallback, so a logo simply
 // drops in here (import + reference) when it arrives.
 
-import cimLogo from '../assets/images/logos for partner/cim logo.png';
+import cimLogo from '../assets/images/logos for partner/cim-global-financial.png';
 import hccLogo from '../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png';
 import solidproofLogo from '../assets/images/logos for partner/logo_shield_trustnet.svg';
 import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-logo.png';
+import coverTechLogo from '../assets/images/logos for partner/covertech-insurance.png';
+import proofAnchorLogo from '../assets/images/logos for partner/proof-anchor.png';
+import lexCrestLogo from '../assets/images/logos for partner/lexcrest-legal.png';
 
 // Capimax Ecosystem — the digital gateway that unites every Capimax platform.
 export const CAPIMAX_ECOSYSTEM = {
@@ -42,7 +45,7 @@ export const AUDIT_PARTNERS = [
     category: 'Smart Contract Audit',
     url: 'https://www.proofanchor.io',
     verifyUrl: 'https://www.proofanchor.io/verify?q=PA-VERIFY-2026-000095',
-    logo: null,
+    logo: proofAnchorLogo,
     description:
       'Independent smart-contract and project audit with on-chain verification for the Pronova ecosystem.',
   },
@@ -66,7 +69,7 @@ export const INSURANCE_PARTNERS = [
     name: 'CoverTech Insurance',
     category: 'Insurance Partner',
     url: 'https://www.covertechinsurance.com/pronova-virtual-assets',
-    logo: null,
+    logo: coverTechLogo,
     description:
       'Full cyber-insurance coverage protecting the Pronova token, platform, and digital assets.',
   },
@@ -94,7 +97,7 @@ export const LEGAL_PARTNERS = [
     name: 'LexCrest Legal',
     category: 'Legal Partner',
     url: 'https://www.lexcrestlegal.com',
-    logo: null,
+    logo: lexCrestLogo,
     description:
       'Legal counsel and regulatory structuring for the Pronova ecosystem across its US and UK jurisdictions.',
   },
