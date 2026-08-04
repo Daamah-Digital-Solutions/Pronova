@@ -25,6 +25,11 @@ import cimLogo from '../assets/images/logos for partner/cim logo.png';
 import eliteGateLogo from '../assets/images/logos for partner/elitgate properties.png';
 import primeInnLogo from '../assets/images/logos for partner/primeinn logo.png';
 import pronovaLogo from '../assets/images/logos for partner/pronova coin.png';
+import westoriaLogo from '../assets/images/logos for partner/westoria-capital.png';
+import crestmarkLogo from '../assets/images/logos for partner/crestmark-global.png';
+import valoraLogo from '../assets/images/logos for partner/valora-estates.png';
+import aetheraLogo from '../assets/images/logos for partner/aethera-development.png';
+import verdeaLogo from '../assets/images/logos for partner/verdea-estates.png';
 import { INSTITUTIONAL_PARTNERS, CAPIMAX_ECOSYSTEM } from '../config/partners';
 import { FaDownload } from 'react-icons/fa';
 
@@ -603,6 +608,36 @@ const Whitepaper = () => {
                   Explore Tokenomics
                 </button>
               </div>
+
+              {/* Official partners — clickable logos in the hero (client request III.2) */}
+              <div className="mt-10">
+                <div className="text-[0.7rem] uppercase tracking-[0.15em] text-gray-400 mb-3 font-semibold">Audited, Insured, Financed &amp; Verified By</div>
+                <div className="flex flex-wrap gap-2.5">
+                  {[
+                    ...INSTITUTIONAL_PARTNERS.filter((p) => ['SolidProof', 'Proof Anchor', 'CIM Global Financial', 'CoverTech Insurance', 'LexCrest Legal'].includes(p.name)),
+                    { name: CAPIMAX_ECOSYSTEM.name, category: 'Ecosystem', url: CAPIMAX_ECOSYSTEM.url, logo: CAPIMAX_ECOSYSTEM.logo },
+                  ].map((p, i) => (
+                    <a
+                      key={i}
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`${p.name} — ${p.category}`}
+                      className={`group flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-xl border transition-colors ${darkMode ? 'bg-dark-800 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200/80 hover:border-primary-300 shadow-sm'}`}
+                    >
+                      <span className={`flex items-center justify-center h-8 w-8 rounded-lg p-1 flex-shrink-0 ${p.logo ? (darkMode ? 'bg-white' : 'bg-gray-50 border border-gray-100') : 'bg-gradient-to-br from-primary-500 to-secondary-500'}`}>
+                        {p.logo ? (
+                          <img src={p.logo} alt={p.name} className="max-h-full max-w-full object-contain" />
+                        ) : (
+                          <span className="text-[0.6rem] font-bold text-white tracking-tight">{p.name.split(' ').slice(0, 2).map((w) => w[0]).join('')}</span>
+                        )}
+                      </span>
+                      <span className={`text-xs font-semibold ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{p.name}</span>
+                      <FaExternalLinkAlt className="text-gray-400 group-hover:text-primary-500" size={9} />
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </Fade>
 
@@ -1150,7 +1185,7 @@ const Whitepaper = () => {
                   ))}
                 </div>
                 <div className={`rounded-2xl border p-6 mt-6 flex items-center justify-center gap-8 flex-wrap ${darkMode ? 'bg-white border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
-                  {[[capimaxGroupLogo, 'Capimax Group'], [eliteGateLogo, 'Elite Gate'], [primeInnLogo, 'Prime Inn']].map(([logo, name], i) => (
+                  {[[capimaxGroupLogo, 'Capimax Group'], [westoriaLogo, 'Westoria Capital'], [crestmarkLogo, 'Crestmark Global'], [valoraLogo, 'Valora Estates'], [aetheraLogo, 'Aethera Development'], [verdeaLogo, 'Verdea Estates'], [eliteGateLogo, 'Elite Gate'], [primeInnLogo, 'Prime Inn']].map(([logo, name], i) => (
                     <img key={i} src={logo} alt={name} className="h-11 object-contain" />
                   ))}
                 </div>
