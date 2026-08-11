@@ -145,7 +145,7 @@ const EnhancedRoadmapSection = () => {
       milestones: [
         { text: "Six incorporated entities (USA + UK)", completed: true },
         { text: "SolidProof audit — token, vesting & pre-sale contracts", completed: true },
-        { text: "Insurance frameworks (HCC, Assurax, HCC International)", completed: true },
+        { text: "Insurance frameworks (CoverTech, Assurax)", completed: true },
         { text: "18+ partner company PRN acceptance announcements", completed: true },
         { text: "CIM Financial Group oversight established", completed: true },
         { text: "Pre-Sale Stage 1 launch (100M PRN @ $0.80)", completed: false }

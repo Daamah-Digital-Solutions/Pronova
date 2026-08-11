@@ -4,7 +4,6 @@ import { FaBuilding, FaHandshake, FaStar, FaUsers, FaShieldAlt, FaExternalLinkAl
 import { CAPIMAX_ECOSYSTEM, FINANCIAL_PARTNERS, INSURANCE_PARTNERS, LEGAL_PARTNERS, AUDIT_PARTNERS } from '../../../config/partners';
 
 // Import partner logos (v2 corporate structure)
-import hccLogo from '../../../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../../../assets/images/logos for partner/assurax logo-01.png';
 import cimLogo from '../../../assets/images/logos for partner/cim logo.png';
 import primeinnLogo from '../../../assets/images/logos for partner/primeinn logo.png';
@@ -329,13 +328,6 @@ const EnhancedPartnersSection = () => {
           delay: 0.82
         },
         {
-          name: "HCC",
-          logo: hccLogo,
-          description: "Technology & digital asset insurance infrastructure",
-          website: "https://hccglobalcoverage.com/",
-          delay: 0.84
-        },
-        {
           name: "Assurax Insurance",
           logo: assuraxLogo,
           description: "Cyber insurance and digital asset protection",
@@ -461,7 +453,7 @@ const EnhancedPartnersSection = () => {
               <div className="bg-white/80 dark:bg-dark-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-primary-600/20 shadow-lg">
                 <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">🤝 Supporting Network</h4>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                  International real estate partners plus insurance and oversight entities (CIM, HCC, Assurax) provide comprehensive ecosystem support and verifiable, real-world PRN utility.
+                  International real estate partners plus insurance and oversight entities (CIM, CoverTech, Assurax) provide comprehensive ecosystem support and verifiable, real-world PRN utility.
                 </p>
               </div>
             </div>

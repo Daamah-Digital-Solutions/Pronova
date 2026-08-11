@@ -11,7 +11,7 @@ import solidproofPage from '../../assets/images/certificates/solidproof-page.jpg
 /**
  * Security, Audit, Insurance, Financial & Legal trust section (client requests
  * A3 / WP hero). Every institutional partner the client listed — SolidProof &
- * Proof Anchor (audit), CIM Global Financial (financial), CoverTech / HCC /
+ * Proof Anchor (audit), CIM Global Financial (financial), CoverTech /
  * Assurax (insurance), and LexCrest Legal — is rendered as a linked card with
  * its official website (and Proof Anchor's on-chain verification link).
  *

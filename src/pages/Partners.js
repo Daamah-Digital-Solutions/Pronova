@@ -17,7 +17,6 @@ import assetShot from '../assets/images/platforms/capimax-asset.jpg';
 
 // Import partner logos (v2 corporate structure)
 import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-logo.png';
-import hccLogo from '../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png';
 import cimLogo from '../assets/images/logos for partner/cim logo.png';
 import primeinnLogo from '../assets/images/logos for partner/primeinn logo.png';
@@ -292,13 +291,6 @@ const Partners = () => {
       description: "Compliance, intelligence & risk monitoring — institutional financial oversight.",
       sectors: ["Oversight", "Compliance"],
       website: "https://cimfingroup.com/"
-    },
-    {
-      name: "HCC",
-      logo: hccLogo,
-      description: "Technology and digital asset insurance infrastructure for the ecosystem.",
-      sectors: ["Insurance", "Technology"],
-      website: "https://hccglobalcoverage.com/"
     },
     {
       name: "Assurax Insurance",

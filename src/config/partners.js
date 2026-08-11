@@ -11,7 +11,6 @@
 // drops in here (import + reference) when it arrives.
 
 import cimLogo from '../assets/images/logos for partner/cim-global-financial.png';
-import hccLogo from '../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png';
 import solidproofLogo from '../assets/images/logos for partner/logo_shield_trustnet.svg';
 import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-logo.png';
@@ -72,14 +71,6 @@ export const INSURANCE_PARTNERS = [
     logo: coverTechLogo,
     description:
       'Full cyber-insurance coverage protecting the Pronova token, platform, and digital assets.',
-  },
-  {
-    name: 'HCC',
-    category: 'Insurance Partner',
-    url: 'https://hccglobalcoverage.com/',
-    logo: hccLogo,
-    description:
-      'Technology-focused insurance infrastructure for digital asset operations and protocol-level events.',
   },
   {
     name: 'Assurax Insurance',

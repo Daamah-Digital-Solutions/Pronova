@@ -276,7 +276,7 @@ const Roadmap = () => {
       milestones: [
         { text: "Six incorporated entities across the USA & UK -- establishing institutional governance from day one", completed: true },
         { text: "SolidProof security audit -- token, vesting, and pre-sale contracts audited and published", completed: true },
-        { text: "Institutional insurance frameworks -- HCC, Assurax, and HCC International arrangements in place", completed: true },
+        { text: "Institutional insurance frameworks -- CoverTech and Assurax arrangements in place", completed: true },
         { text: "18+ partner company PRN acceptance announcements -- verifiable on official websites", completed: true },
         { text: "CIM Financial Group oversight & real estate platform integrations activated", completed: true },
         { text: "Pre-Sale Stage 1 launch -- 100M PRN @ $0.80", completed: false }

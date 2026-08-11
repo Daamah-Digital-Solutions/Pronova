@@ -68,9 +68,9 @@ const UPDATES = [
     icon: FaShieldAlt,
     tag: 'Insurance',
     title: 'Institutional Insurance Frameworks Established',
-    desc: 'Insurance arrangements with HCC, Assurax, and HCC International established before launch to protect the ecosystem.',
-    link: 'https://hccglobalcoverage.com/',
-    linkLabel: 'HCC',
+    desc: 'Insurance arrangements with CoverTech and Assurax established before launch to protect the ecosystem.',
+    link: 'https://www.covertechinsurance.com/pronova-virtual-assets',
+    linkLabel: 'CoverTech',
   },
   {
     icon: FaHandshake,

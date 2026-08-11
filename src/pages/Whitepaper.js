@@ -19,9 +19,9 @@ import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-l
 import capiMaxVirtualAssetLogo from '../assets/images/logos for partner/capi max  Virtual Asset uk dark .png';
 import capiMaxFintechBlockchainLogo from '../assets/images/logos for partner/capi max  Fintech and Blockchain uk dark  copy.png';
 import capiMaxTokenizationLogo from '../assets/images/logos for partner/capimax logos png/dark/capi max all versions logos-tokenization dark.png';
-import hccLogo from '../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png';
-import cimLogo from '../assets/images/logos for partner/cim logo.png';
+import cimLogo from '../assets/images/logos for partner/cim-global-financial.png';
+import coverTechLogo from '../assets/images/logos for partner/covertech-insurance.png';
 import eliteGateLogo from '../assets/images/logos for partner/elitgate properties.png';
 import primeInnLogo from '../assets/images/logos for partner/primeinn logo.png';
 import pronovaLogo from '../assets/images/logos for partner/pronova coin.png';
@@ -69,7 +69,7 @@ const DIFF_TABLE = [
   ['Utility Model', 'Speculation-driven; utility typically post-listing', 'Real utility active from pre-sale day one'],
   ['Asset Backing', 'None or synthetic', 'Real estate, RWA & tokenized property — accepted on 4 platforms + 12 companies, usable now'],
   ['Institutional Structure', 'Typically anonymous or minimally incorporated', 'Six incorporated entities across US & UK — all verifiable'],
-  ['Insurance & Protection', 'Absent or unverified', 'HCC, Assurax & HCC International (hccglobalcoverage.com, assuraxinsurance.com)'],
+  ['Insurance & Protection', 'Absent or unverified', 'CoverTech & Assurax (covertechinsurance.com, assuraxinsurance.com)'],
   ['Audit Status', 'Often pending or absent at launch', 'Completed by SolidProof for three contracts prior to pre-sale launch'],
 ];
 
@@ -91,7 +91,7 @@ const MARKET_CONTEXT = [
 
 const PROBLEMS = [
   ['01 · Absence of Real-World Economic Utility', 'Most digital assets derive value entirely from speculative demand — fewer than 10% of the top 500 operate within ecosystems generating measurable economic activity.', 'PRN token utility was engineered to be active from the first day of the pre-sale, integrated with real estate, investment, and payment systems already operational at launch.'],
-  ['02 · Institutional Infrastructure Deficit', 'The vast majority of projects lack governance, compliance, legal incorporation, insurance, and audit — a segment that has suffered over $50B in documented losses since 2017.', 'Six incorporated entities across the US & UK, a completed SolidProof audit (token + vesting + pre-sale), institutional insurance via HCC/Assurax/HCC International, plus CIM Financial Group oversight.'],
+  ['02 · Institutional Infrastructure Deficit', 'The vast majority of projects lack governance, compliance, legal incorporation, insurance, and audit — a segment that has suffered over $50B in documented losses since 2017.', 'Six incorporated entities across the US & UK, a completed SolidProof audit (token + vesting + pre-sale), institutional insurance via CoverTech/Assurax, plus CIM Financial Group oversight.'],
   ['03 · The Real Asset Integration Gap', "Real estate is the world's largest asset class (~$380T), yet its blockchain integration remains fragmented — a trillion-dollar opportunity substantially unfilled.", 'A purpose-built RWA framework connecting PRN to property acquisition, fractional ownership, and real estate-backed liquidity through operational platforms.'],
   ['04 · Security & Trust Infrastructure Failure', 'The sector has suffered ~$70B in documented security incidents since 2011, eroding institutional trust and complicating regulatory engagement.', 'Pre-launch SolidProof audit, multi-layered institutional insurance, professional cybersecurity infrastructure, and operational risk management at the architecture level.'],
   ['05 · Traditional Business Integration Failure', 'Merchant acceptance and enterprise-grade crypto payment rails are available from fewer than 1% of global businesses.', 'A business integration model spanning payments, real estate, fractional investment, and digital finance — designed for seamless adoption by traditional businesses.'],
@@ -131,7 +131,7 @@ const LIQ_OUTFLOWS = ['Long-term lock (45% of supply, up to 9 years)', 'Staking 
 const STABILITY = [
   ['Supply Control', 'Fixed 1B cap, ~45% locked up to 9 years, graduated release schedules, and burn mechanisms linked to activity — structural scarcity that compounds with demand.'],
   ['Demand Expansion', 'Systematic growth of the partner network, continuous real estate integration, expanded payment acceptance, and new PRN-denominated investment products.'],
-  ['Value Protection', 'Real-world property anchoring, institutional governance across six entities, and professional insurance (HCC, Assurax, HCC International).'],
+  ['Value Protection', 'Real-world property anchoring, institutional governance across six entities, and professional insurance (CoverTech, Assurax).'],
   ['Institutional Foundation', 'Multi-entity structure, regulatory compliance, audit completion, and CIM oversight — the conditions for compounding institutional participation.'],
 ];
 
@@ -247,7 +247,7 @@ const SECTORS = [
   ['Blockchain & Technology', 'Development firms, smart contract specialists, security providers, and Web3 operators supporting technical infrastructure.'],
   ['Digital Finance & Fintech', 'Digital banking, payment processors, and lending infrastructure supporting cross-border PRN payments and lending.'],
   ['Investment & Asset Management', 'Funds, asset managers, family offices, and institutional platforms creating demand from high-value participants.'],
-  ['Insurance & Risk Management', 'HCC, Assurax, and HCC International — protective arrangements and institutional credibility signaling.'],
+  ['Insurance & Risk Management', 'CoverTech and Assurax — protective arrangements and institutional credibility signaling.'],
 ];
 
 const PLATFORMS = [
@@ -311,7 +311,7 @@ const UNIFIED = [
 ];
 
 const ROADMAP = [
-  { phase: 'Phase 1 — Foundation & Pre-Sale', when: 'Completed / In Progress', done: true, items: ['Six incorporated entities (USA & UK)', 'SolidProof audit — token, vesting & pre-sale contracts', 'Insurance frameworks (HCC, Assurax, HCC International)', '18+ partner PRN acceptance announcements', 'CIM Financial Group oversight & real estate platform integrations', 'Pre-Sale Stage 1 launch (100M PRN @ $0.80)'] },
+  { phase: 'Phase 1 — Foundation & Pre-Sale', when: 'Completed / In Progress', done: true, items: ['Six incorporated entities (USA & UK)', 'SolidProof audit — token, vesting & pre-sale contracts', 'Insurance frameworks (CoverTech, Assurax)', '18+ partner PRN acceptance announcements', 'CIM Financial Group oversight & real estate platform integrations', 'Pre-Sale Stage 1 launch (100M PRN @ $0.80)'] },
   { phase: 'Phase 2 — Ecosystem Activation', when: '2026', done: false, items: ['Pre-Sale Stages 2 & 3 completion', 'Staking protocol deployment & activation', 'Lending & collateral protocol launch', 'First tokenized real estate properties listed', 'AI analytics beta & Tier 2 CEX listings', 'Partner network expansion & GCC regional launch'] },
   { phase: 'Phase 3 — Institutional Scale', when: '2026 – 2027', done: false, items: ['Tier 1 CEX listing campaign', '100+ properties tokenized across the ecosystem', 'Institutional investment fund products', 'Cross-chain interoperability bridges', 'Asia-Pacific market expansion & Layer 2 integration'] },
   { phase: 'Phase 4 — Global Leadership', when: '2027+', done: false, items: ['Dedicated blockchain infrastructure evaluation', 'Global top-tier exchange listings', 'Full cross-chain interoperability', 'Integration with traditional finance & institutional custodians'] },
@@ -330,7 +330,6 @@ const OFFICIAL_LINKS = [
   ['Nova Digital Finance', 'PRN-based financing platform', 'https://novadf.com/'],
   ['Capimax Group', 'Ecosystem holding group', 'https://capimaxgroup.com/'],
   ['CoverTech Insurance', 'Full cyber-insurance coverage', 'https://www.covertechinsurance.com/pronova-virtual-assets'],
-  ['HCC Insurance', 'Technology & digital asset coverage', 'https://hccglobalcoverage.com/'],
   ['Assurax Insurance', 'Cyber & digital asset protection', 'https://assuraxinsurance.com/'],
   ['CIM Global Financial', 'Financial oversight & audit', 'https://www.cimglobalfinancial.com/strategic-partnership'],
   ['LexCrest Legal', 'Legal & regulatory structuring', 'https://www.lexcrestlegal.com'],
@@ -611,10 +610,36 @@ const Whitepaper = () => {
 
               {/* Official partners — clickable logos in the hero (client request III.2) */}
               <div className="mt-10">
-                <div className="text-[0.7rem] uppercase tracking-[0.15em] text-gray-400 mb-3 font-semibold">Audited, Insured, Financed &amp; Verified By</div>
-                <div className="flex flex-wrap gap-2.5">
+                <div className="text-[0.7rem] uppercase tracking-[0.15em] text-gray-400 mb-3 font-semibold">Audited, Verified &amp; Financed By</div>
+                {/* Featured audit & financial partners — enlarged */}
+                <div className="flex flex-wrap gap-3">
+                  {INSTITUTIONAL_PARTNERS.filter((p) => ['SolidProof', 'Proof Anchor', 'CIM Global Financial'].includes(p.name)).map((p, i) => (
+                    <a
+                      key={i}
+                      href={p.verifyUrl || p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`${p.name} — ${p.category}`}
+                      className={`group flex items-center gap-3 pl-2.5 pr-5 py-3 rounded-2xl border transition-colors ${darkMode ? 'bg-dark-800 border-primary-600/25 hover:border-primary-500/60' : 'bg-white border-gray-200 hover:border-primary-300 shadow-sm hover:shadow-md'}`}
+                    >
+                      <span className={`flex items-center justify-center h-14 w-14 rounded-xl p-1.5 flex-shrink-0 ${p.logo ? (darkMode ? 'bg-white' : 'bg-gray-50 border border-gray-100') : 'bg-gradient-to-br from-primary-500 to-secondary-500'}`}>
+                        {p.logo ? (
+                          <img src={p.logo} alt={p.name} className="max-h-full max-w-full object-contain" />
+                        ) : (
+                          <span className="text-sm font-bold text-white">{p.name.split(' ').slice(0, 2).map((w) => w[0]).join('')}</span>
+                        )}
+                      </span>
+                      <span className="min-w-0">
+                        <span className={`block text-base font-bold leading-tight ${darkMode ? 'text-white' : 'text-gray-900'}`}>{p.name}</span>
+                        <span className="block text-xs font-medium text-primary-500 mt-0.5">{p.category} <FaExternalLinkAlt className="inline" size={9} /></span>
+                      </span>
+                    </a>
+                  ))}
+                </div>
+                {/* Insurance, legal & ecosystem */}
+                <div className="flex flex-wrap gap-2.5 mt-3">
                   {[
-                    ...INSTITUTIONAL_PARTNERS.filter((p) => ['SolidProof', 'Proof Anchor', 'CIM Global Financial', 'CoverTech Insurance', 'LexCrest Legal'].includes(p.name)),
+                    ...INSTITUTIONAL_PARTNERS.filter((p) => ['CoverTech Insurance', 'Assurax Insurance', 'LexCrest Legal'].includes(p.name)),
                     { name: CAPIMAX_ECOSYSTEM.name, category: 'Ecosystem', url: CAPIMAX_ECOSYSTEM.url, logo: CAPIMAX_ECOSYSTEM.logo },
                   ].map((p, i) => (
                     <a
@@ -1037,15 +1062,12 @@ const Whitepaper = () => {
                   While most crypto projects treat insurance as a future aspiration, Pronova established concrete relationships with
                   specialized institutional insurers prior to the pre-sale launch — verifiable rather than merely promised.
                 </p>
-                <Grid cols="md:grid-cols-2 lg:grid-cols-4">
-                  <IconCard icon={FaShieldAlt} title="CoverTech Insurance" accent="from-emerald-500 to-teal-500">Full cyber-insurance coverage protecting the Pronova token, platform, and digital assets. (covertechinsurance.com)</IconCard>
-                  <IconCard icon={FaShieldAlt} title="HCC">Technology-focused insurance infrastructure for digital asset operations, smart contract failures, oracle manipulation, and protocol-level events. (hccglobalcoverage.com)</IconCard>
+                <Grid cols="md:grid-cols-2">
+                  <IconCard icon={FaShieldAlt} title="CoverTech Insurance" accent="from-emerald-500 to-teal-500">Full cyber-insurance coverage protecting the Pronova token, platform, and digital assets — data breaches, cyberattacks, and business-interruption events. (covertechinsurance.com)</IconCard>
                   <IconCard icon={FaLock} title="Assurax Insurance" accent="from-teal-500 to-emerald-500">Cyber insurance and digital asset protection — hot wallet breaches, private key compromise, and third-party security failures. (assuraxinsurance.com)</IconCard>
-                  <IconCard icon={FaBalanceScale} title="HCC International" accent="from-indigo-500 to-blue-500">Broad institutional coverage with demonstrable claims-paying capacity for large-scale digital asset operations.</IconCard>
                 </Grid>
                 <div className={`rounded-2xl border p-6 my-6 flex items-center justify-center gap-8 flex-wrap ${darkMode ? 'bg-white border-primary-600/20' : 'bg-white border-gray-200/80 shadow-sm'}`}>
-                  <a href="https://www.covertechinsurance.com/pronova-virtual-assets" target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-gray-500 hover:text-primary-600 transition-colors">CoverTech Insurance</a>
-                  <a href="https://hccglobalcoverage.com/" target="_blank" rel="noopener noreferrer"><img src={hccLogo} alt="HCC" className="h-12 object-contain" /></a>
+                  <a href="https://www.covertechinsurance.com/pronova-virtual-assets" target="_blank" rel="noopener noreferrer"><img src={coverTechLogo} alt="CoverTech Insurance" className="h-12 object-contain" /></a>
                   <a href="https://assuraxinsurance.com/" target="_blank" rel="noopener noreferrer"><img src={assuraxLogo} alt="Assurax" className="h-12 object-contain" /></a>
                   <a href="https://www.cimglobalfinancial.com/strategic-partnership" target="_blank" rel="noopener noreferrer"><img src={cimLogo} alt="CIM Global Financial" className="h-12 object-contain" /></a>
                 </div>

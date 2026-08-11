@@ -66,7 +66,7 @@ const WhatIsPronovaSection = () => {
     {
       icon: <FaChartLine size={24} />,
       title: "Audited & Insured",
-      description: "Smart contracts independently audited by SolidProof, with institutional insurance frameworks (HCC, Assurax) in place before launch."
+      description: "Smart contracts independently audited by SolidProof, with institutional insurance frameworks (CoverTech, Assurax) in place before launch."
     }
   ];
 

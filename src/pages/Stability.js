@@ -605,7 +605,7 @@ const Stability = () => {
               {
                 icon: <FaUsers size={24} />,
                 title: "Insurance & Protection",
-                description: "HCC and Assurax Insurance provide technology, cyber, and digital asset coverage — established before the pre-sale launch."
+                description: "CoverTech and Assurax Insurance provide technology, cyber, and digital asset coverage — established before the pre-sale launch."
               },
               {
                 icon: <FaBuilding size={24} />,

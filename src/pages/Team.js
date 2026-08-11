@@ -11,7 +11,6 @@ import capiMaxTokenizationLogo from '../assets/images/logos for partner/capimax 
 import capiMaxVirtualAssetLogo from '../assets/images/logos for partner/capi max  Virtual Asset uk dark .png';
 import capiMaxFintechBlockchainLogo from '../assets/images/logos for partner/capi max  Fintech and Blockchain uk dark  copy.png';
 import novaDigitalFinanceLogo from '../assets/images/logos for partner/novadf-logo.png';
-import hccLogo from '../assets/images/logos for partner/hcc logo.png';
 import assuraxLogo from '../assets/images/logos for partner/assurax logo-01.png';
 import cimLogo from '../assets/images/logos for partner/cim logo.png';
 import primeinnLogo from '../assets/images/logos for partner/primeinn logo.png';
@@ -439,13 +438,6 @@ const Team = () => {
           delay: 0.45
         },
         {
-          name: "HCC",
-          logo: hccLogo,
-          description: "Technology & digital asset insurance infrastructure for the ecosystem.",
-          website: "https://hccglobalcoverage.com/",
-          delay: 0.5
-        },
-        {
           name: "Assurax Insurance",
           logo: assuraxLogo,
           description: "Cyber insurance and digital asset protection coverage.",
@@ -719,7 +711,7 @@ const Team = () => {
                   {
                     title: "Insurance & Protection",
                     icon: <FaUsers className="w-6 h-6" />,
-                    description: "HCC and Assurax Insurance provide technology, cyber, and digital asset coverage — established before the pre-sale launch."
+                    description: "CoverTech and Assurax Insurance provide technology, cyber, and digital asset coverage — established before the pre-sale launch."
                   },
                   {
                     title: "Corporate Governance",
@@ -946,7 +938,7 @@ const Team = () => {
               <p className={`text-lg mb-8 text-center leading-relaxed ${
                 darkMode ? 'text-gray-300' : 'text-gray-600'
               }`}>
-                HCC and Assurax have been contracted to insure digital assets and currencies to provide protection and financial support in the event of data breaches, cyber attacks, cyber threats, business interruption coverage resulting from cyber incidents, and legal and regulatory expenses and fines.
+                CoverTech and Assurax have been contracted to insure digital assets and currencies to provide protection and financial support in the event of data breaches, cyber attacks, cyber threats, business interruption coverage resulting from cyber incidents, and legal and regulatory expenses and fines.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -1012,8 +1004,8 @@ const Team = () => {
                 <p className={`text-sm ${
                   darkMode ? 'text-gray-400' : 'text-gray-600'
                 }`}>
-                  View the Insurance Providers: <a href="https://hccglobalcoverage.com/" target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 font-medium hover:underline">
-                    HCC
+                  View the Insurance Providers: <a href="https://www.covertechinsurance.com/pronova-virtual-assets" target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 font-medium hover:underline">
+                    CoverTech Insurance
                   </a> | <a href="https://assuraxinsurance.com/" target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 font-medium hover:underline">
                     Assurax Insurance
                   </a>

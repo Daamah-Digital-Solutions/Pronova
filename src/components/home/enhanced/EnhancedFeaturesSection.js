@@ -103,7 +103,7 @@ const EnhancedFeaturesSection = () => {
     {
       icon: <FaShieldAlt size={28} />,
       title: "Audited & Insured",
-      description: "SolidProof-audited contracts with HCC and Assurax insurance frameworks in place before launch.",
+      description: "SolidProof-audited contracts with CoverTech and Assurax insurance frameworks in place before launch.",
       delay: 0.3
     },
     {
