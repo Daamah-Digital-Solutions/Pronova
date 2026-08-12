@@ -291,7 +291,7 @@ const Team = () => {
       description: "Real estate tokenization and property technology arm, powering on-chain representation of real-world assets within the ecosystem.",
       icon: <FaBuilding />,
       logo: capiMaxTokenizationLogo,
-      website: "https://capimaxrt.com/",
+      website: "https://capimaxrt.tech/",
       delay: 0.2
     },
     {

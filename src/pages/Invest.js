@@ -50,7 +50,7 @@ const PLATFORMS = [
   {
     name: 'Capimax RT',
     tag: 'Tokenized Real Estate',
-    url: 'https://capimaxrt.com/',
+    url: 'https://capimaxrt.tech/',
     desc: 'Tokenized real estate trading and digital real estate asset marketplace — PRN accepted for property token acquisition and trading.',
     icon: FaCubes,
   },

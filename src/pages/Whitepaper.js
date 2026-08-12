@@ -251,7 +251,7 @@ const SECTORS = [
 ];
 
 const PLATFORMS = [
-  { name: 'Capimax RT', url: 'https://capimaxrt.com/', desc: 'Tokenized real estate trading & digital real estate asset marketplace', icon: FaCube },
+  { name: 'Capimax RT', url: 'https://capimaxrt.tech/', desc: 'Tokenized real estate trading & digital real estate asset marketplace', icon: FaCube },
   { name: 'Capimax BRX', url: 'https://capimaxbrx.com/', desc: 'Blockchain real estate exchange — institutional-grade access to digitized property', icon: FaExchangeAlt },
   { name: 'Capimax ProShare', url: 'https://capimaxpropshare.com/', desc: 'Fractional property ownership marketplace — stake acquisition & yield receipt', icon: FaChartPie },
   { name: 'Capimax ASseT', url: 'https://capimaxasset.com/', desc: 'Digital asset & RWA management — connecting capital to property investment', icon: FaBuilding },
@@ -831,7 +831,7 @@ const Whitepaper = () => {
                   ))}
                 </div>
                 <Callout icon={FaLink} title="Verify the operational platforms" href="https://capimaxgroup.com/" hrefLabel="capimaxgroup.com">
-                  Check capimaxrt.com · capimaxbrx.com · capimaxpropshare.com · capimaxasset.com · and finance with PRN at novadf.com —
+                  Check capimaxrt.tech · capimaxbrx.com · capimaxpropshare.com · capimaxasset.com · and finance with PRN at novadf.com —
                   all linked from the Pronova web and independently verifiable.
                 </Callout>
               </Section>

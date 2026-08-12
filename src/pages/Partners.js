@@ -14,6 +14,12 @@ import propshareShot from '../assets/images/platforms/capimax-propshare.jpg';
 import rtShot from '../assets/images/platforms/capimax-rt.jpg';
 import oneShot from '../assets/images/platforms/capimax-one.jpg';
 import assetShot from '../assets/images/platforms/capimax-asset.jpg';
+import novaShot from '../assets/images/platforms/nova-df.jpg';
+import westoriaAccept from '../assets/images/partners-accept/westoria-accept.jpg';
+import crestmarkAccept from '../assets/images/partners-accept/crestmark-accept.jpg';
+import valoraAccept from '../assets/images/partners-accept/valora-accept.jpg';
+import aetheraAccept from '../assets/images/partners-accept/aethera-accept.jpg';
+import verdeaAccept from '../assets/images/partners-accept/verdea-accept.jpg';
 
 // Import partner logos (v2 corporate structure)
 import capimaxGroupLogo from '../assets/images/logos for partner/capimax-group-logo.png';
@@ -213,7 +219,7 @@ const Partners = () => {
       logo: capiMaxTokenizationLogo,
       description: "Real estate tokenization and property technology arm powering on-chain RWA.",
       sectors: ["Tokenization", "Real Estate"],
-      website: "https://capimaxrt.com/"
+      website: "https://capimaxrt.tech/"
     },
     {
       name: "Capimax Virtual Asset",
@@ -315,7 +321,7 @@ const Partners = () => {
   const platforms = [
     { name: 'Capimax BRX', url: 'https://capimaxbrx.com/', description: 'Blockchain real estate exchange & tokenization — institutional-grade access to digitized property.', icon: <FaBuilding size={22} />, shot: brxShot },
     { name: 'Capimax ProShare', url: 'https://capimaxpropshare.com/', description: 'Fractional property ownership marketplace — stake acquisition & yield receipt in PRN.', icon: <FaGem size={22} />, shot: propshareShot },
-    { name: 'Capimax RT', url: 'https://capimaxrt.com/', description: 'Tokenized real estate trading & digital real estate asset marketplace.', icon: <FaCoins size={22} />, shot: rtShot },
+    { name: 'Capimax RT', url: 'https://capimaxrt.tech/', description: 'Tokenized real estate trading & digital real estate asset marketplace.', icon: <FaCoins size={22} />, shot: rtShot },
     { name: 'Capimax ASseT', url: 'https://capimaxasset.com/', description: 'Digital asset & RWA management — connecting capital to property investment.', icon: <FaChartLine size={22} />, shot: assetShot },
   ];
 
@@ -654,6 +660,61 @@ const Partners = () => {
                 darkMode={darkMode}
                 delay={0.05 * (index + 1)}
               />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PRN Accepted — Live proof (real screenshots from partner sites) */}
+      <section className={`relative py-20 ${darkMode ? 'bg-dark-800' : 'bg-gray-50'}`}>
+        <div className="container-custom">
+          <FadeInWhenVisible>
+            <div className="text-center mb-12">
+              <div className={`inline-flex items-center px-6 py-2 rounded-full border mb-6 ${darkMode ? 'bg-green-600/15 border-green-600/30' : 'bg-green-100/70 border-green-200'}`}>
+                <FaCheck className="w-4 h-4 mr-2 text-green-600 dark:text-green-400" />
+                <span className={`text-sm font-medium ${darkMode ? 'text-green-400' : 'text-green-700'}`}>Verified · Live on partner websites</span>
+              </div>
+              <h2 className={`text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                See PRN <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">Accepted</span> — Live Proof
+              </h2>
+              <p className={`text-lg max-w-3xl mx-auto ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                Real screenshots from the partners’ own websites and platforms — each publicly accepting Pronova (PRN) as a payment and investment method.
+              </p>
+            </div>
+          </FadeInWhenVisible>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {[
+              { name: 'Nova Digital Finance', tag: 'Finance with PRN', shot: novaShot, url: 'https://novadf.com/' },
+              { name: 'Westoria Capital Estates', tag: 'We Accept Pronova', shot: westoriaAccept, url: 'https://westoriacapital.com/' },
+              { name: 'Crestmark Global Estates', tag: 'We Accept Pronova', shot: crestmarkAccept, url: 'https://crestmarkglobal.com/' },
+              { name: 'Valora Estates', tag: 'We Accept Pronova', shot: valoraAccept, url: 'https://valoraestatesglobal.com/' },
+              { name: 'Aethera Estates', tag: 'We Accept Pronova', shot: aetheraAccept, url: 'https://aetheradevelopment.com/' },
+              { name: 'Verdea Estates', tag: 'We Accept Pronova', shot: verdeaAccept, url: 'https://verdeaestates.com/' },
+            ].map((p, index) => (
+              <FadeInWhenVisible key={p.name} delay={0.05 * (index + 1)}>
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group flex flex-col h-full rounded-2xl overflow-hidden border transition-all duration-300 hover:scale-[1.02] ${
+                    darkMode ? 'bg-dark-900/70 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200/60 hover:border-primary-400/60 hover:shadow-xl'
+                  }`}
+                >
+                  <div className="relative aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-dark-900 border-b border-gray-200/60 dark:border-primary-600/20">
+                    <img src={p.shot} alt={`${p.name} — ${p.tag}`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <span className="absolute top-2 right-2 inline-flex items-center gap-1 text-[0.65rem] font-semibold px-2 py-0.5 rounded-full bg-green-600 text-white shadow">
+                      <FaCheck size={9} /> {p.tag}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between p-4">
+                    <span className={`font-heading font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{p.name}</span>
+                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-500 group-hover:gap-2.5 transition-all">
+                      Visit <FaExternalLinkAlt size={11} />
+                    </span>
+                  </div>
+                </a>
+              </FadeInWhenVisible>
             ))}
           </div>
         </div>

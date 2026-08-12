@@ -88,7 +88,7 @@ const Dashboard = () => {
     {
       name: "Capimax Tokenization",
       description: "Real-world asset tokenization platform for fractional ownership and digital asset management.",
-      url: "https://capimaxrt.com",
+      url: "https://capimaxrt.tech",
       icon: "🪙",
       features: ["Asset Tokenization", "Fractional Ownership", "Digital Securities"],
       color: "from-indigo-600 to-blue-600"

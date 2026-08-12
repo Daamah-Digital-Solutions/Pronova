@@ -29,7 +29,7 @@ const PLATFORMS = [
   {
     name: 'Capimax RT',
     desc: 'Tokenized real estate trading & digital real estate asset marketplace.',
-    url: 'https://capimaxrt.com/',
+    url: 'https://capimaxrt.tech/',
     icon: FaCubes,
   },
   {

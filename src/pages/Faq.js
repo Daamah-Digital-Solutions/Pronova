@@ -39,7 +39,7 @@ const Faq = () => {
       },
       {
         question: "What can I do with PRN right now, before exchange listing?",
-        answer: "PRN has active, operational utility across real platforms today — you do not need to wait for exchange listing:\n\n🏠 Real Estate:\n• Fractional and full property acquisition on Capimax platforms (capimaxrt.com, capimaxbrx.com, capimaxpropshare.com, capimaxasset.com)\n• Tokenized RWA property stakes\n\n🏦 Financing:\n• PRN-based loans, collateralized credit, and real estate mortgages via Nova Digital Finance (novadf.com)\n\n💳 Payments:\n• Transactions with 18+ partner companies that publicly accept PRN\n• Platform fee payments with 5–30% discounts vs. fiat or other crypto\n\n🔐 Staking:\n• Earn yield, participate in governance, and unlock premium features\n\nThis is a present reality, verifiable through participating platforms and ecosystem partners — not a future promise."
+        answer: "PRN has active, operational utility across real platforms today — you do not need to wait for exchange listing:\n\n🏠 Real Estate:\n• Fractional and full property acquisition on Capimax platforms (capimaxrt.tech, capimaxbrx.com, capimaxpropshare.com, capimaxasset.com)\n• Tokenized RWA property stakes\n\n🏦 Financing:\n• PRN-based loans, collateralized credit, and real estate mortgages via Nova Digital Finance (novadf.com)\n\n💳 Payments:\n• Transactions with 18+ partner companies that publicly accept PRN\n• Platform fee payments with 5–30% discounts vs. fiat or other crypto\n\n🔐 Staking:\n• Earn yield, participate in governance, and unlock premium features\n\nThis is a present reality, verifiable through participating platforms and ecosystem partners — not a future promise."
       }
     ],
     tokenomics: [
@@ -89,7 +89,7 @@ const Faq = () => {
     partnerships: [
       {
         question: "Which platforms and companies accept PRN?",
-        answer: "PRN is actively integrated across the Capimax ecosystem and a growing international network:\n\n🏢 Capimax Platforms (live):\n• capimaxrt.com — tokenized real estate trading\n• capimaxbrx.com — blockchain real estate exchange\n• capimaxpropshare.com — fractional ownership\n• capimaxasset.com — digital asset & RWA management\n\n🌍 International Companies (publicly accept PRN):\n• capimaxgroup.com (USA & UK)\n• westoriacapital.com (USA)\n• crestmarkglobal.com (UK)\n• valoraestatesglobal.com (Spain)\n• aetheradevelopment.com (Greece)\n• verdeaestates.com (Georgia)\n• elitegateproperties.com (UK)\n• priminnhotels.com (USA & Europe)\n\nAll are independently verifiable through their official websites."
+        answer: "PRN is actively integrated across the Capimax ecosystem and a growing international network:\n\n🏢 Capimax Platforms (live):\n• capimaxrt.tech — tokenized real estate trading\n• capimaxbrx.com — blockchain real estate exchange\n• capimaxpropshare.com — fractional ownership\n• capimaxasset.com — digital asset & RWA management\n\n🌍 International Companies (publicly accept PRN):\n• capimaxgroup.com (USA & UK)\n• westoriacapital.com (USA)\n• crestmarkglobal.com (UK)\n• valoraestatesglobal.com (Spain)\n• aetheradevelopment.com (Greece)\n• verdeaestates.com (Georgia)\n• elitegateproperties.com (UK)\n• priminnhotels.com (USA & Europe)\n\nAll are independently verifiable through their official websites."
       },
       {
         question: "What is Nova Digital Finance and why is it significant?",

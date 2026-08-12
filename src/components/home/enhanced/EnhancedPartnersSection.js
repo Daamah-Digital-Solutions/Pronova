@@ -214,7 +214,7 @@ const EnhancedPartnersSection = () => {
           name: "Capimax Real Estate Technologies",
           logo: capiMaxTokenizationLogo,
           description: "Real estate tokenization and property technology arm",
-          website: "https://capimaxrt.com/",
+          website: "https://capimaxrt.tech/",
           delay: 0.42
         },
         {
