@@ -5,8 +5,20 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import {
   FaExternalLinkAlt, FaRocket, FaHome, FaExchangeAlt, FaChartPie,
-  FaCubes, FaHandHoldingUsd, FaMoneyBillWave, FaCoins, FaLock, FaBuilding
+  FaCubes, FaHandHoldingUsd, FaMoneyBillWave, FaCoins, FaLock, FaBuilding, FaCheck
 } from 'react-icons/fa';
+
+// Real platform & partner screenshots (client-supplied)
+import brxShot from '../assets/images/platforms/capimax-brx.jpg';
+import propshareShot from '../assets/images/platforms/capimax-propshare.jpg';
+import rtShot from '../assets/images/platforms/capimax-rt.jpg';
+import assetShot from '../assets/images/platforms/capimax-asset.jpg';
+import novaShot from '../assets/images/platforms/nova-df.jpg';
+import westoriaAccept from '../assets/images/partners-accept/westoria-accept.jpg';
+import crestmarkAccept from '../assets/images/partners-accept/crestmark-accept.jpg';
+import valoraAccept from '../assets/images/partners-accept/valora-accept.jpg';
+import aetheraAccept from '../assets/images/partners-accept/aethera-accept.jpg';
+import verdeaAccept from '../assets/images/partners-accept/verdea-accept.jpg';
 
 // Animation component for elements when they come into view
 const FadeInWhenVisible = ({ children, delay = 0, direction = null }) => {
@@ -53,6 +65,7 @@ const PLATFORMS = [
     url: 'https://capimaxrt.tech/',
     desc: 'Tokenized real estate trading and digital real estate asset marketplace — PRN accepted for property token acquisition and trading.',
     icon: FaCubes,
+    shot: rtShot,
   },
   {
     name: 'Capimax BRX',
@@ -60,6 +73,7 @@ const PLATFORMS = [
     url: 'https://capimaxbrx.com/',
     desc: 'Blockchain real estate exchange providing institutional-grade access to digitized property assets and ownership.',
     icon: FaExchangeAlt,
+    shot: brxShot,
   },
   {
     name: 'Capimax ProShare',
@@ -67,6 +81,7 @@ const PLATFORMS = [
     url: 'https://capimaxpropshare.com/',
     desc: 'Fractional property ownership marketplace — PRN used for fractional stake acquisition and yield receipt.',
     icon: FaChartPie,
+    shot: propshareShot,
   },
   {
     name: 'Capimax ASseT',
@@ -74,19 +89,20 @@ const PLATFORMS = [
     url: 'https://capimaxasset.com/',
     desc: 'Digital asset and real-world asset (RWA) management platform connecting blockchain capital to property investment.',
     icon: FaBuilding,
+    shot: assetShot,
   },
 ];
 
-// Companies that publicly accept / support PRN
+// Companies that publicly accept / support PRN (with real "We Accept Pronova" screenshots where available)
 const COMPANIES = [
-  { name: 'Capimax Group', country: 'USA & UK', url: 'https://capimaxgroup.com/' },
-  { name: 'Westoria Capital', country: 'United States', url: 'https://westoriacapital.com/' },
-  { name: 'Crestmark Global', country: 'United Kingdom', url: 'https://crestmarkglobal.com/' },
-  { name: 'Valora Estates', country: 'Spain', url: 'https://valoraestatesglobal.com/' },
-  { name: 'Aethera Development', country: 'Greece', url: 'https://aetheradevelopment.com/' },
-  { name: 'Verdea Estates', country: 'Georgia', url: 'https://verdeaestates.com/' },
-  { name: 'Elite Gate Properties', country: 'United Kingdom', url: 'https://elitegateproperties.com/' },
-  { name: 'Prime Inn Hotels', country: 'USA & Europe', url: 'https://priminnhotels.com/' },
+  { name: 'Westoria Capital', country: 'United States', url: 'https://westoriacapital.com/', shot: westoriaAccept },
+  { name: 'Crestmark Global', country: 'United Kingdom', url: 'https://crestmarkglobal.com/', shot: crestmarkAccept },
+  { name: 'Valora Estates', country: 'Spain', url: 'https://valoraestatesglobal.com/', shot: valoraAccept },
+  { name: 'Aethera Development', country: 'Greece', url: 'https://aetheradevelopment.com/', shot: aetheraAccept },
+  { name: 'Verdea Estates', country: 'Georgia', url: 'https://verdeaestates.com/', shot: verdeaAccept },
+  { name: 'Capimax Group', country: 'USA & UK', url: 'https://capimaxgroup.com/', shot: null },
+  { name: 'Elite Gate Properties', country: 'United Kingdom', url: 'https://elitegateproperties.com/', shot: null },
+  { name: 'Prime Inn Hotels', country: 'USA & Europe', url: 'https://priminnhotels.com/', shot: null },
 ];
 
 // The five operational pathways for using PRN
@@ -190,19 +206,28 @@ const Invest = () => {
                     href={p.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`group block h-full p-8 rounded-2xl border transition-all duration-300 hover:scale-[1.02] ${
+                    className={`group flex flex-col h-full rounded-2xl overflow-hidden border transition-all duration-300 hover:scale-[1.02] ${
                       darkMode ? 'bg-dark-800/70 border-primary-600/20 hover:border-primary-500/50' : 'bg-gray-50 border-gray-200/60 hover:border-primary-300/70 hover:shadow-xl'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 text-white">
-                        <Icon size={22} />
-                      </div>
-                      <FaExternalLinkAlt className={`w-4 h-4 ${darkMode ? 'text-gray-500' : 'text-gray-400'} group-hover:text-primary-500 transition-colors`} />
+                    {/* Real platform screenshot showing PRN accepted */}
+                    <div className="relative aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-dark-900 border-b border-gray-200/60 dark:border-primary-600/20">
+                      <img src={p.shot} alt={`${p.name} — Pronova accepted`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
+                      <span className="absolute top-3 right-3 inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-green-600 text-white shadow">
+                        <FaCheck size={10} /> Accepts PRN
+                      </span>
                     </div>
-                    <h3 className={`text-xl font-bold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{p.name}</h3>
-                    <div className="text-sm font-medium text-primary-500 mb-3">{p.tag}</div>
-                    <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{p.desc}</p>
+                    <div className="flex flex-col flex-grow p-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 text-white">
+                          <Icon size={18} />
+                        </div>
+                        <FaExternalLinkAlt className={`w-4 h-4 ${darkMode ? 'text-gray-500' : 'text-gray-400'} group-hover:text-primary-500 transition-colors`} />
+                      </div>
+                      <h3 className={`text-xl font-bold mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{p.name}</h3>
+                      <div className="text-sm font-medium text-primary-500 mb-3">{p.tag}</div>
+                      <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{p.desc}</p>
+                    </div>
                   </a>
                 </FadeInWhenVisible>
               );
@@ -248,6 +273,10 @@ const Invest = () => {
             </FadeInWhenVisible>
 
             <FadeInWhenVisible direction="right" delay={0.2}>
+              {/* Real Nova Digital Finance screenshot */}
+              <a href="https://novadf.com/" target="_blank" rel="noopener noreferrer" className={`group block mb-4 rounded-2xl overflow-hidden border transition-all duration-300 hover:scale-[1.01] ${darkMode ? 'border-primary-600/20 hover:border-primary-500/50' : 'border-gray-200/60 hover:border-primary-300/70 hover:shadow-xl'}`}>
+                <img src={novaShot} alt="Nova Digital Finance — Finance Your Future with Pronova" className="w-full h-auto object-cover object-top group-hover:scale-[1.02] transition-transform duration-500" />
+              </a>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
                   { icon: FaHandHoldingUsd, t: 'PRN-Collateralized Lending' },
@@ -287,9 +316,40 @@ const Invest = () => {
             </div>
           </FadeInWhenVisible>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
-            {COMPANIES.map((c, i) => (
-              <FadeInWhenVisible key={i} delay={(i % 4) * 0.08}>
+          {/* Real "We Accept Pronova" screenshots from the partners' own websites */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {COMPANIES.filter((c) => c.shot).map((c, i) => (
+              <FadeInWhenVisible key={i} delay={(i % 3) * 0.08}>
+                <a
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group flex flex-col h-full rounded-2xl overflow-hidden border transition-all duration-300 hover:scale-[1.02] ${
+                    darkMode ? 'bg-dark-800/70 border-primary-600/20 hover:border-primary-500/50' : 'bg-white border-gray-200/60 hover:border-primary-300/70 hover:shadow-xl'
+                  }`}
+                >
+                  <div className="relative aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-dark-900 border-b border-gray-200/60 dark:border-primary-600/20">
+                    <img src={c.shot} alt={`${c.name} — We Accept Pronova`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
+                    <span className="absolute top-3 right-3 inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-green-600 text-white shadow">
+                      <FaCheck size={10} /> We Accept Pronova
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between p-5">
+                    <div>
+                      <div className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{c.name}</div>
+                      <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{c.country}</div>
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-500 group-hover:gap-2.5 transition-all">Visit <FaExternalLinkAlt size={11} /></span>
+                  </div>
+                </a>
+              </FadeInWhenVisible>
+            ))}
+          </div>
+
+          {/* Additional partners (text links) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto mt-6">
+            {COMPANIES.filter((c) => !c.shot).map((c, i) => (
+              <FadeInWhenVisible key={i} delay={i * 0.08}>
                 <a
                   href={c.url}
                   target="_blank"
