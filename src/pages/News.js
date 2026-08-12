@@ -176,7 +176,7 @@ const News = () => {
                 >
                   {/* Real article screenshot */}
                   <div className="relative aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-dark-900 border-b border-gray-200/60 dark:border-primary-600/20">
-                    <img src={m.img} alt={`${m.outlet} — ${m.title}`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <img src={m.img} alt={`${m.outlet} — ${m.title}`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="flex flex-col flex-grow p-5">
                     <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary-500 mb-2">

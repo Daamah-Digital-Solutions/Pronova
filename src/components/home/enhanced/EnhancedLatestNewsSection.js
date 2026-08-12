@@ -189,7 +189,7 @@ const EnhancedLatestNewsSection = () => {
               }`}>
                 {/* Real article screenshot */}
                 <div className="relative z-10 aspect-[16/9] overflow-hidden border-b border-gray-200/60 dark:border-primary-600/20 bg-gray-100 dark:bg-dark-900">
-                  <img src={item.img} alt={item.headline} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  <img src={item.img} alt={item.headline} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
                 </div>
 
                 {/* Background Gradient */}

@@ -557,7 +557,7 @@ const Partners = () => {
                 </div>
                 {/* Real ecosystem screenshot */}
                 <div className="w-full md:w-64 flex-shrink-0 rounded-xl overflow-hidden border border-gray-200/60 dark:border-primary-600/20 shadow-sm">
-                  <img src={oneShot} alt="Capimax ONE ecosystem — Pronova Crypto" className="w-full h-auto object-cover object-top" loading="lazy" />
+                  <img src={oneShot} alt="Capimax ONE ecosystem — Pronova Crypto" className="w-full h-auto object-cover object-top" />
                 </div>
                 <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold group-hover:bg-primary-700 transition-colors flex-shrink-0">
                   Visit <FaExternalLinkAlt size={13} />
@@ -582,7 +582,7 @@ const Partners = () => {
                   {/* Real platform screenshot showing PRN accepted */}
                   {p.shot ? (
                     <div className="relative aspect-[16/9] overflow-hidden border-b border-gray-200/60 dark:border-primary-600/20 bg-gray-100 dark:bg-dark-900">
-                      <img src={p.shot} alt={`${p.name} — Pronova accepted`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                      <img src={p.shot} alt={`${p.name} — Pronova accepted`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
                       <span className="absolute top-2 right-2 inline-flex items-center gap-1 text-[0.65rem] font-semibold px-2 py-0.5 rounded-full bg-green-600 text-white shadow">
                         <FaCheck size={9} /> Accepts PRN
                       </span>
@@ -702,7 +702,7 @@ const Partners = () => {
                   }`}
                 >
                   <div className="relative aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-dark-900 border-b border-gray-200/60 dark:border-primary-600/20">
-                    <img src={p.shot} alt={`${p.name} — ${p.tag}`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <img src={p.shot} alt={`${p.name} — ${p.tag}`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
                     <span className="absolute top-2 right-2 inline-flex items-center gap-1 text-[0.65rem] font-semibold px-2 py-0.5 rounded-full bg-green-600 text-white shadow">
                       <FaCheck size={9} /> {p.tag}
                     </span>

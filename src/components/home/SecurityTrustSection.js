@@ -137,7 +137,7 @@ const SecurityTrustSection = () => {
                 }`}
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-dark-900">
-                  <img src={c.img} alt={`${c.title} — ${c.label}`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  <img src={c.img} alt={`${c.title} — ${c.label}`} className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" />
                 </div>
                 <div className="p-3">
                   <div className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">{c.title}</div>
